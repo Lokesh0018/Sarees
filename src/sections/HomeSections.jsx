@@ -53,7 +53,8 @@ export function IntroSection() {
   const ref = useSectionReveal()
   return (
     <section ref={ref} className="relative overflow-hidden bg-parchment py-20 text-forest sm:py-28" aria-labelledby="intro-title">
-      <div className="pointer-events-none absolute -bottom-20 -right-20 select-none font-serif text-[24rem] leading-none text-forest opacity-[0.05]" aria-hidden="true">SJR</div>
+      {/* Kept fully inside the section: if it overhangs the bottom edge, the J's descending hook is cut off and it reads as "SIR" */}
+      <div className="pointer-events-none absolute -right-6 bottom-10 select-none font-serif text-[clamp(10rem,24vw,24rem)] leading-none text-forest opacity-[0.05]" aria-hidden="true">SJR</div>
       <div className="container-x relative grid items-center gap-14 lg:grid-cols-12 lg:gap-16">
         <div className="relative lg:col-span-6" data-reveal>
           <div className="absolute -left-4 -top-4 hidden h-full w-full border-2 border-gold/50 sm:block" aria-hidden="true" />
