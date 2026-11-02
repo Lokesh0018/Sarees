@@ -724,22 +724,64 @@ export function PetticoatsCollection() {
   )
 }
 
+// Inners: photo panel with the comfort promises beside a compact 2x2 grid, sized so the spread fits one laptop screen
 export function InnersCollection() {
+  const { settings } = useStore()
   const d = INNERS
   return (
-    <CollectionSection data={d}>
-      <CollectionHeader data={d} titleId={`${d.id}-title`} />
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
-        {d.items.map((item) => (
-          <article key={item.title} className="flex flex-col justify-between border border-gold/20 bg-night-low p-6 transition-colors duration-300 hover:border-gold">
-            <div>
-              <div className="mb-3"><IconBox name={item.icon} small /></div>
-              <h3 className="mb-2 font-serif text-xl font-semibold text-ivory">{item.title}</h3>
-              <p className="text-xs leading-relaxed text-mist">{item.body}</p>
-            </div>
-            <span className="mt-6 text-[0.6875rem] font-semibold text-sage">{item.note}</span>
-          </article>
-        ))}
+    <CollectionSection data={d} className="lg:py-16">
+      <div className="grid gap-10 lg:grid-cols-12 lg:items-stretch lg:gap-12">
+        {/* Photo panel */}
+        <div className="relative min-h-[300px] overflow-hidden border border-gold/25 bg-night-mid sm:min-h-[380px] lg:col-span-5 lg:min-h-0" data-reveal>
+          <div className="absolute inset-0"><Photo {...d.image} /></div>
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night via-night/30 to-transparent" aria-hidden="true" />
+          <div className="pointer-events-none absolute inset-3 border border-gold-light/20" aria-hidden="true" />
+          <div className="absolute inset-x-5 bottom-5 sm:inset-x-7 sm:bottom-7">
+            <span className={`${LABEL} text-gold-light`}>{d.note}</span>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {d.promises.map((p) => (
+                <li key={p} className="inline-flex items-center gap-1.5 border border-gold/40 bg-night/80 px-3 py-1.5 text-[0.75rem] font-semibold text-ivory backdrop-blur-md">
+                  <Check className="h-3.5 w-3.5 text-gold-light" strokeWidth={2.5} aria-hidden="true" /> {p}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Copy + essentials */}
+        <div className="flex flex-col lg:col-span-7">
+          <div data-reveal>
+            <RuleLabel className="mb-3 text-gold-light">{d.eyebrow}</RuleLabel>
+            <h2 id={`${d.id}-title`} className={`${H_XL} lg:text-[3rem]`}>{d.title}</h2>
+            <p className="mt-3 max-w-2xl text-[0.9375rem] leading-[1.7] text-mist">{d.lead}</p>
+          </div>
+          <ul className="mt-8 grid gap-4 sm:grid-cols-2" data-reveal-stagger>
+            {d.items.map((item, i) => {
+              const Icon = COLLECTION_ICONS[item.icon] || Sparkles
+              return (
+                <li key={item.title} className="group/inner relative flex flex-col border border-gold/20 bg-night-low p-5 transition-colors duration-300 hover:border-gold/60 hover:bg-night-mid">
+                  <span className="absolute right-4 top-4 font-serif text-[1rem] italic text-gold/50" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  <div className="flex items-center gap-3 pr-8">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-gold/35 bg-gold-light/10 text-gold-light transition-colors duration-300 group-hover/inner:border-gold-light group-hover/inner:bg-gold-light group-hover/inner:text-ink">
+                      <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                    </span>
+                    <h3 className="font-serif text-[1.2rem] font-semibold leading-snug text-ivory">{item.title}</h3>
+                  </div>
+                  <p className="mt-3 flex-1 text-[0.8125rem] leading-relaxed text-mist">{item.body}</p>
+                  <span className="mt-4 w-fit border-t border-gold/15 pt-3 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-sage">{item.note}</span>
+                </li>
+              )
+            })}
+          </ul>
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between" data-reveal>
+            <p className="flex items-center gap-2 text-[0.8125rem] text-mist">
+              <Shield className="h-4 w-4 shrink-0 text-gold" strokeWidth={1.5} aria-hidden="true" /> {d.privacy}
+            </p>
+            <a href={whatsappHref(settings, d.cta.message)} {...EXTERNAL} className={`${BTN_SAGE} shrink-0 text-center`}>
+              <WhatsAppIcon className="h-[18px] w-[18px]" /> {d.cta.label}
+            </a>
+          </div>
+        </div>
       </div>
     </CollectionSection>
   )

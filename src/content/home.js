@@ -296,6 +296,10 @@ export const INNERS = {
   note: 'Day-Long Bridal Wear',
   title: 'Ethnic Inners & Intimate Essentials',
   lead: 'Curated foundations engineered for Indian festive drapes: zero show-through, friction-free movement, and supreme breathability under heavy bridal regalia.',
+  image: { src: IMG('cat-inners'), alt: 'Ivory gift boxes of intimate essentials tied with gold satin ribbon on a boutique counter', position: '50% 55%' },
+  promises: ['Zero Show-Through', 'Friction-Free', 'Breathable All Day'],
+  privacy: 'Discreet fitting help and plain packaging, always.',
+  cta: { label: 'Ask Privately on WhatsApp', message: 'Hello SJR House of Collection, I would like help choosing inners and intimate essentials for my saree.' },
   items: [
     { icon: 'shirt', title: 'Modal Full Slips', body: 'Ultra-soft, antibacterial modal slips that glide smoothly beneath transparent Kurtis, Anarkalis, and sheer georgettes.', note: 'Sizes: S – 3XL' },
     { icon: 'shield', title: 'Anti-Chafing Thigh Guards', body: 'Seamless breathable microfiber shorts preventing thigh rubbing and chafing during long muhurtham ceremonies.', note: 'Moisture-Wicking Tech' },
