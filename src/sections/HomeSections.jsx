@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowRight, BadgeCheck, BookOpen, Brush, CalendarCheck, CalendarDays, Check, CircleCheck, CircleDot, Clock, Flower, Flower2, Grid2x2, Layers, LockOpen, MapPin, Palette, PencilRuler, Phone, Ribbon, Ruler, Shield, Shirt, Sparkles, UserCheck, Waves } from 'lucide-react'
+import { ArrowRight, BadgeCheck, BookOpen, Brush, CalendarCheck, CalendarDays, Check, CircleCheck, CircleDot, Clock, Flower, Flower2, Grid2x2, Layers, LockOpen, MapPin, Palette, PencilRuler, Phone, Ribbon, Ruler, Scissors, Shield, Shirt, Sparkles, UserCheck, Waves } from 'lucide-react'
 import { useStore } from '../context/StoreContext'
 import { useAsync } from '../hooks/useAsync'
 import { gsap, useReveal } from '../utils/motion'
@@ -384,10 +384,10 @@ function CollectionHeader({ data, titleId, action, centered = false }) {
   )
 }
 
-function CollectionSection({ data, tone, children }) {
+function CollectionSection({ data, tone, className = '', children }) {
   const ref = useSectionReveal()
   return (
-    <section id={data.id} ref={ref} className={`relative border-t border-gold/20 py-20 text-ivory sm:py-28 ${tone === 'low' ? 'bg-night-lowest' : 'bg-night'}`} aria-labelledby={`${data.id}-title`}>
+    <section id={data.id} ref={ref} className={`relative border-t border-gold/20 py-20 text-ivory sm:py-28 ${tone === 'low' ? 'bg-night-lowest' : 'bg-night'} ${className}`} aria-labelledby={`${data.id}-title`}>
       <div className="container-x">{children}</div>
     </section>
   )
@@ -516,35 +516,67 @@ export function StitchingCollection() {
   const { settings } = useStore()
   const d = STITCHING
   return (
-    <CollectionSection data={d} tone="low">
-      <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-16">
-        <div className="relative lg:col-span-6" data-reveal>
-          <div className="relative h-[420px] overflow-hidden border border-gold/30 shadow-2xl sm:h-[520px]">
-            <Photo {...d.image} />
-            <div className="absolute bottom-5 left-5 right-5 max-w-sm border border-gold/40 bg-night/90 p-4 backdrop-blur-md sm:bottom-6 sm:left-6 sm:right-auto">
-              <span className="block text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-gold-light">{d.caption.label}</span>
-              <span className="mt-1 block font-serif text-xl font-semibold text-ivory">{d.caption.title}</span>
-              <p className="mt-1 text-xs leading-relaxed text-mist">{d.caption.body}</p>
+    <CollectionSection data={d} tone="low" className="lg:py-16">
+      {/* On desktop the photo stretches to the copy's height so the whole spread fits one screen */}
+      <div className="grid gap-12 lg:grid-cols-12 lg:items-stretch lg:gap-14">
+        <div className="relative pb-5 pr-5 sm:pb-7 sm:pr-7 lg:col-span-6" data-reveal>
+          {/* Offset mat behind the photo, like a fabric swatch pinned to a board */}
+          <div className="pointer-events-none absolute bottom-0 left-5 right-0 top-5 border border-gold/30 bg-[radial-gradient(80%_70%_at_70%_80%,rgb(201_164_92/0.10),transparent_70%)] sm:left-7 sm:top-7" aria-hidden="true" />
+          <div className="group relative h-[380px] overflow-hidden border border-gold/30 bg-night-mid shadow-[0_30px_80px_-30px_rgba(0,0,0,0.85)] sm:h-[520px] lg:h-full lg:min-h-[480px]">
+            <div className="absolute inset-0 transition-transform duration-[1200ms] ease-[var(--ease-silk)] motion-safe:group-hover:scale-[1.03]">
+              <Photo {...d.image} />
+            </div>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night/85 via-night/10 to-transparent" aria-hidden="true" />
+            <div className="pointer-events-none absolute inset-3 border border-gold-light/25" aria-hidden="true" />
+            {/* Tape-measure edge: fine ticks every 12px, long ticks every 60px */}
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-7 border-r border-gold/30 bg-night/70 backdrop-blur-sm" aria-hidden="true">
+              <div className="absolute inset-y-0 left-0 w-2.5 [background-image:repeating-linear-gradient(to_bottom,rgb(227_200_143/0.55)_0_1px,transparent_1px_12px)]" />
+              <div className="absolute inset-y-0 left-0 w-4 [background-image:repeating-linear-gradient(to_bottom,rgb(227_200_143/0.9)_0_1px,transparent_1px_60px)]" />
+            </div>
+            {/* Fitting seal, ringed with a stitched border */}
+            <div className="absolute right-4 top-4 flex h-[4.75rem] w-[4.75rem] flex-col items-center justify-center rounded-full border border-gold-light/60 bg-night/80 text-center backdrop-blur-md sm:right-7 sm:top-7 sm:h-24 sm:w-24">
+              <span className="pointer-events-none absolute inset-1.5 rounded-full border border-dashed border-gold-light/40" aria-hidden="true" />
+              <span className="font-serif text-[1.9rem] leading-none text-gold-light">18</span>
+              <span className="mt-1 text-[0.5rem] font-semibold uppercase tracking-[0.2em] text-mist">Point Fit</span>
+            </div>
+            <div className="absolute bottom-5 left-10 right-5 max-w-sm border-l-2 border-gold-light bg-night/85 px-4 py-3.5 backdrop-blur-md sm:bottom-8 sm:left-12 sm:right-8 sm:px-5 sm:py-4">
+              <span className={`block text-gold-light ${LABEL}`}>{d.caption.label}</span>
+              <span className="mt-1.5 block font-serif text-[1.2rem] sm:text-[1.4rem] font-semibold leading-tight text-ivory">{d.caption.title}</span>
+              <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-mist">{d.caption.body}</p>
             </div>
           </div>
         </div>
-        <div className="flex flex-col lg:col-span-6">
+        <div className="flex flex-col justify-center lg:col-span-6">
           <RuleLabel className="mb-3 text-gold-light" data-reveal>{d.eyebrow}</RuleLabel>
-          <h2 id={`${d.id}-title`} className={`mb-6 ${H_XL}`} data-reveal>
+          <h2 id={`${d.id}-title`} className={`mb-5 ${H_XL} lg:text-[3.1rem]`} data-reveal>
             {d.title} <br />
             <span className="italic text-gold-light">{d.titleAccent}</span>
           </h2>
-          <p className="mb-8 text-lg font-light leading-[1.85] text-mist" data-reveal>{d.lead}</p>
-          <ul className="mb-9 grid gap-4 sm:grid-cols-2" data-reveal-stagger>
-            {d.features.map((f) => (
-              <li key={f.title} className="flex flex-col gap-2 border border-gold/20 bg-night-low p-4">
-                <IconBox name={f.icon} small />
-                <span className="text-sm font-semibold text-ivory">{f.title}</span>
-                <p className="text-xs leading-relaxed text-mist">{f.body}</p>
-              </li>
-            ))}
+          <p className="max-w-xl text-base font-light leading-[1.8] text-mist lg:text-[0.9375rem] lg:leading-[1.75]" data-reveal>{d.lead}</p>
+          {/* Stitched seam divider */}
+          <div className="my-7 flex items-center gap-3 text-gold lg:my-6" aria-hidden="true" data-reveal>
+            <Scissors className="h-4 w-4 -rotate-90" strokeWidth={1.5} />
+            <span className="h-0 flex-1 border-t border-dashed border-gold/50" />
+          </div>
+          <ul className="mb-8 grid border-l border-t border-gold/20 sm:grid-cols-2" data-reveal-stagger>
+            {d.features.map((f, i) => {
+              const Icon = COLLECTION_ICONS[f.icon] || Sparkles
+              return (
+                <li key={f.title} className="group/feat relative flex items-start gap-4 border-b border-r border-gold/20 p-5 transition-colors duration-300 hover:bg-night-low">
+                  <span className="absolute right-4 top-4 font-serif text-[1rem] italic text-gold/50" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-gold/35 bg-gold-light/10 text-gold-light transition-colors duration-300 group-hover/feat:border-gold-light group-hover/feat:bg-gold-light group-hover/feat:text-ink">
+                    <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                  </span>
+                  <div className="min-w-0">
+                    <span className="block pr-7 font-serif text-[1.125rem] font-semibold leading-snug text-ivory">{f.title}</span>
+                    <p className="mt-1 text-[0.8125rem] leading-relaxed text-mist">{f.body}</p>
+                  </div>
+                </li>
+              )
+            })}
           </ul>
-          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap [&>a]:whitespace-nowrap" data-reveal>
+          {/* Labels may wrap on phones so the long consultation button never overflows the screen */}
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:[&>a]:whitespace-nowrap [&>a]:text-center" data-reveal>
             <a href={whatsappHref(settings, d.primary.message)} {...EXTERNAL} className={`${BTN_GOLD} shadow-xl`}><CalendarDays className="h-[18px] w-[18px]" aria-hidden="true" /> {d.primary.label}</a>
             <a href={whatsappHref(settings, d.secondary.message)} {...EXTERNAL} className={BTN_LINE}><WhatsAppIcon className="h-[18px] w-[18px]" /> {d.secondary.label}</a>
           </div>
