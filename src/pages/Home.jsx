@@ -1,8 +1,8 @@
 import { useSeo } from '../hooks/useSeo'
 import Hero from '../sections/Hero'
 import {
-  CollectionsSection, CraftSection, DressSetsCollection, FeaturedSection, GallerySection, InnersCollection, IntroSection, JewelleryCollection,
-  MarqueeBand, MatchingsCollection, NewArrivalsSection, NightiesCollection, PetticoatsCollection, SareesCollection, StitchingCollection,
+  CollectionsSection, CraftSection, GallerySection, InnersCollection, IntroSection, JewelleryCollection,
+  MarqueeBand, MatchingsCollection, NightiesCollection, PetticoatsCollection, SareesCollection, StitchingCollection,
   StorySection, VisitSection,
 } from '../sections/HomeSections'
 
@@ -24,9 +24,6 @@ export default function Home() {
       <InnersCollection />
       <NightiesCollection />
       <JewelleryCollection />
-      <DressSetsCollection />
-      <FeaturedSection />
-      <NewArrivalsSection />
       <CraftSection />
       <StorySection />
       <GallerySection />

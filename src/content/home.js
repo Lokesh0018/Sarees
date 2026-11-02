@@ -52,58 +52,21 @@ export const COLLECTIONS = {
   },
 }
 
-export const FEATURED = {
-  ribbon: 'Featured Masterpiece Repository',
-  code: 'Collection Code: #SJR-PAT-804',
-  title: 'Elegance In Every',
-  titleAccent: 'Sacred Drape.',
-  body: 'Hand-spun on centuries-old pit looms in the heart of Tamil Nadu and Andhra craft colonies, this masterpiece marries unadulterated mulberry silk with 2-gram tested gold zari. Its temple korvai border takes over 180 hours of meticulous hand-interlocking by two master weavers.',
-  image: { src: IMG('featured-drape'), alt: 'A model in a rani pink and emerald bridal Kanchipuram silk saree with a heavy gold brocade pallu', position: '50% 30%' },
-  detail: { src: IMG('featured-zari-detail'), alt: 'Close-up of gold zari woven into emerald silk with peacock motifs', caption: '2gm Gold Zari Detail' },
-  seal: { label: 'Authentic Loom', title: 'Kanchipuram Royal Varam', note: 'Certified Silk Mark' },
-  specs: [
-    { label: 'Weave Architecture', value: 'Double Warp Pure Kanchi Pattu' },
-    { label: 'Zari Composition', value: 'Tested 2-Gram Gold & Silver Zari', tone: 'gold' },
-    { label: 'Loom Provenance', value: 'Kanchipuram Heritage Guild' },
-    { label: 'Blouse Piece', value: 'Matching Brocade with Sleeve Zari', tone: 'sage' },
-  ],
-  enquiry: 'Hello SJR House of Collection, I am interested in Featured Bridal Saree SJR-PAT-804',
-  trialEnquiry: 'Hello SJR House of Collection, I would like to book a boutique private trial for Featured Bridal Saree SJR-PAT-804',
-}
-
-export const ARRIVALS = {
-  eyebrow: 'Curated for the Festive Season',
-  title: 'New Arrivals',
-  lead: 'Fresh from the artisan looms of South India into our MVP Colony vitrines.',
-  // Filter chips match a product's `tags` in products.json.
-  filters: [
-    { label: 'All Drapes', tag: null },
-    { label: 'Gadwal', tag: 'gadwal' },
-    { label: 'Kanchipuram', tag: 'kanchipuram' },
-    { label: 'Blouses', tag: 'blouses' },
-  ],
-  banner: {
-    title: 'Seeking a Specific Saree Colour Palette or Budget?',
-    body: 'Our boutique stylists send bespoke video walkthroughs of newly unboxed sarees daily.',
-    cta: 'Request Digital Lookbook',
-    message: 'Hi SJR Boutique, please share your latest arrivals catalogue.',
-  },
-}
-
 export const CRAFT = {
   eyebrow: 'The SJR Atelier Promise',
-  title: 'Your Style. Our Craft.',
+  title: 'Your Style.',
+  titleAccent: 'Our Craft.',
   lead: 'A great ensemble does not end at purchasing a saree—it begins with the architectural perfection of tailoring, blouse sculpting, and fabric harmony.',
   pillars: [
-    { icon: 'ruler', title: 'Master Cut & Fitting', body: 'Every blouse pattern is individually drafted based on 18 ergonomic measurements to ensure no shoulder slips, perfect armhole comfort, and sculpted bust support.' },
-    { icon: 'brush', title: 'Custom Maggam Work', body: 'In-house artisan karigars hand-embed genuine zari wires, kardana stones, freshwater pearls, and zardosi motifs reflecting the saree’s sacred pallu patterns.' },
-    { icon: 'palette', title: 'Exact Shade Matching', body: 'Zero compromise on dyes. We stock over 400 silk and cotton hues in petticoats, lining fabrics, and contrast drapes for a seamless monolithic ensemble look.' },
-    { icon: 'concierge', title: 'Bridal Styling Concierge', body: 'Personal appointment-based trials in our private salon suite with jewellery pairing, pleat preparation, and bespoke muhurtham drape consultations.' },
+    { icon: 'ruler', stat: '18', statLabel: 'Ergonomic measurements', title: 'Master Cut & Fitting', body: 'Every blouse pattern is individually drafted based on 18 ergonomic measurements to ensure no shoulder slips, perfect armhole comfort, and sculpted bust support.' },
+    { icon: 'brush', stat: 'In-House', statLabel: 'Artisan karigars', title: 'Custom Maggam Work', body: 'In-house artisan karigars hand-embed genuine zari wires, kardana stones, freshwater pearls, and zardosi motifs reflecting the saree’s sacred pallu patterns.' },
+    { icon: 'palette', stat: '400+', statLabel: 'Silk & cotton hues', title: 'Exact Shade Matching', body: 'Zero compromise on dyes. We stock over 400 silk and cotton hues in petticoats, lining fabrics, and contrast drapes for a seamless monolithic ensemble look.' },
+    { icon: 'concierge', stat: 'Private', statLabel: 'Salon suite trials', title: 'Bridal Styling Concierge', body: 'Personal appointment-based trials in our private salon suite with jewellery pairing, pleat preparation, and bespoke muhurtham drape consultations.' },
   ],
   images: [
-    { src: IMG('craft-pattern'), alt: 'Artisan hands drafting a blouse pattern with tailoring chalk and rulers on silk', position: '50% 50%' },
-    { src: IMG('craft-embroidery'), alt: 'Gold zardosi being threaded into crimson silk on an embroidery frame', position: '50% 50%' },
-    { src: IMG('craft-finished-blouse'), alt: 'A finished bridal blouse displayed with temple jewellery on an emerald silk cushion', position: '50% 55%' },
+    { src: IMG('craft-pattern'), alt: 'Artisan hands drafting a blouse pattern with tailoring chalk and rulers on silk', position: '50% 50%', caption: 'Pattern Drafting' },
+    { src: IMG('craft-embroidery'), alt: 'Gold zardosi being threaded into crimson silk on an embroidery frame', position: '50% 50%', caption: 'Zardosi Embroidery' },
+    { src: IMG('craft-finished-blouse'), alt: 'A finished bridal blouse displayed with temple jewellery on an emerald silk cushion', position: '50% 55%', caption: 'The Finished Blouse' },
   ],
 }
 
@@ -191,7 +154,7 @@ export const FOOTER = {
   ],
 }
 
-// ── Dedicated collection sections (between Collections and Featured) ─────────────────────────────────────────
+// ── Dedicated collection sections (between Collections and Craft) ─────────────────────────────────────────
 // The four saree photos are stand-ins until the real ones are saved to src/assets/images as
 // saree-kanchipuram, saree-gadwal, saree-banarasi and saree-organza (.webp / .jpg / .png). They take over automatically.
 const PREFER = (name, fallback) => pickImage(name, fallback)
@@ -337,17 +300,3 @@ export const JEWELLERY = {
   cardCta: 'Enquire',
 }
 
-export const DRESS_SETS = {
-  id: 'collection-dress-sets',
-  eyebrow: 'Ready-To-Wear Couture',
-  note: 'Festive Celebrations',
-  title: 'Three-Piece Dress Sets & Kurtis',
-  lead: 'Effortless festive grandeur: pure chanderi, raw silk and georgette suit ensembles complete with designer pants and hand-embroidered organza dupattas.',
-  cta: { label: 'View Dress Lookbook', message: 'Hi SJR House of Collection, please share your Three-Piece Dress Sets Catalogue' },
-  items: [
-    { image: IMG('dress-anarkali'), alt: 'A bride seated in an emerald silk ensemble with heavy zari and temple jewellery', badge: 'Flared Anarkali', label: '3-Piece Bridal Ensemble', title: 'Royal Zardosi Anarkali Suite', body: '32-kali floor-length flared pure chanderi silk gown with hand-done zardosi yoke, churidar pants, and heavy scalloped border dupatta.', note: 'Sizes: XS – 3XL', message: 'Interested in Royal Zardosi Anarkali Suite', position: '50% 28%' },
-    { image: IMG('intro-drape'), alt: 'A woman in a crimson and emerald silk drape with a gold zari border', badge: 'Straight Silhouette', label: 'Festive Prêt', title: 'Festive Straight Kurta Set', body: 'Pure raw silk straight kurta paired with slim cigarette trousers, side pocket utility, and a shimmering banarasi zari border dupatta.', note: 'Ready for Dispatch', message: 'Interested in Festive Straight Kurta Set', position: '60% 40%' },
-    { image: IMG('cat-matchings'), alt: 'Festive garments and dupattas hanging in a boutique wardrobe', badge: 'Palazzo Pairing', label: 'Casual Festive', title: 'Embroidered Palazzo Suit', body: 'Breathable georgette tunic with intricate resham thread embroidery, flared wide-leg palazzo bottoms, and lightweight printed stole.', note: 'Boutique Fit Assured', message: 'Interested in Embroidered Palazzo Suit' },
-  ],
-  cardCta: 'Enquire Set',
-}

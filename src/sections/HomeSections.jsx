@@ -1,15 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowRight, BadgeCheck, BookOpen, Brush, CalendarCheck, CalendarDays, Check, CircleCheck, CircleDot, Clock, Flower, Flower2, Grid2x2, Layers, LockOpen, MapPin, Moon, Palette, PencilRuler, Phone, Ribbon, Ruler, Scissors, Shield, Shirt, Sparkles, UserCheck, Waves } from 'lucide-react'
+import { ArrowRight, BadgeCheck, Brush, CalendarCheck, CalendarDays, Check, CircleCheck, CircleDot, Clock, Flower, Flower2, Grid2x2, Layers, LockOpen, MapPin, Moon, Palette, PencilRuler, Phone, Ribbon, Ruler, Scissors, Shield, Shirt, Sparkles, UserCheck, Waves } from 'lucide-react'
 import { useStore } from '../context/StoreContext'
-import { useAsync } from '../hooks/useAsync'
 import { gsap, useReveal } from '../utils/motion'
-import { getNewArrivals } from '../services/catalog'
 import { addressLines, formatPhone, generalEnquiryMessage, mapsDirectionsHref, productEnquiryMessage, telHref, whatsappHref } from '../utils/contact'
 import WhatsAppIcon from '../components/WhatsAppIcon'
 import ShadeFinder from '../components/ShadeFinder'
 import { LOGO } from '../components/Logo'
 import { imageUrl } from '../utils/assets'
-import { ARRIVALS, COLLECTIONS, CRAFT, DRESS_SETS, FEATURED, GALLERY, INNERS, INTRO, JEWELLERY, MARQUEE, MATCHINGS, NIGHTIES, PETTICOATS, SAREES, STITCHING, STORY, VISIT } from '../content/home'
+import { COLLECTIONS, CRAFT, GALLERY, INNERS, INTRO, JEWELLERY, MARQUEE, MATCHINGS, NIGHTIES, PETTICOATS, SAREES, STITCHING, STORY, VISIT } from '../content/home'
 
 // Shared type scale for the editorial sections
 const LABEL = 'text-[0.6875rem] font-semibold uppercase tracking-[0.22em]'
@@ -262,7 +260,7 @@ const CARD_TITLE = { lg: 'text-[2.25rem] leading-[1.15]', md: 'text-[1.75rem] le
 // Category slug → its dedicated section further down the page
 const SECTION_BY_SLUG = {
   sarees: SAREES.id, stitching: STITCHING.id, matchings: MATCHINGS.id, petticoats: PETTICOATS.id,
-  inners: INNERS.id, nighties: NIGHTIES.id, 'fancy-jewellery': JEWELLERY.id, 'dress-sets': DRESS_SETS.id,
+  inners: INNERS.id, nighties: NIGHTIES.id, 'fancy-jewellery': JEWELLERY.id,
 }
 
 function CollectionCard({ category, index }) {
@@ -391,38 +389,6 @@ function CollectionSection({ data, tone, className = '', children }) {
     <section id={data.id} ref={ref} className={`relative border-t border-gold/20 py-20 text-ivory sm:py-28 ${tone === 'low' ? 'bg-night-lowest' : 'bg-night'} ${className}`} aria-labelledby={`${data.id}-title`}>
       <div className="container-x">{children}</div>
     </section>
-  )
-}
-
-// Image card used by jewellery and dress sets
-function ShowcaseCard({ item, height, cta, titleSize = 'text-xl' }) {
-  const { settings } = useStore()
-  const href = whatsappHref(settings, item.message)
-  return (
-    <article className="group flex flex-col overflow-hidden border border-gold/20 bg-night-low transition-[border-color,box-shadow] duration-300 hover:border-gold hover:shadow-2xl">
-      <div className={`relative overflow-hidden border-b border-gold/20 bg-night-mid ${height}`}>
-        {item.image && (
-          <div className="absolute inset-0 transition-transform duration-700 ease-[var(--ease-silk)] group-hover:scale-105">
-            <Photo src={item.image} alt={item.alt} position={item.position} />
-          </div>
-        )}
-        <span className="absolute left-3 top-3 border border-gold/30 bg-night-high/90 px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-gold-light backdrop-blur-md">{item.badge}</span>
-      </div>
-      <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
-        <div>
-          <span className="mb-1 block text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-gold">{item.label}</span>
-          <h3 className={`font-serif font-semibold text-ivory transition-colors group-hover:text-gold-light ${titleSize}`}>{item.title}</h3>
-          <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-mist">{item.body}</p>
-        </div>
-        {/* If the note and link don't fit on one line, the link drops to the right on the next */}
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-gold/15 pt-3">
-          {item.status
-            ? <span className="whitespace-nowrap text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-sage">{item.status}</span>
-            : <span className="whitespace-nowrap text-xs text-sage">{item.note}</span>}
-          <a href={href} {...EXTERNAL} className={`${ACTION} ml-auto shrink-0 text-gold-light hover:underline`} aria-label={`${cta} — ${item.title}, on WhatsApp`}>{cta} →</a>
-        </div>
-      </div>
-    </article>
   )
 }
 
@@ -904,216 +870,74 @@ export function JewelleryCollection() {
   )
 }
 
-export function DressSetsCollection() {
-  const { settings } = useStore()
-  const d = DRESS_SETS
-  return (
-    <CollectionSection data={d} tone="low">
-      <CollectionHeader
-        data={d}
-        titleId={`${d.id}-title`}
-        action={<a href={whatsappHref(settings, d.cta.message)} {...EXTERNAL} className={`${BTN_GOLD} shrink-0 shadow-xl`}><WhatsAppIcon className="h-[18px] w-[18px]" /> {d.cta.label}</a>}
-      />
-      <div className="grid gap-6 md:grid-cols-3 lg:gap-8" data-reveal-stagger>
-        {d.items.map((item) => <ShowcaseCard key={item.title} item={item} height="h-[340px] lg:h-[360px]" cta={d.cardCta} titleSize="text-[1.6rem] leading-tight" />)}
-      </div>
-    </CollectionSection>
-  )
-}
-
-// 3 · Featured masterpiece
-export function FeaturedSection() {
-  const { settings } = useStore()
-  const ref = useSectionReveal()
-  return (
-    <section id="featured" ref={ref} className="relative overflow-hidden border-y border-gold/20 bg-night py-20 text-ivory sm:py-28" aria-labelledby="featured-title">
-      <div className="container-x">
-        <div className="mb-14 flex items-center justify-center gap-4 text-gold-light" data-reveal>
-          <span className="hidden h-px w-24 bg-gold/30 sm:block" aria-hidden="true" />
-          <span className="text-xs" aria-hidden="true">◆</span>
-          <span className={`${LABEL} text-center`}>{FEATURED.ribbon}</span>
-          <span className="text-xs text-gold" aria-hidden="true">◆</span>
-          <span className="hidden h-px w-24 bg-gold/30 sm:block" aria-hidden="true" />
-        </div>
-
-        <div className="grid items-center gap-16 lg:grid-cols-12 lg:gap-12">
-          <div className="relative lg:col-span-7" data-reveal>
-            <div className="relative h-[460px] border border-gold/30 shadow-2xl sm:h-[620px]">
-              <Photo {...FEATURED.image} />
-              <div className="absolute left-5 top-5 max-w-[200px] border border-gold/40 bg-night/90 p-4 backdrop-blur-md sm:left-6 sm:top-6">
-                <span className="block text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-gold-light">{FEATURED.seal.label}</span>
-                <span className="font-serif text-xl font-semibold text-ivory">{FEATURED.seal.title}</span>
-                <span className="mt-1 block text-[0.625rem] font-semibold uppercase tracking-[0.18em] text-sage">{FEATURED.seal.note}</span>
-              </div>
-              <figure className="absolute -bottom-8 -right-4 hidden h-48 w-48 border-2 border-gold-light shadow-2xl sm:block lg:-right-8">
-                <Photo src={FEATURED.detail.src} alt={FEATURED.detail.alt} />
-                <figcaption className="absolute bottom-2.5 left-2.5 bg-night/90 px-1.5 py-0.5 text-[0.5625rem] font-semibold uppercase tracking-wider text-gold-light">{FEATURED.detail.caption}</figcaption>
-              </figure>
-            </div>
-          </div>
-
-          <div className="flex flex-col lg:col-span-5 lg:pl-6">
-            <span className={`${LABEL} mb-3 text-gold-light`} data-reveal>{FEATURED.code}</span>
-            <h2 id="featured-title" className={`mb-6 ${H_XL}`} data-reveal>
-              {FEATURED.title} <br />
-              <span className="italic text-gold-light">{FEATURED.titleAccent}</span>
-            </h2>
-            <p className="mb-6 text-[0.9375rem] leading-[1.7] text-mist" data-reveal>{FEATURED.body}</p>
-            <dl className="mb-8 flex flex-col gap-4 border border-gold/20 bg-night-low p-6" data-reveal>
-              {FEATURED.specs.map((s, i) => (
-                <div key={s.label} className={`flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4 ${i < FEATURED.specs.length - 1 ? 'border-b border-gold/15 pb-2.5' : ''}`}>
-                  <dt className={`${LABEL} text-mist`}>{s.label}</dt>
-                  <dd className={`text-[0.8125rem] font-semibold sm:text-right ${s.tone === 'gold' ? 'text-gold-light' : s.tone === 'sage' ? 'text-sage' : 'text-ivory'}`}>{s.value}</dd>
-                </div>
-              ))}
-            </dl>
-            <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap [&>a]:whitespace-nowrap" data-reveal>
-              <a href={whatsappHref(settings, FEATURED.enquiry)} {...EXTERNAL} className={BTN_GOLD}>
-                <WhatsAppIcon className="h-[18px] w-[18px]" /> Inquire via WhatsApp
-              </a>
-              <a href={whatsappHref(settings, FEATURED.trialEnquiry)} {...EXTERNAL} className={BTN_LINE}>Boutique Private Trial</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// 4 · New arrivals (products.json), with working filter chips
-const BADGE_TONE = {
-  gold: 'bg-gold-light text-ink',
-  sage: 'bg-sage-deep text-sage border border-gold/30',
-  default: 'bg-night-high/90 text-gold-light border border-gold/30',
-}
-
-function ArrivalCard({ product }) {
-  const { settings, categoryBySlug } = useStore()
-  const image = product.images?.[0]
-  const enquiry = whatsappHref(settings, productEnquiryMessage(settings, product, categoryBySlug[product.categorySlug]?.name))
-  return (
-    <article className="group flex flex-col border border-gold/20 bg-night-low transition-[border-color,box-shadow] duration-300 hover:border-gold hover:shadow-2xl">
-      <div className="relative h-[400px] overflow-hidden">
-        {image ? <Photo src={imageUrl(image.url)} alt={image.alt || product.name} position={product.imagePosition} /> : <div className="h-full w-full bg-night-high" />}
-        {product.badge && (
-          <span className={`absolute left-3 top-3 px-2 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] ${BADGE_TONE[product.badgeTone] || BADGE_TONE.default}`}>{product.badge}</span>
-        )}
-        {/* Hover/focus shortcut on pointer devices; the same enquiry link is always in the card footer */}
-        <div className="absolute inset-0 hidden items-center justify-center bg-night/30 p-4 opacity-0 transition-opacity duration-300 group-focus-within:opacity-100 group-hover:opacity-100 [@media(hover:hover)]:flex">
-          <a href={enquiry} {...EXTERNAL} tabIndex={-1} aria-hidden="true" className="flex w-full items-center justify-center gap-1.5 bg-gold-light py-3 text-center text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-ink shadow-xl transition-colors hover:bg-ivory">
-            <WhatsAppIcon className="h-4 w-4" /> WhatsApp Enquiry
-          </a>
-        </div>
-      </div>
-      <div className="flex flex-1 flex-col justify-between p-5">
-        <div>
-          <span className="mb-1 block text-[0.6875rem] font-semibold tracking-[0.22em] text-gold">#{product.productCode}</span>
-          <h3 className="font-serif text-xl font-semibold text-ivory transition-colors group-hover:text-gold-light">{product.name}</h3>
-          <p className="mt-1 text-[0.8125rem] leading-relaxed text-mist">{product.description}</p>
-        </div>
-        <div className="mt-4 flex items-center justify-between gap-3 border-t border-gold/15 pt-3">
-          <span className={`${LABEL} !tracking-wider text-sage`}>{product.statusLabel}</span>
-          <a href={enquiry} {...EXTERNAL} className={`${ACTION} text-gold-light hover:underline`} aria-label={`Enquire about ${product.name} on WhatsApp`}>Enquire →</a>
-        </div>
-      </div>
-    </article>
-  )
-}
-
-export function NewArrivalsSection() {
-  const { settings } = useStore()
-  const { data, loading, error } = useAsync(() => getNewArrivals(4), [])
-  const [tag, setTag] = useState(null)
-  const ref = useRef(null)
-  useReveal(ref, [data?.length])
-  const shown = useMemo(() => (data || []).filter((p) => !tag || p.tags?.includes(tag)), [data, tag])
-  if (!loading && (error || !data?.length)) return null
-
-  return (
-    <section id="new-arrivals" ref={ref} className="relative bg-night-lowest py-20 text-ivory sm:py-28" aria-labelledby="arrivals-title">
-      <div className="container-x">
-        <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end" data-reveal>
-          <div>
-            <span className={`${LABEL} mb-2 block text-gold-light`}>{ARRIVALS.eyebrow}</span>
-            <h2 id="arrivals-title" className={H_XL}>{ARRIVALS.title}</h2>
-            <p className="mt-1 text-[0.9375rem] text-mist">{ARRIVALS.lead}</p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter new arrivals">
-            {ARRIVALS.filters.map((f) => {
-              const on = tag === f.tag
-              return (
-                <button
-                  key={f.label}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => setTag(f.tag)}
-                  className={`min-h-11 cursor-pointer border px-4 py-2 transition-colors ${ACTION} ${on ? 'border-gold/40 bg-sage-deep text-sage' : 'border-transparent bg-night-mid text-mist hover:text-gold-light'}`}
-                >
-                  {f.label}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-
-        {loading ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">{[0, 1, 2, 3].map((i) => <div key={i} className="h-[560px] animate-pulse bg-night-low" />)}</div>
-        ) : shown.length ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {shown.map((p) => <ArrivalCard key={p.id} product={p} />)}
-          </div>
-        ) : (
-          <p className="border border-gold/20 bg-night-low p-8 text-center text-mist" role="status">No new arrivals in this weave right now — ask us on WhatsApp for the latest pieces.</p>
-        )}
-
-        <div className="mt-14 flex flex-col items-center justify-between gap-6 border border-gold/30 bg-night-mid p-8 md:flex-row" data-reveal>
-          <div className="flex items-center gap-4">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center border border-gold/40 bg-gold-light/10 text-gold-light"><BookOpen className="h-6 w-6" aria-hidden="true" /></span>
-            <div>
-              <h3 className="font-serif text-xl font-semibold text-ivory">{ARRIVALS.banner.title}</h3>
-              <p className="text-[0.8125rem] text-mist">{ARRIVALS.banner.body}</p>
-            </div>
-          </div>
-          <a href={whatsappHref(settings, ARRIVALS.banner.message)} {...EXTERNAL} className={`${BTN_GOLD} shrink-0 whitespace-nowrap`}>
-            {ARRIVALS.banner.cta} <BookOpen className="h-[18px] w-[18px]" aria-hidden="true" />
-          </a>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 // 5 · Craft pillars
 const PILLAR_ICONS = { ruler: Ruler, brush: Brush, palette: Palette, concierge: UserCheck }
+
+// Staggered heights for the three process photos (draft, embroider, finish)
+const CRAFT_FRAMES = ['h-64 sm:h-72 md:mt-12', 'h-72 sm:h-96', 'h-64 sm:h-72 md:mt-20']
+const ROMAN = ['I', 'II', 'III']
 
 export function CraftSection() {
   const ref = useSectionReveal()
   return (
-    <section id="craft" ref={ref} className="relative overflow-hidden bg-night py-20 text-ivory sm:py-28" aria-labelledby="craft-title">
-      <div className="container-x">
-        <div className="mx-auto mb-16 max-w-3xl text-center" data-reveal>
-          <RuleLabel both className="mb-3 justify-center text-gold-light">{CRAFT.eyebrow}</RuleLabel>
-          <h2 id="craft-title" className={H_XL}>{CRAFT.title}</h2>
-          <p className="mt-4 text-lg font-light leading-[1.85] text-mist">{CRAFT.lead}</p>
+    <section id="craft" ref={ref} className="relative overflow-hidden bg-night py-20 text-ivory sm:py-28 lg:py-24" aria-labelledby="craft-title">
+      {/* Soft gold glow anchoring the header */}
+      <div className="pointer-events-none absolute -top-40 left-1/2 h-[480px] w-[900px] -translate-x-1/2 bg-[radial-gradient(closest-side,rgb(201_164_92/0.10),transparent)]" aria-hidden="true" />
+      <div className="container-x relative">
+        {/* Split header: statement left, lead right */}
+        <div className="grid gap-6 lg:grid-cols-12 lg:items-end lg:gap-12" data-reveal>
+          <div className="lg:col-span-6">
+            <RuleLabel className="mb-3 text-gold-light">{CRAFT.eyebrow}</RuleLabel>
+            <h2 id="craft-title" className={`${H_XL} lg:text-[4rem]`}>
+              {CRAFT.title} <span className="italic text-gold-light">{CRAFT.titleAccent}</span>
+            </h2>
+          </div>
+          <p className="max-w-xl border-gold/30 text-base font-light leading-[1.8] text-mist lg:col-span-6 lg:border-l lg:pl-10 lg:text-[1.0625rem]">{CRAFT.lead}</p>
         </div>
-        <ol className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-8" data-reveal-stagger>
+
+        {/* Process triptych */}
+        <div className="mt-14 grid gap-5 sm:grid-cols-3 sm:gap-6" data-reveal-stagger>
+          {CRAFT.images.map((img, i) => (
+            <figure key={img.src} className={`group relative overflow-hidden border border-gold/25 bg-night-mid ${CRAFT_FRAMES[i]}`}>
+              <div className="absolute inset-0 transition-transform duration-[1200ms] ease-[var(--ease-silk)] motion-safe:group-hover:scale-105"><Photo {...img} /></div>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night/85 via-night/10 to-transparent" aria-hidden="true" />
+              <div className="pointer-events-none absolute inset-2.5 border border-gold-light/15" aria-hidden="true" />
+              <figcaption className="absolute inset-x-5 bottom-5 flex items-baseline gap-3">
+                <span className="font-serif text-[1.75rem] italic leading-none text-gold-light">{ROMAN[i]}</span>
+                <span className={`${LABEL} text-ivory`}>{img.caption}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+
+        {/* Pillars: stat-led cards with a ghost numeral, diamond-framed icon and a gold bar that runs out on hover */}
+        <ol className="mt-16 grid gap-5 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-6" data-reveal-stagger>
           {CRAFT.pillars.map((p, i) => {
             const Icon = PILLAR_ICONS[p.icon] || Ruler
+            const n = String(i + 1).padStart(2, '0')
             return (
-              <li key={p.title} className="flex flex-col border border-gold/20 bg-night-low p-8 transition-colors duration-300 hover:border-gold">
-                <span className="mb-6 flex h-12 w-12 items-center justify-center border border-gold/40 bg-night-high text-gold-light"><Icon className="h-6 w-6" strokeWidth={1.5} aria-hidden="true" /></span>
-                <span className={`${LABEL} mb-2 text-gold-light`}>Pillar {String(i + 1).padStart(2, '0')}</span>
-                <h3 className="mb-3 font-serif text-xl font-semibold text-ivory">{p.title}</h3>
-                <p className="text-[0.8125rem] leading-relaxed text-mist">{p.body}</p>
+              <li key={p.title} className="group/pillar relative flex flex-col overflow-hidden border border-gold/20 bg-gradient-to-b from-night-low to-night p-7 transition-[border-color,box-shadow,transform] duration-500 ease-[var(--ease-silk)] hover:border-gold/60 hover:shadow-[0_24px_60px_-28px_rgba(0,0,0,0.8)] motion-safe:hover:-translate-y-1 sm:p-8">
+                <span className="absolute left-0 top-0 h-[2px] w-12 bg-gold-light transition-[width] duration-700 ease-[var(--ease-silk)] group-hover/pillar:w-full" aria-hidden="true" />
+                <span className="pointer-events-none absolute -bottom-6 -right-2 select-none font-serif text-[8rem] font-semibold leading-none text-gold/[0.07] transition-colors duration-500 group-hover/pillar:text-gold/[0.12]" aria-hidden="true">{n}</span>
+                <div className="flex items-start justify-between">
+                  {/* Icon inside a rotated diamond frame */}
+                  <span className="relative flex h-14 w-14 items-center justify-center">
+                    <span className="absolute inset-1.5 rotate-45 border border-gold/45 bg-night-high transition-colors duration-300 group-hover/pillar:border-gold-light group-hover/pillar:bg-gold-light" aria-hidden="true" />
+                    <Icon className="relative h-6 w-6 text-gold-light transition-colors duration-300 group-hover/pillar:text-ink" strokeWidth={1.5} aria-hidden="true" />
+                  </span>
+                  <span className={`${LABEL} pt-1 text-gold/80`}>Pillar {n}</span>
+                </div>
+                <div className="mt-7">
+                  <span className="block font-serif text-[2.4rem] font-semibold leading-none text-gold-light">{p.stat}</span>
+                  <span className="mt-1.5 block text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-sage">{p.statLabel}</span>
+                </div>
+                <span className="my-5 h-px w-full bg-gradient-to-r from-gold/40 to-transparent" aria-hidden="true" />
+                <h3 className="font-serif text-[1.5rem] font-semibold leading-snug text-ivory transition-colors duration-300 group-hover/pillar:text-gold-light">{p.title}</h3>
+                <p className="relative mt-2 text-[0.875rem] leading-relaxed text-mist">{p.body}</p>
               </li>
             )
           })}
         </ol>
-        <div className="mt-12 grid gap-6 md:grid-cols-3" data-reveal-stagger>
-          {CRAFT.images.map((img) => (
-            <div key={img.src} className="h-64 overflow-hidden border border-gold/20"><Photo {...img} /></div>
-          ))}
-        </div>
       </div>
     </section>
   )
