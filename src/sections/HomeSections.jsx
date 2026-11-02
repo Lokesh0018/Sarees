@@ -426,28 +426,49 @@ function ShowcaseCard({ item, height, cta, titleSize = 'text-xl' }) {
   )
 }
 
-// Hover loupe on saree photos: square side in px, and how much it magnifies
+// Hover loupe on product photos: square side in px, and how much it magnifies
 const LENS_SIZE = 150
 const LENS_ZOOM = 2.5
 
-// Saree card: the whole card is one WhatsApp link, framed like a drape on display
-function SareeCard({ item, index, cta }) {
-  const { settings } = useStore()
+// Loupe wiring: put `onPointerMove={follow}` and the `group/zoom` class on the photo frame, and render <Loupe> inside it.
+// The square follows the cursor and pans an enlarged copy of the photo; written straight to the DOM to skip re-renders.
+function useLoupe() {
   const lensRef = useRef(null)
-  const lensViewRef = useRef(null)
-  // Move the loupe square with the cursor and pan its enlarged copy of the photo; written straight to the DOM to skip re-renders
-  const followZoom = (e) => {
+  const viewRef = useRef(null)
+  const follow = (e) => {
     if (e.pointerType !== 'mouse' || !lensRef.current) return
     const r = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - r.left
     const y = e.clientY - r.top
     const half = LENS_SIZE / 2
     lensRef.current.style.transform = `translate(${x - half}px, ${y - half}px)`
-    const view = lensViewRef.current.style
+    const view = viewRef.current.style
     view.width = `${r.width * LENS_ZOOM}px`
     view.height = `${r.height * LENS_ZOOM}px`
     view.transform = `translate(${half - x * LENS_ZOOM}px, ${half - y * LENS_ZOOM}px)`
   }
+  return { lensRef, viewRef, follow }
+}
+
+function Loupe({ loupe, src, position }) {
+  return (
+    <div
+      ref={loupe.lensRef}
+      className="pointer-events-none absolute left-0 top-0 z-10 overflow-hidden border border-gold-light bg-night-mid opacity-0 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.8)] transition-opacity duration-300 group-hover/zoom:opacity-100"
+      style={{ width: LENS_SIZE, height: LENS_SIZE }}
+      aria-hidden="true"
+    >
+      <div ref={loupe.viewRef} className="absolute left-0 top-0">
+        <Photo src={src} alt="" position={position} />
+      </div>
+    </div>
+  )
+}
+
+// Saree card: the whole card is one WhatsApp link, framed like a drape on display
+function SareeCard({ item, index, cta }) {
+  const { settings } = useStore()
+  const loupe = useLoupe()
   return (
     <a
       href={whatsappHref(settings, item.message)}
@@ -455,23 +476,12 @@ function SareeCard({ item, index, cta }) {
       aria-label={`${cta} — ${item.title}, on WhatsApp`}
       className="group relative flex cursor-pointer flex-col border border-gold/20 bg-night-low transition-[border-color,box-shadow,transform] duration-500 ease-[var(--ease-silk)] hover:border-gold/70 hover:shadow-[0_24px_60px_-24px_rgba(0,0,0,0.75)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-light motion-safe:hover:-translate-y-1.5"
     >
-      <div className="group/zoom relative aspect-[3/4] cursor-crosshair overflow-hidden bg-night-mid" onPointerMove={followZoom}>
+      <div className="group/zoom relative aspect-[3/4] cursor-crosshair overflow-hidden bg-night-mid" onPointerMove={loupe.follow}>
         {item.image && <Photo src={item.image} alt={item.alt} position={item.position || '50% 25%'} />}
         {/* Shade at the foot of the photo so it settles into the card body */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-night-low via-night-low/40 to-transparent" aria-hidden="true" />
         {/* Loupe square: an enlarged copy of the photo, panned so the cursor sits at its centre */}
-        {item.image && (
-          <div
-            ref={lensRef}
-            className="pointer-events-none absolute left-0 top-0 z-10 overflow-hidden border border-gold-light bg-night-mid opacity-0 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.8)] transition-opacity duration-300 group-hover/zoom:opacity-100"
-            style={{ width: LENS_SIZE, height: LENS_SIZE }}
-            aria-hidden="true"
-          >
-            <div ref={lensViewRef} className="absolute left-0 top-0">
-              <Photo src={item.image} alt="" position={item.position || '50% 25%'} />
-            </div>
-          </div>
-        )}
+        {item.image && <Loupe loupe={loupe} src={item.image} position={item.position || '50% 25%'} />}
         {/* Gold inner frame that draws in on hover */}
         <div className="pointer-events-none absolute inset-3 border border-gold-light/0 transition-colors duration-500 group-hover:border-gold-light/60" aria-hidden="true" />
         <span className="absolute left-5 top-5 border border-gold/40 bg-night/70 px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-gold-light backdrop-blur-md">{item.badge}</span>
@@ -844,13 +854,51 @@ export function NightiesCollection() {
   )
 }
 
+// Jewellery card: the whole card is one WhatsApp link. The photo sits under a temple-arch frame and carries the
+// same hover loupe as the saree cards, so the kemp stones, pearls and nakshi work can be inspected up close.
+function JewelleryCard({ item, cta }) {
+  const { settings } = useStore()
+  const loupe = useLoupe()
+  return (
+    <a
+      href={whatsappHref(settings, item.message)}
+      {...EXTERNAL}
+      aria-label={`${cta} — ${item.title}, on WhatsApp`}
+      className="group flex cursor-pointer flex-col items-center border border-gold/20 bg-night-low p-3 text-center transition-[border-color,box-shadow,transform] duration-500 ease-[var(--ease-silk)] hover:border-gold/70 hover:shadow-[0_24px_60px_-24px_rgba(0,0,0,0.75)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-light motion-safe:hover:-translate-y-1.5"
+    >
+      {/* Temple arch: gold outline around an arched photo window */}
+      <div className="w-full rounded-t-full border border-gold/35 p-1.5 transition-colors duration-500 group-hover:border-gold-light/70">
+        <div className="group/zoom relative aspect-[4/5] cursor-crosshair overflow-hidden rounded-t-full bg-night-mid" onPointerMove={loupe.follow}>
+          <Photo src={item.image} alt={item.alt} position={item.position || '50% 35%'} />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-night/70 to-transparent" aria-hidden="true" />
+          <Loupe loupe={loupe} src={item.image} position={item.position || '50% 35%'} />
+          <span className="absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap border border-gold/40 bg-night/80 px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-gold-light backdrop-blur-md">{item.badge}</span>
+        </div>
+      </div>
+      <div className="flex flex-1 flex-col items-center px-2 pb-3 pt-5">
+        <span className={`${LABEL} text-gold`}>{item.label}</span>
+        <h3 className="mt-1.5 font-serif text-[1.45rem] font-semibold leading-tight text-ivory transition-colors duration-300 group-hover:text-gold-light">{item.title}</h3>
+        <p className="mt-2 flex-1 text-[0.8125rem] leading-relaxed text-mist">{item.body}</p>
+        <ZariStar className="my-4 h-3 w-3 text-gold/70" />
+        <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-sage">{item.note}</span>
+        <span className={`${ACTION} mt-3 inline-flex items-center gap-2 text-gold-light`}>
+          {cta}
+          <span className="transition-transform duration-300 motion-safe:group-hover:translate-x-1" aria-hidden="true">→</span>
+        </span>
+      </div>
+    </a>
+  )
+}
+
 export function JewelleryCollection() {
   const d = JEWELLERY
   return (
     <CollectionSection data={d}>
+      {/* Soft gold glow behind the cards, like lamplight on a jewellery counter */}
+      <div className="pointer-events-none absolute inset-x-0 top-1/3 h-2/3 bg-[radial-gradient(60%_60%_at_50%_50%,rgb(201_164_92/0.08),transparent_70%)]" aria-hidden="true" />
       <CollectionHeader data={d} titleId={`${d.id}-title`} centered />
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
-        {d.items.map((item) => <ShowcaseCard key={item.title} item={item} height="h-[300px] lg:h-[320px]" cta={d.cardCta} />)}
+      <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
+        {d.items.map((item) => <JewelleryCard key={item.title} item={item} cta={d.cardCta} />)}
       </div>
     </CollectionSection>
   )
