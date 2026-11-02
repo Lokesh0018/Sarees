@@ -137,3 +137,6 @@
 .shade-rail > * { scroll-snap-align: start; }
 @media (min-width: 640px) { .shade-rail { mask-image: none; } }
 @media (prefers-reduced-motion: reduce) { .shade-scroll { scroll-behavior: auto; } }
+
+/* Lightbox photo swap */
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: none; } }

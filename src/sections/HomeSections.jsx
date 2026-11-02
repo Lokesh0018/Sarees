@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowRight, BadgeCheck, Brush, CalendarCheck, CalendarDays, Check, CircleCheck, CircleDot, Clock, Flower, Flower2, Grid2x2, Layers, LockOpen, MapPin, Moon, Palette, PencilRuler, Phone, Ribbon, Ruler, Scissors, Shield, Shirt, Sparkles, UserCheck, Waves } from 'lucide-react'
+import { ArrowRight, BadgeCheck, Brush, CalendarCheck, CalendarDays, Check, CircleCheck, CircleDot, Clock, Flower, Flower2, Grid2x2, Layers, LockOpen, MapPin, Maximize2, Moon, Palette, PencilRuler, Phone, Ribbon, Ruler, Scissors, Shield, Shirt, Sparkles, UserCheck, Waves } from 'lucide-react'
 import { useStore } from '../context/StoreContext'
 import { gsap, useReveal } from '../utils/motion'
 import { addressLines, formatPhone, generalEnquiryMessage, mapsDirectionsHref, productEnquiryMessage, telHref, whatsappHref } from '../utils/contact'
 import WhatsAppIcon from '../components/WhatsAppIcon'
 import ShadeFinder from '../components/ShadeFinder'
+import GalleryLightbox from '../components/GalleryLightbox'
 import { LOGO } from '../components/Logo'
 import { imageUrl } from '../utils/assets'
 import { COLLECTIONS, CRAFT, GALLERY, INNERS, INTRO, JEWELLERY, MARQUEE, MATCHINGS, NIGHTIES, PETTICOATS, SAREES, STITCHING, STORY, VISIT } from '../content/home'
@@ -1037,30 +1038,54 @@ export function StorySection() {
 // 7 · Gallery mosaic
 const SPAN = { 3: 'lg:col-span-3', 4: 'lg:col-span-4', 5: 'lg:col-span-5' }
 
+// Editorial mosaic: two columns on phones (first and last photos span both), 12-column bento on desktop.
+// Every tile opens the full-screen lightbox.
 export function GallerySection() {
   const ref = useSectionReveal()
+  const [active, setActive] = useState(null)
   return (
-    <section id="gallery" ref={ref} className="relative bg-night py-20 text-ivory sm:py-28" aria-labelledby="gallery-title">
+    <section id="gallery" ref={ref} className="relative bg-night py-20 text-ivory sm:py-28 lg:py-20" aria-labelledby="gallery-title">
       <div className="container-x">
-        <div className="mb-14 flex flex-col justify-between gap-4 md:flex-row md:items-end" data-reveal>
-          <div>
-            <span className={`${LABEL} mb-2 block text-gold-light`}>{GALLERY.eyebrow}</span>
+        <div className="mb-10 grid gap-5 md:mb-12 md:grid-cols-12 md:items-end" data-reveal>
+          <div className="md:col-span-7">
+            <RuleLabel className="mb-3 text-gold-light">{GALLERY.eyebrow}</RuleLabel>
             <h2 id="gallery-title" className={H_XL}>{GALLERY.title}</h2>
           </div>
-          <p className="max-w-md text-[0.8125rem] leading-relaxed text-mist">{GALLERY.lead}</p>
+          <div className="flex items-end justify-between gap-6 md:col-span-5 md:flex-col md:items-end md:text-right">
+            <p className="max-w-sm text-[0.9375rem] leading-relaxed text-mist">{GALLERY.lead}</p>
+            <span className={`${LABEL} shrink-0 text-gold`}>{String(GALLERY.items.length).padStart(2, '0')} Moments</span>
+          </div>
         </div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-12" data-reveal-stagger>
-          {GALLERY.items.map((g) => (
-            <figure key={g.src} className={`group relative overflow-hidden border border-gold/20 ${SPAN[g.span]} ${g.tall ? 'h-[360px] lg:h-[420px]' : 'h-[300px] lg:h-[340px]'}`}>
-              <Photo src={g.src} alt={g.alt} position={g.position} className="transition-transform duration-700 group-hover:scale-105" />
-              {/* Captions always show on touch screens; on pointer devices they reveal on hover */}
-              <figcaption className="absolute inset-0 flex items-end bg-gradient-to-t from-night/70 to-transparent p-5 transition-opacity duration-300 [@media(hover:hover)]:bg-night/40 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 sm:p-6">
-                <span className={`${LABEL} border border-gold/30 bg-night/90 px-3 py-1.5 text-gold-light`}>{g.caption}</span>
-              </figcaption>
-            </figure>
+        <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-12 lg:gap-5" data-reveal-stagger>
+          {GALLERY.items.map((g, i) => (
+            <li key={g.src} className={`${i === 0 || i === GALLERY.items.length - 1 ? 'col-span-2' : ''} ${SPAN[g.span]}`}>
+              <button
+                type="button"
+                onClick={() => setActive(i)}
+                aria-label={`View photo: ${g.caption}`}
+                aria-haspopup="dialog"
+                className={`group relative block w-full cursor-zoom-in overflow-hidden border border-gold/20 bg-night-mid text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-light ${i === 0 ? 'h-64 sm:h-[380px]' : g.tall ? 'h-56 sm:h-[340px]' : 'h-44 sm:h-[300px]'} ${g.tall ? 'lg:h-[420px]' : 'lg:h-[320px]'}`}
+              >
+                <div className="absolute inset-0 transition-transform duration-[1200ms] ease-[var(--ease-silk)] motion-safe:group-hover:scale-105">
+                  <Photo src={g.src} alt={g.alt} position={g.position} />
+                </div>
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night/85 via-night/10 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-100" aria-hidden="true" />
+                {/* Gold frame that draws in on hover */}
+                <span className="pointer-events-none absolute inset-3 border border-gold-light/0 transition-colors duration-500 group-hover:border-gold-light/50" aria-hidden="true" />
+                <span className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center border border-gold/40 bg-night/70 text-gold-light opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" aria-hidden="true">
+                  <Maximize2 className="h-4 w-4" />
+                </span>
+                {/* Caption: always visible, lifts slightly on hover */}
+                <span className="absolute inset-x-3 bottom-3 flex items-baseline gap-2.5 transition-transform duration-500 ease-[var(--ease-silk)] sm:inset-x-5 sm:bottom-5 sm:gap-3 motion-safe:group-hover:-translate-y-1">
+                  <span className="font-serif text-[1.1rem] italic leading-none text-gold-light sm:text-[1.4rem]">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="text-[0.625rem] font-semibold uppercase leading-snug tracking-[0.16em] text-ivory sm:text-[0.6875rem] sm:tracking-[0.2em]">{g.caption}</span>
+                </span>
+              </button>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
+      <GalleryLightbox items={GALLERY.items} index={active} onChange={setActive} onClose={() => setActive(null)} />
     </section>
   )
 }
