@@ -80,11 +80,13 @@ export const STORY = {
     'Today, daughters walk into our salon with their mothers and grandmothers, choosing sarees that will be passed down for generations to come. When you wear SJR, you do not simply wear garments—you wear an enduring heritage of Indian handloom mastery.',
   ],
   facts: [
-    { value: 'MVP Colony', label: 'Sector 2, Vizag' },
-    { value: 'Bespoke', label: 'Bridal Sanctuary' },
-    { value: 'Heirloom', label: 'Certified Silks' },
+    { icon: 'pin', value: 'MVP Colony', label: 'Sector 2, Vizag' },
+    { icon: 'crown', value: 'Bespoke', label: 'Bridal Sanctuary' },
+    { icon: 'badge', value: 'Heirloom', label: 'Certified Silks' },
   ],
   image: { src: IMG('story-boutique'), alt: 'Interior of a boutique with emerald walls, warm gold lighting and wooden saree vitrines', position: '50% 50%' },
+  inset: { src: IMG('gallery-loom'), alt: 'A master weaver working gold zari threads on a wooden pit loom', position: '70% 50%' },
+  signature: 'SJR – House of Collection',
   vision: { label: 'The Founder’s Vision', quote: '“Every stitch must honor the hand that wove the thread, and every drape must glorify the woman who wears it.”' },
 }
 

@@ -49,6 +49,33 @@ function useSectionReveal() {
   return ref
 }
 
+// Mouse parallax: every [data-depth] element inside the section drifts against the pointer by `depth` px at the edges.
+// Pointer-and-hover devices only, and off when the visitor prefers reduced motion.
+function useMouseParallax(ref) {
+  useEffect(() => {
+    const root = ref.current
+    if (!root || !window.matchMedia('(hover: hover) and (pointer: fine)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const layers = [...root.querySelectorAll('[data-depth]')].map((el) => ({
+      depth: Number(el.dataset.depth),
+      x: gsap.quickTo(el, 'x', { duration: 0.9, ease: 'power3.out' }),
+      y: gsap.quickTo(el, 'y', { duration: 0.9, ease: 'power3.out' }),
+    }))
+    const move = (e) => {
+      const r = root.getBoundingClientRect()
+      const nx = (e.clientX - r.left) / r.width - 0.5
+      const ny = (e.clientY - r.top) / r.height - 0.5
+      layers.forEach((l) => { l.x(-nx * l.depth * 2); l.y(-ny * l.depth * 2) })
+    }
+    const reset = () => layers.forEach((l) => { l.x(0); l.y(0) })
+    root.addEventListener('pointermove', move)
+    root.addEventListener('pointerleave', reset)
+    return () => {
+      root.removeEventListener('pointermove', move)
+      root.removeEventListener('pointerleave', reset)
+    }
+  }, [ref])
+}
+
 // 0 · Scrolling band between the hero film and the parchment introduction
 
 // Four-point star, like a kolam dot or a zari buti, used as the separator
@@ -944,41 +971,63 @@ export function CraftSection() {
 }
 
 // 6 · Brand story (the nav's "About")
+const FACT_ICONS = { pin: MapPin, crown: Sparkles, badge: BadgeCheck }
+
 export function StorySection() {
   const ref = useSectionReveal()
+  useMouseParallax(ref)
+  const [first, ...rest] = STORY.lead
   return (
-    <section id="about" ref={ref} className="relative border-t border-gold/20 bg-night-lowest py-20 text-ivory sm:py-28" aria-labelledby="story-title">
-      <div className="container-x grid items-center gap-16 lg:grid-cols-12">
+    <section id="about" ref={ref} className="relative overflow-hidden border-t border-gold/20 bg-night-lowest py-20 text-ivory sm:py-28 lg:py-16" aria-labelledby="story-title">
+      {/* Monogram watermark */}
+      <span className="pointer-events-none absolute -right-6 top-6 select-none font-serif text-[11rem] font-semibold leading-none text-gold/[0.04] sm:text-[16rem] lg:text-[20rem]" aria-hidden="true">SJR</span>
+      <div className="container-x relative grid items-center gap-14 lg:grid-cols-12 lg:gap-14">
+        {/* Layered photo composition */}
+        <div className="relative pb-16 pr-6 sm:pb-20 sm:pr-16 lg:col-span-6 lg:pb-14" data-reveal>
+          <div data-depth="22" className="pointer-events-none absolute -left-3 -top-3 h-24 w-24 border-l border-t border-gold/50 sm:-left-5 sm:-top-5" aria-hidden="true" />
+          <div data-depth="6" className="group relative h-[380px] overflow-hidden border border-gold/30 bg-night-mid shadow-2xl sm:h-[500px] lg:h-[min(500px,62vh)]">
+            <div className="absolute inset-0 transition-transform duration-[1200ms] ease-[var(--ease-silk)] motion-safe:group-hover:scale-[1.03]"><Photo {...STORY.image} /></div>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night/60 via-transparent to-transparent" aria-hidden="true" />
+          </div>
+          {/* Inset loom photo */}
+          <div data-depth="18" className="absolute right-0 top-10 hidden h-44 w-36 overflow-hidden border-4 border-night-lowest shadow-2xl outline outline-1 outline-gold/40 sm:block lg:h-52 lg:w-40">
+            <Photo {...STORY.inset} />
+          </div>
+          {/* Founder's vision pull quote */}
+          <figure data-depth="12" className="absolute bottom-0 left-4 right-10 border border-gold/40 bg-night-high/95 p-5 shadow-2xl backdrop-blur-md sm:left-8 sm:right-auto sm:max-w-sm sm:p-6">
+            <span className="absolute -top-5 left-5 font-serif text-[4rem] leading-none text-gold-light" aria-hidden="true">“</span>
+            <figcaption className={`${LABEL} !tracking-wider text-gold-light`}>{STORY.vision.label}</figcaption>
+            <blockquote className="mt-2 font-serif text-[1.05rem] italic leading-relaxed text-ivory sm:text-[1.15rem]">{STORY.vision.quote.replace(/^“|”$/g, '')}</blockquote>
+          </figure>
+        </div>
+
+        {/* Story */}
         <div className="flex flex-col lg:col-span-6">
           <RuleLabel className="mb-4 text-gold-light" data-reveal>{STORY.eyebrow}</RuleLabel>
-          <h2 id="story-title" className={`mb-6 ${H_XL}`} data-reveal>
+          <h2 id="story-title" className={`mb-5 ${H_XL} lg:text-[3.1rem]`} data-reveal>
             {STORY.title} <br />
             <span className="italic text-gold-light">{STORY.titleAccent}</span>
           </h2>
-          <p className="mb-6 text-lg font-light leading-[1.85] text-mist" data-reveal>
-            {STORY.lead.split('SJR – House of Collection').flatMap((part, i) => (i ? [<strong key={i} className="font-normal text-ivory">SJR – House of Collection</strong>, part] : [part]))}
+          <p className="mb-4 text-[1.0625rem] font-light leading-[1.8] text-mist lg:text-base lg:leading-[1.75]" data-reveal>
+            <span className="float-left mr-3 mt-1 font-serif text-[4.25rem] font-semibold leading-[0.8] text-gold-light">{first}</span>
+            {rest.join('').split('SJR – House of Collection').flatMap((part, i) => (i ? [<strong key={i} className="font-normal text-ivory">SJR – House of Collection</strong>, part] : [part]))}
           </p>
-          {STORY.paragraphs.map((t) => <p key={t.slice(0, 20)} className="mb-6 text-[0.9375rem] leading-[1.7] text-mist" data-reveal>{t}</p>)}
-          <dl className="mt-2 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-gold/20 pt-6" data-reveal>
-            {STORY.facts.map((f, i) => (
-              <div key={f.value} className="flex items-center gap-8">
-                {i > 0 && <span className="hidden h-10 w-px bg-gold/30 sm:block" aria-hidden="true" />}
-                <div className="flex flex-col">
-                  <dt className="font-serif text-[1.75rem] font-medium text-gold-light">{f.value}</dt>
-                  <dd className={`${LABEL} mt-1 !tracking-[0.16em] text-mist`}>{f.label}</dd>
+          {STORY.paragraphs.map((t) => <p key={t.slice(0, 20)} className="mb-4 max-w-xl text-[0.9375rem] leading-[1.75] text-mist lg:text-[0.875rem] lg:leading-[1.7]" data-reveal>{t}</p>)}
+          <p className="mb-6 font-serif text-[1.15rem] italic text-gold-light" data-reveal>— {STORY.signature}</p>
+          <dl className="grid grid-cols-1 border border-gold/20 sm:grid-cols-3" data-reveal>
+            {STORY.facts.map((f) => {
+              const Icon = FACT_ICONS[f.icon] || Sparkles
+              return (
+                <div key={f.value} className="flex items-center gap-3 border-b border-gold/20 p-4 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
+                  <Icon className="h-5 w-5 shrink-0 text-gold" strokeWidth={1.5} aria-hidden="true" />
+                  <div className="flex flex-col-reverse">
+                    <dt className={`${LABEL} mt-1 !tracking-[0.16em] text-mist`}>{f.label}</dt>
+                    <dd className="font-serif text-[1.5rem] font-medium leading-tight text-gold-light">{f.value}</dd>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </dl>
-        </div>
-        <div className="relative lg:col-span-6" data-reveal>
-          <div className="relative h-[420px] border border-gold/30 shadow-2xl sm:h-[540px]">
-            <Photo {...STORY.image} />
-            <figure className="absolute -bottom-8 -left-8 hidden max-w-xs border border-gold/40 bg-night-high p-6 shadow-2xl sm:block">
-              <figcaption className={`${LABEL} !tracking-wider text-gold-light`}>{STORY.vision.label}</figcaption>
-              <blockquote className="mt-2 text-[0.8125rem] italic leading-relaxed text-ivory">{STORY.vision.quote}</blockquote>
-            </figure>
-          </div>
         </div>
       </div>
     </section>
