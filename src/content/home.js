@@ -1,6 +1,6 @@
 // Copy and imagery for the home page sections below the hero.
 // Edit wording here; the layout lives in src/sections/HomeSections.jsx.
-import { imageUrl } from '../utils/assets'
+import { imageUrl, pickImage } from '../utils/assets'
 
 // Images live in src/assets/images
 const IMG = (name) => imageUrl(`${name}.webp`)
@@ -189,4 +189,129 @@ export const FOOTER = {
     'Premium Inners & Nighties',
     'Fancy Temple Jewellery',
   ],
+}
+
+// ── Dedicated collection sections (between Collections and Featured) ─────────────────────────────────────────
+// The four saree photos are stand-ins until the real ones are saved to src/assets/images as
+// saree-kanchipuram, saree-gadwal, saree-banarasi and saree-organza (.webp / .jpg / .png). They take over automatically.
+const PREFER = (name, fallback) => pickImage(name, fallback)
+
+export const SAREES = {
+  id: 'collection-sarees',
+  eyebrow: 'Heritage Silk Registry',
+  note: '100% Silk Mark Certified',
+  title: 'Pattu, Handloom & Fancy Sarees',
+  lead: 'Hand-selected heirloom weaves crafted by generational master artisans across Kanchipuram, Gadwal, Uppada, and Banaras.',
+  cta: { label: 'Enquire Collection', message: 'Hi SJR House of Collection, I would like to view your Pattu and Handloom Saree catalogue.' },
+  items: [
+    { image: PREFER('saree-kanchipuram', 'cat-sarees'), alt: 'Pure Kanchipuram Pattu Saree with pure zari brocade and temple border', badge: 'Silk Mark Certified', label: 'Kanchipuram Heritage', title: 'Pure Kanchipuram Pattu', body: 'Heavy 3-ply mulberry silk with 2-gram tested gold zari korvai border.', status: 'Bridal Masterpiece', message: 'Interested in Pure Kanchipuram Bridal Pattu' },
+    { image: PREFER('saree-gadwal', 'arrival-emerald-gadwal'), alt: 'Pure Gadwal Silk Handloom Saree with kuttu interlocking zari pallu', badge: 'Handloom Guild', label: 'Gadwal Atelier', title: 'Pure Gadwal Sico & Silk', body: 'Featherweight cotton body seamlessly woven into rich pure silk zari borders.', status: 'Kuttu Technique', message: 'Interested in Pure Gadwal Sico and Silk' },
+    { image: PREFER('saree-banarasi', 'arrival-crimson-kanchipuram'), alt: 'Banarasi Katan Brocade silk saree with intricate floral kadwa weaves', badge: 'Katan Silk', label: 'Banaras Weaves', title: 'Banarasi Katan Brocade', body: 'Regal kadwa floral jaal motifs woven in antique silver and sona-rupa zari.', status: 'Festive Royal', message: 'Interested in Banarasi Katan Brocade' },
+    { image: PREFER('saree-organza', 'arrival-chanderi-floral'), alt: 'Sheer Tissue Organza Festive Saree with delicate scalloped cutwork and resham embroidery', badge: 'Contemporary Chic', label: 'Festive Delight', title: 'Sheer Tissue Organza', body: 'Airy pure organza enhanced with scalloped zari borders and pastel undertones.', status: 'Light & Ethereal', message: 'Interested in Sheer Tissue Organza Saree' },
+  ],
+  cardCta: 'Reserve Drape',
+}
+
+export const STITCHING = {
+  id: 'collection-stitching',
+  image: { src: IMG('cat-stitching'), alt: 'Bespoke maggam embroidery artisan handcrafting a bridal blouse with golden zardosi on a frame', position: '60% 50%' },
+  caption: { label: 'Bespoke Atelier', title: 'Master Maggam & Aari Craft', body: 'Precision cut, genuine zardosi, French knot detailing, and 18-point anatomic blouse tailoring.' },
+  eyebrow: 'In-House Tailoring Atelier',
+  title: 'Bespoke Stitching &',
+  titleAccent: 'Custom Maggam Work.',
+  lead: 'A bridal saree achieves its true magnificence only when complemented by a tailor-made blouse that fits like a second skin. Our master pattern makers sculpt neckline curves, sleeve aesthetics, and back backdrops with mathematical accuracy.',
+  features: [
+    { icon: 'ruler', title: '18-Point Fitting Formula', body: 'Zero shoulder droop, seamless underarm ease, and custom bust cups.' },
+    { icon: 'sparkles', title: 'Heirloom Zardosi Work', body: 'Pure metallic bullion wires, seed pearls, and pallu-matched motifs.' },
+    { icon: 'clock', title: 'Express Bridal Timelines', body: 'Priority stitching schedules tailored for tight wedding itineraries.' },
+    { icon: 'check', title: 'Perfect Trial Guarantee', body: 'Private trial salon with on-the-spot master adjustments before hand-off.' },
+  ],
+  primary: { label: 'Book Tailoring Consultation', message: 'Hello SJR House of Collection, I would like to book a blouse stitching and maggam appointment.' },
+  secondary: { label: 'WhatsApp Lookbook', message: 'Hi, please share Maggam work patterns and pricing.' },
+}
+
+export const MATCHINGS = {
+  id: 'collection-matchings',
+  eyebrow: 'Perfect Tone Synchronization',
+  title: 'Designer Matchings & Lining Fabrics',
+  lead: 'Over 400 meticulously dyed tones ensuring an exact, seamless colour match for pure silks, sheer georgettes, and heavy bridal borders.',
+  items: [
+    { icon: 'texture', label: 'Breathable Durability', title: '2x2 Pure Cotton Linings', body: 'Pre-shrunk, color-fast, ultra-absorbent 2x2 fine combed cotton linings that preserve luxury silk fabrics against sweat and tension while offering featherweight comfort.', note: '400+ Available Shades', message: 'Enquiring about 2x2 Cotton Linings Matchings' },
+    { icon: 'layers', label: 'Textured Lustre', title: 'Raw Silk & Brocades', body: 'Contrast raw silk fabrics, authentic Banarasi brocades, and lustrous tissue fabrics curated for contrast sleeves, borders, and designer blouse backs.', note: 'By Meter & Pre-Cut Bits', message: 'Enquiring about Contrast Raw Silk and Brocade' },
+    { icon: 'ribbon', label: 'Drape Accents', title: 'Organza & Silk Dupattas', body: 'Embellished scalloped dupattas, banarasi weaves, and lightweight organza veils tailored for double-drape bridal ceremonies and festive ensembles.', note: 'Bespoke Embroidery', message: 'Enquiring about Designer Dupattas' },
+  ],
+  cardCta: 'Match Shade',
+}
+
+export const PETTICOATS = {
+  id: 'collection-petticoats',
+  eyebrow: 'Structure & Silhouette',
+  note: 'Comfort Sculpting',
+  title: 'Shaper Petticoats & Underskirts',
+  lead: 'Engineered underskirts and 4-way stretch mermaid shapers designed to hold heavy drapes securely without bulkiness.',
+  aside: 'Sizes XS to 3XL',
+  items: [
+    { label: 'Signature Draping', title: 'Mermaid Saree Shaper', body: 'Four-way micro-stretch fabric that hugs the hips and thighs while flaring at the hem for effortless walking and flawless pleat fall.', points: ['Targeted compression & tummy control', 'Side slit for unrestricted movement', 'Sturdy drawcord supports heavy Kanchi silks'], note: 'Available in 28+ Colours', message: 'I am looking for a Mermaid Saree Shaper' },
+    { label: 'Lustrous Glide', title: 'Pure Satin Underskirt', body: 'Heavy satin weave giving an exquisite sheen beneath sheer organzas, net sarees, and chiffon handlooms without clinging.', points: ['Zero static friction with delicate weaves', 'Flared 6-panel classical silhouette', 'Reinforced waist tie cord'], note: 'Gold, Champagne & Silver Tones', message: 'I am looking for a Satin Underskirt' },
+    { label: 'Daily Classic', title: 'Pure Cotton Drawstring Skirt', body: 'Traditional 100% fine cotton petticoat crafted with sturdy interlock stitching, double-hemmed bottom, and pre-washed softness.', points: ['100% breathable natural cotton', 'Pre-shrunk color guarantee', 'Ideal for traditional everyday & temple drapes'], note: '100+ Shades In Stock', message: 'I am looking for Cotton Petticoats' },
+  ],
+  cardCta: 'Enquire Size',
+}
+
+export const INNERS = {
+  id: 'collection-inners',
+  eyebrow: 'Intimate Comfort Foundations',
+  note: 'Day-Long Bridal Wear',
+  title: 'Ethnic Inners & Intimate Essentials',
+  lead: 'Curated foundations engineered for Indian festive drapes: zero show-through, friction-free movement, and supreme breathability under heavy bridal regalia.',
+  items: [
+    { icon: 'shirt', title: 'Modal Full Slips', body: 'Ultra-soft, antibacterial modal slips that glide smoothly beneath transparent Kurtis, Anarkalis, and sheer georgettes.', note: 'Sizes: S – 3XL' },
+    { icon: 'shield', title: 'Anti-Chafing Thigh Guards', body: 'Seamless breathable microfiber shorts preventing thigh rubbing and chafing during long muhurtham ceremonies.', note: 'Moisture-Wicking Tech' },
+    { icon: 'cups', title: 'Blouse Foam Cups & Pads', body: 'High-density Italian molded contour cups in tear-drop and round shapes for seamless backless and deep-neck blouses.', note: 'Sizes 30 to 44' },
+    { icon: 'flower', title: 'Pure Cotton Camisoles', body: 'Adjustable-strap fine cotton camisoles and tube tops tailored with discreet side darts for spotless festive silhouettes.', note: 'Neutral Nude & Skin Tones' },
+  ],
+}
+
+export const NIGHTIES = {
+  id: 'collection-nighties',
+  eyebrow: 'Everyday Tranquillity',
+  title: 'Cotton & Modal Nighties',
+  titleAccent: '& Bespoke Loungewear.',
+  lead: 'Indulge in breathable natural fibers designed for restorative rest and quiet home elegance. Our loungewear collection blends traditional Indian handblock prints with breezy, relaxed modern silhouettes.',
+  features: [
+    { icon: 'blossom', title: 'Jaipuri Handblock Pure Cotton Gowns', body: '100% combed cotton, authentic floral block motifs, and non-shrink guaranteed color dyes.' },
+    { icon: 'waves', title: 'Flowy Modal & Rayon Caftans', body: 'Lustrous featherlight drape with adjustable waist tassels, ideal for warm coastal evenings in Vizag.' },
+    { icon: 'zip', title: 'Maternity & Concealed Feeding Zippers', body: 'Thoughtfully integrated invisible side and front zippers designed for new mothers without sacrificing elegance.' },
+  ],
+  cta: { label: 'Request Nightwear Catalogue', message: 'Please send photos of available Cotton and Modal Nighties' },
+  image: { src: IMG('cat-nighties'), alt: 'Soft handblock printed pure cotton nightwear on a wooden rack with warm ambient lighting', position: '55% 50%' },
+}
+
+export const JEWELLERY = {
+  id: 'collection-jewellery',
+  eyebrow: 'Sacred Adornments',
+  title: 'Fancy Temple & Kundan Jewellery',
+  lead: 'Regal South Indian antique matte gold finish, uncut polki stones, guttapusalu pearls, and bridal waistbands matched precisely to your saree zari.',
+  items: [
+    { image: IMG('cat-fancy-jewellery'), alt: 'Antique matte gold Goddess Lakshmi temple choker necklace with kemp stones and pearl droplets', badge: 'Antique Matte Gold', label: 'Choker Suite', title: 'Lakshmi Temple Choker', body: 'Repoussé temple idol motif with rubies, emerald cabochons & matching jhumkas.', note: 'With Matching Earrings', message: 'Enquiry for Lakshmi Temple Choker' },
+    { image: IMG('gallery-jewellery-silk'), alt: 'Pearl and kundan necklace with matching earrings on emerald silk', badge: 'Pearl Clusters', label: 'Long Haaram', title: 'Royal Gutta Pusalu Haaram', body: 'Centuries-old Nizam-inspired cluster pearl fringes woven on hand-engraved gold.', note: 'Heritage Wedding Classic', message: 'Enquiry for Gutta Pusalu Haaram' },
+    { image: IMG('craft-finished-blouse'), alt: 'Bridal jewellery and a waist belt laid out with an embroidered blouse on emerald silk', badge: 'Bridal Waistbelt', label: 'Oddiyanam Accent', title: 'Nakshi Vaddanam Belt', body: 'Sculpted peacock and floral motifs with adjustable belt chain for snug saree tucking.', note: 'Adjustable Fit', message: 'Enquiry for Nakshi Vaddanam Waist Belt', position: '75% 70%' },
+    { image: IMG('gallery-bride'), alt: 'A bride wearing traditional forehead and hair jewellery', badge: 'Hair & Forehead Set', label: 'Bridal Accents', title: 'Maang Tikka & Jada Billalu', body: 'Nine-piece traditional braid jewellery set complete with sun-moon tikkas.', note: 'Full 9-Piece Set', message: 'Enquiry for Maang Tikka and Jada Billalu', position: '45% 25%' },
+  ],
+  cardCta: 'Enquire',
+}
+
+export const DRESS_SETS = {
+  id: 'collection-dress-sets',
+  eyebrow: 'Ready-To-Wear Couture',
+  note: 'Festive Celebrations',
+  title: 'Three-Piece Dress Sets & Kurtis',
+  lead: 'Effortless festive grandeur: pure chanderi, raw silk and georgette suit ensembles complete with designer pants and hand-embroidered organza dupattas.',
+  cta: { label: 'View Dress Lookbook', message: 'Hi SJR House of Collection, please share your Three-Piece Dress Sets Catalogue' },
+  items: [
+    { image: IMG('dress-anarkali'), alt: 'A bride seated in an emerald silk ensemble with heavy zari and temple jewellery', badge: 'Flared Anarkali', label: '3-Piece Bridal Ensemble', title: 'Royal Zardosi Anarkali Suite', body: '32-kali floor-length flared pure chanderi silk gown with hand-done zardosi yoke, churidar pants, and heavy scalloped border dupatta.', note: 'Sizes: XS – 3XL', message: 'Interested in Royal Zardosi Anarkali Suite', position: '50% 28%' },
+    { image: IMG('intro-drape'), alt: 'A woman in a crimson and emerald silk drape with a gold zari border', badge: 'Straight Silhouette', label: 'Festive Prêt', title: 'Festive Straight Kurta Set', body: 'Pure raw silk straight kurta paired with slim cigarette trousers, side pocket utility, and a shimmering banarasi zari border dupatta.', note: 'Ready for Dispatch', message: 'Interested in Festive Straight Kurta Set', position: '60% 40%' },
+    { image: IMG('cat-matchings'), alt: 'Festive garments and dupattas hanging in a boutique wardrobe', badge: 'Palazzo Pairing', label: 'Casual Festive', title: 'Embroidered Palazzo Suit', body: 'Breathable georgette tunic with intricate resham thread embroidery, flared wide-leg palazzo bottoms, and lightweight printed stole.', note: 'Boutique Fit Assured', message: 'Interested in Embroidered Palazzo Suit' },
+  ],
+  cardCta: 'Enquire Set',
 }

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowRight, BadgeCheck, BookOpen, Brush, CalendarCheck, Clock, MapPin, Palette, Phone, Ruler, UserCheck } from 'lucide-react'
+import { ArrowRight, BadgeCheck, BookOpen, Brush, CalendarCheck, CalendarDays, Check, CircleCheck, CircleDot, Clock, Flower, Flower2, Grid2x2, Layers, LockOpen, MapPin, Palette, PencilRuler, Phone, Ribbon, Ruler, Shield, Shirt, Sparkles, UserCheck, Waves } from 'lucide-react'
 import { useStore } from '../context/StoreContext'
 import { useAsync } from '../hooks/useAsync'
 import { gsap, useReveal } from '../utils/motion'
@@ -8,7 +8,7 @@ import { addressLines, formatPhone, generalEnquiryMessage, mapsDirectionsHref, p
 import WhatsAppIcon from '../components/WhatsAppIcon'
 import { LOGO } from '../components/Logo'
 import { imageUrl } from '../utils/assets'
-import { ARRIVALS, COLLECTIONS, CRAFT, FEATURED, GALLERY, INTRO, MARQUEE, STORY, VISIT } from '../content/home'
+import { ARRIVALS, COLLECTIONS, CRAFT, DRESS_SETS, FEATURED, GALLERY, INNERS, INTRO, JEWELLERY, MARQUEE, MATCHINGS, NIGHTIES, PETTICOATS, SAREES, STITCHING, STORY, VISIT } from '../content/home'
 
 // Shared type scale for the editorial sections
 const LABEL = 'text-[0.6875rem] font-semibold uppercase tracking-[0.22em]'
@@ -258,15 +258,25 @@ const BENTO = [
 ]
 const CARD_TITLE = { lg: 'text-[2.25rem] leading-[1.15]', md: 'text-[1.75rem] leading-tight', sm: 'text-[1.4rem] leading-tight' }
 
+// Category slug → its dedicated section further down the page
+const SECTION_BY_SLUG = {
+  sarees: SAREES.id, stitching: STITCHING.id, matchings: MATCHINGS.id, petticoats: PETTICOATS.id,
+  inners: INNERS.id, nighties: NIGHTIES.id, 'fancy-jewellery': JEWELLERY.id, 'dress-sets': DRESS_SETS.id,
+}
+
 function CollectionCard({ category, index }) {
   const { settings } = useStore()
   const card = COLLECTIONS.cards[category.slug] || { label: `Category ${String(index + 1).padStart(2, '0')}`, title: category.name, body: category.description, cta: 'Enquire' }
   const layout = BENTO[index] || BENTO[BENTO.length - 1]
+  const section = SECTION_BY_SLUG[category.slug]
+  // Scroll to the category's section when it has one; otherwise fall back to a WhatsApp enquiry
+  const link = section
+    ? { href: `#${section}` }
+    : { href: whatsappHref(settings, generalEnquiryMessage(settings, { topic: card.title })), ...EXTERNAL }
   return (
     <a
-      href={whatsappHref(settings, generalEnquiryMessage(settings, { topic: card.title }))}
-      {...EXTERNAL}
-      className={`group relative flex flex-col justify-end overflow-hidden border border-gold/20 bg-night-low p-6 transition-colors duration-500 hover:border-gold sm:p-8 ${layout.span} ${layout.height}`}
+      {...link}
+      className={`group relative flex cursor-pointer flex-col justify-end overflow-hidden border border-gold/20 bg-night-low p-6 transition-colors duration-500 hover:border-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-light sm:p-8 ${layout.span} ${layout.height}`}
     >
       {category.image && (
         <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105">
@@ -322,6 +332,367 @@ export function CollectionsSection() {
         )}
       </div>
     </section>
+  )
+}
+
+// ── 2.1–2.8 · Dedicated collection sections ──────────────────────────────────────────────────────────────────
+
+const COLLECTION_ICONS = {
+  ruler: PencilRuler, sparkles: Sparkles, clock: Clock, check: CircleCheck,
+  texture: Grid2x2, layers: Layers, ribbon: Ribbon,
+  shirt: Shirt, shield: Shield, cups: CircleDot, flower: Flower2,
+  blossom: Flower, waves: Waves, zip: LockOpen,
+}
+
+function IconBox({ name, small = false }) {
+  const Icon = COLLECTION_ICONS[name] || Sparkles
+  return (
+    <span className={`flex shrink-0 items-center justify-center border border-gold/30 bg-gold-light/10 text-gold-light ${small ? 'h-10 w-10' : 'h-12 w-12'}`}>
+      <Icon className={small ? 'h-5 w-5' : 'h-6 w-6'} strokeWidth={1.5} aria-hidden="true" />
+    </span>
+  )
+}
+
+// Eyebrow + title + lead, left-aligned with an optional action on the right, or centred
+function CollectionHeader({ data, titleId, action, centered = false }) {
+  if (centered) {
+    return (
+      <div className="mx-auto mb-14 max-w-3xl text-center" data-reveal>
+        <RuleLabel both className="mb-3 justify-center text-gold-light">{data.eyebrow}</RuleLabel>
+        <h2 id={titleId} className={H_XL}>{data.title}</h2>
+        <p className="mt-3 text-[0.9375rem] leading-[1.7] text-mist">{data.lead}</p>
+      </div>
+    )
+  }
+  return (
+    <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end" data-reveal>
+      <div>
+        <div className="mb-2 flex flex-wrap items-center gap-3">
+          <span className={`${LABEL} text-gold-light`}>{data.eyebrow}</span>
+          {data.note && (
+            <>
+              <span className="text-xs text-gold" aria-hidden="true">◆</span>
+              <span className={`${LABEL} !tracking-wider text-sage`}>{data.note}</span>
+            </>
+          )}
+        </div>
+        <h2 id={titleId} className={H_XL}>{data.title}</h2>
+        <p className="mt-2 max-w-2xl text-[0.9375rem] leading-[1.7] text-mist">{data.lead}</p>
+      </div>
+      {action}
+    </div>
+  )
+}
+
+function CollectionSection({ data, tone, children }) {
+  const ref = useSectionReveal()
+  return (
+    <section id={data.id} ref={ref} className={`relative border-t border-gold/20 py-20 text-ivory sm:py-28 ${tone === 'low' ? 'bg-night-lowest' : 'bg-night'}`} aria-labelledby={`${data.id}-title`}>
+      <div className="container-x">{children}</div>
+    </section>
+  )
+}
+
+// Image card used by jewellery and dress sets
+function ShowcaseCard({ item, height, cta, titleSize = 'text-xl' }) {
+  const { settings } = useStore()
+  const href = whatsappHref(settings, item.message)
+  return (
+    <article className="group flex flex-col overflow-hidden border border-gold/20 bg-night-low transition-[border-color,box-shadow] duration-300 hover:border-gold hover:shadow-2xl">
+      <div className={`relative overflow-hidden border-b border-gold/20 bg-night-mid ${height}`}>
+        {item.image && (
+          <div className="absolute inset-0 transition-transform duration-700 ease-[var(--ease-silk)] group-hover:scale-105">
+            <Photo src={item.image} alt={item.alt} position={item.position} />
+          </div>
+        )}
+        <span className="absolute left-3 top-3 border border-gold/30 bg-night-high/90 px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-gold-light backdrop-blur-md">{item.badge}</span>
+      </div>
+      <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
+        <div>
+          <span className="mb-1 block text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-gold">{item.label}</span>
+          <h3 className={`font-serif font-semibold text-ivory transition-colors group-hover:text-gold-light ${titleSize}`}>{item.title}</h3>
+          <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-mist">{item.body}</p>
+        </div>
+        {/* If the note and link don't fit on one line, the link drops to the right on the next */}
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-gold/15 pt-3">
+          {item.status
+            ? <span className="whitespace-nowrap text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-sage">{item.status}</span>
+            : <span className="whitespace-nowrap text-xs text-sage">{item.note}</span>}
+          <a href={href} {...EXTERNAL} className={`${ACTION} ml-auto shrink-0 text-gold-light hover:underline`} aria-label={`${cta} — ${item.title}, on WhatsApp`}>{cta} →</a>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+// Hover loupe on saree photos: square side in px, and how much it magnifies
+const LENS_SIZE = 150
+const LENS_ZOOM = 2.5
+
+// Saree card: the whole card is one WhatsApp link, framed like a drape on display
+function SareeCard({ item, index, cta }) {
+  const { settings } = useStore()
+  const lensRef = useRef(null)
+  const lensViewRef = useRef(null)
+  // Move the loupe square with the cursor and pan its enlarged copy of the photo; written straight to the DOM to skip re-renders
+  const followZoom = (e) => {
+    if (e.pointerType !== 'mouse' || !lensRef.current) return
+    const r = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - r.left
+    const y = e.clientY - r.top
+    const half = LENS_SIZE / 2
+    lensRef.current.style.transform = `translate(${x - half}px, ${y - half}px)`
+    const view = lensViewRef.current.style
+    view.width = `${r.width * LENS_ZOOM}px`
+    view.height = `${r.height * LENS_ZOOM}px`
+    view.transform = `translate(${half - x * LENS_ZOOM}px, ${half - y * LENS_ZOOM}px)`
+  }
+  return (
+    <a
+      href={whatsappHref(settings, item.message)}
+      {...EXTERNAL}
+      aria-label={`${cta} — ${item.title}, on WhatsApp`}
+      className="group relative flex cursor-pointer flex-col border border-gold/20 bg-night-low transition-[border-color,box-shadow,transform] duration-500 ease-[var(--ease-silk)] hover:border-gold/70 hover:shadow-[0_24px_60px_-24px_rgba(0,0,0,0.75)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-light motion-safe:hover:-translate-y-1.5"
+    >
+      <div className="group/zoom relative aspect-[3/4] cursor-crosshair overflow-hidden bg-night-mid" onPointerMove={followZoom}>
+        {item.image && <Photo src={item.image} alt={item.alt} position={item.position || '50% 25%'} />}
+        {/* Shade at the foot of the photo so it settles into the card body */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-night-low via-night-low/40 to-transparent" aria-hidden="true" />
+        {/* Loupe square: an enlarged copy of the photo, panned so the cursor sits at its centre */}
+        {item.image && (
+          <div
+            ref={lensRef}
+            className="pointer-events-none absolute left-0 top-0 z-10 overflow-hidden border border-gold-light bg-night-mid opacity-0 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.8)] transition-opacity duration-300 group-hover/zoom:opacity-100"
+            style={{ width: LENS_SIZE, height: LENS_SIZE }}
+            aria-hidden="true"
+          >
+            <div ref={lensViewRef} className="absolute left-0 top-0">
+              <Photo src={item.image} alt="" position={item.position || '50% 25%'} />
+            </div>
+          </div>
+        )}
+        {/* Gold inner frame that draws in on hover */}
+        <div className="pointer-events-none absolute inset-3 border border-gold-light/0 transition-colors duration-500 group-hover:border-gold-light/60" aria-hidden="true" />
+        <span className="absolute left-5 top-5 border border-gold/40 bg-night/70 px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-gold-light backdrop-blur-md">{item.badge}</span>
+        <span className="absolute right-5 top-4 font-serif text-[1.75rem] leading-none text-ivory/80 [text-shadow:0_2px_12px_rgba(0,0,0,0.5)]" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+      </div>
+      <div className="relative flex flex-1 flex-col px-5 pb-5 sm:px-6 sm:pb-6">
+        <div className="flex items-center gap-2.5 text-gold">
+          <span className="h-px w-6 bg-current" aria-hidden="true" />
+          <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.22em]">{item.label}</span>
+        </div>
+        <h3 className="mt-2 font-serif text-[1.5rem] font-semibold leading-tight text-ivory transition-colors duration-300 group-hover:text-gold-light">{item.title}</h3>
+        <p className="mt-2 flex-1 text-[0.875rem] leading-relaxed text-mist">{item.body}</p>
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-gold/15 pt-4">
+          <span className="whitespace-nowrap text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-sage">{item.status}</span>
+          <span className={`${ACTION} ml-auto inline-flex shrink-0 items-center gap-2 text-gold-light`}>
+            {cta}
+            <span className="transition-transform duration-300 motion-safe:group-hover:translate-x-1" aria-hidden="true">→</span>
+          </span>
+        </div>
+      </div>
+    </a>
+  )
+}
+
+export function SareesCollection() {
+  const { settings } = useStore()
+  const d = SAREES
+  return (
+    <CollectionSection data={d}>
+      <CollectionHeader
+        data={d}
+        titleId={`${d.id}-title`}
+        action={<a href={whatsappHref(settings, d.cta.message)} {...EXTERNAL} className={`${BTN_SAGE} shrink-0`}><WhatsAppIcon className="h-[18px] w-[18px]" /> {d.cta.label}</a>}
+      />
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
+        {d.items.map((item, i) => <SareeCard key={item.title} item={item} index={i} cta={d.cardCta} />)}
+      </div>
+    </CollectionSection>
+  )
+}
+
+export function StitchingCollection() {
+  const { settings } = useStore()
+  const d = STITCHING
+  return (
+    <CollectionSection data={d} tone="low">
+      <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-16">
+        <div className="relative lg:col-span-6" data-reveal>
+          <div className="relative h-[420px] overflow-hidden border border-gold/30 shadow-2xl sm:h-[520px]">
+            <Photo {...d.image} />
+            <div className="absolute bottom-5 left-5 right-5 max-w-sm border border-gold/40 bg-night/90 p-4 backdrop-blur-md sm:bottom-6 sm:left-6 sm:right-auto">
+              <span className="block text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-gold-light">{d.caption.label}</span>
+              <span className="mt-1 block font-serif text-xl font-semibold text-ivory">{d.caption.title}</span>
+              <p className="mt-1 text-xs leading-relaxed text-mist">{d.caption.body}</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col lg:col-span-6">
+          <RuleLabel className="mb-3 text-gold-light" data-reveal>{d.eyebrow}</RuleLabel>
+          <h2 id={`${d.id}-title`} className={`mb-6 ${H_XL}`} data-reveal>
+            {d.title} <br />
+            <span className="italic text-gold-light">{d.titleAccent}</span>
+          </h2>
+          <p className="mb-8 text-lg font-light leading-[1.85] text-mist" data-reveal>{d.lead}</p>
+          <ul className="mb-9 grid gap-4 sm:grid-cols-2" data-reveal-stagger>
+            {d.features.map((f) => (
+              <li key={f.title} className="flex flex-col gap-2 border border-gold/20 bg-night-low p-4">
+                <IconBox name={f.icon} small />
+                <span className="text-sm font-semibold text-ivory">{f.title}</span>
+                <p className="text-xs leading-relaxed text-mist">{f.body}</p>
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap [&>a]:whitespace-nowrap" data-reveal>
+            <a href={whatsappHref(settings, d.primary.message)} {...EXTERNAL} className={`${BTN_GOLD} shadow-xl`}><CalendarDays className="h-[18px] w-[18px]" aria-hidden="true" /> {d.primary.label}</a>
+            <a href={whatsappHref(settings, d.secondary.message)} {...EXTERNAL} className={BTN_LINE}><WhatsAppIcon className="h-[18px] w-[18px]" /> {d.secondary.label}</a>
+          </div>
+        </div>
+      </div>
+    </CollectionSection>
+  )
+}
+
+export function MatchingsCollection() {
+  const { settings } = useStore()
+  const d = MATCHINGS
+  return (
+    <CollectionSection data={d}>
+      <CollectionHeader data={d} titleId={`${d.id}-title`} centered />
+      <div className="grid gap-6 md:grid-cols-3 lg:gap-8" data-reveal-stagger>
+        {d.items.map((item) => (
+          <article key={item.title} className="flex flex-col justify-between border border-gold/20 bg-night-low p-7 transition-colors duration-300 hover:border-gold sm:p-8">
+            <div>
+              <div className="mb-4"><IconBox name={item.icon} /></div>
+              <span className="text-[0.6875rem] font-semibold uppercase tracking-wider text-gold-light">{item.label}</span>
+              <h3 className="mb-3 mt-1 font-serif text-[1.75rem] font-medium leading-tight text-ivory">{item.title}</h3>
+              <p className="text-[0.8125rem] leading-relaxed text-mist">{item.body}</p>
+            </div>
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-gold/15 pt-4">
+              <span className="whitespace-nowrap text-xs text-sage">{item.note}</span>
+              <a href={whatsappHref(settings, item.message)} {...EXTERNAL} className={`${ACTION} ml-auto shrink-0 text-gold-light hover:underline`} aria-label={`${d.cardCta} — ${item.title}, on WhatsApp`}>{d.cardCta} →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </CollectionSection>
+  )
+}
+
+export function PetticoatsCollection() {
+  const { settings } = useStore()
+  const d = PETTICOATS
+  return (
+    <CollectionSection data={d} tone="low">
+      <CollectionHeader data={d} titleId={`${d.id}-title`} action={<span className={`${LABEL} !tracking-wider shrink-0 text-mist`}>{d.aside}</span>} />
+      <div className="grid gap-6 md:grid-cols-3" data-reveal-stagger>
+        {d.items.map((item) => (
+          <article key={item.title} className="flex flex-col justify-between border border-gold/20 bg-night-low p-7 transition-colors duration-300 hover:border-gold sm:p-8">
+            <div>
+              <span className="text-[0.6875rem] font-semibold uppercase tracking-wider text-gold-light">{item.label}</span>
+              <h3 className="mb-2 mt-1 font-serif text-[1.75rem] font-medium leading-tight text-ivory">{item.title}</h3>
+              <p className="mb-4 text-[0.8125rem] leading-relaxed text-mist">{item.body}</p>
+              <ul className="flex flex-col gap-2 text-xs text-mist">
+                {item.points.map((pt) => (
+                  <li key={pt} className="flex items-start gap-2"><Check className="mt-px h-4 w-4 shrink-0 text-gold-light" aria-hidden="true" /> {pt}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-gold/15 pt-4">
+              <span className="whitespace-nowrap text-xs text-sage">{item.note}</span>
+              <a href={whatsappHref(settings, item.message)} {...EXTERNAL} className={`${ACTION} ml-auto shrink-0 text-gold-light hover:underline`} aria-label={`${d.cardCta} — ${item.title}, on WhatsApp`}>{d.cardCta} →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </CollectionSection>
+  )
+}
+
+export function InnersCollection() {
+  const d = INNERS
+  return (
+    <CollectionSection data={d}>
+      <CollectionHeader data={d} titleId={`${d.id}-title`} />
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
+        {d.items.map((item) => (
+          <article key={item.title} className="flex flex-col justify-between border border-gold/20 bg-night-low p-6 transition-colors duration-300 hover:border-gold">
+            <div>
+              <div className="mb-3"><IconBox name={item.icon} small /></div>
+              <h3 className="mb-2 font-serif text-xl font-semibold text-ivory">{item.title}</h3>
+              <p className="text-xs leading-relaxed text-mist">{item.body}</p>
+            </div>
+            <span className="mt-6 text-[0.6875rem] font-semibold text-sage">{item.note}</span>
+          </article>
+        ))}
+      </div>
+    </CollectionSection>
+  )
+}
+
+export function NightiesCollection() {
+  const { settings } = useStore()
+  const d = NIGHTIES
+  return (
+    <CollectionSection data={d} tone="low">
+      <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-16">
+        <div className="flex flex-col lg:col-span-6">
+          <RuleLabel className="mb-3 text-gold-light" data-reveal>{d.eyebrow}</RuleLabel>
+          <h2 id={`${d.id}-title`} className={`mb-6 ${H_XL}`} data-reveal>
+            {d.title} <br />
+            <span className="italic text-gold-light">{d.titleAccent}</span>
+          </h2>
+          <p className="mb-6 text-lg font-light leading-[1.85] text-mist" data-reveal>{d.lead}</p>
+          <ul className="mb-8 flex flex-col gap-4" data-reveal-stagger>
+            {d.features.map((f) => (
+              <li key={f.title} className="flex items-start gap-4 border border-gold/20 bg-night-low p-4">
+                <IconBox name={f.icon} small />
+                <div>
+                  <h3 className="text-sm font-semibold text-ivory">{f.title}</h3>
+                  <p className="mt-0.5 text-xs leading-relaxed text-mist">{f.body}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div data-reveal>
+            <a href={whatsappHref(settings, d.cta.message)} {...EXTERNAL} className={`${BTN_GOLD} shadow-xl`}><WhatsAppIcon className="h-[18px] w-[18px]" /> {d.cta.label}</a>
+          </div>
+        </div>
+        <div className="lg:col-span-6" data-reveal>
+          <div className="h-[420px] overflow-hidden border border-gold/30 shadow-2xl sm:h-[500px]"><Photo {...d.image} /></div>
+        </div>
+      </div>
+    </CollectionSection>
+  )
+}
+
+export function JewelleryCollection() {
+  const d = JEWELLERY
+  return (
+    <CollectionSection data={d}>
+      <CollectionHeader data={d} titleId={`${d.id}-title`} centered />
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
+        {d.items.map((item) => <ShowcaseCard key={item.title} item={item} height="h-[300px] lg:h-[320px]" cta={d.cardCta} />)}
+      </div>
+    </CollectionSection>
+  )
+}
+
+export function DressSetsCollection() {
+  const { settings } = useStore()
+  const d = DRESS_SETS
+  return (
+    <CollectionSection data={d} tone="low">
+      <CollectionHeader
+        data={d}
+        titleId={`${d.id}-title`}
+        action={<a href={whatsappHref(settings, d.cta.message)} {...EXTERNAL} className={`${BTN_GOLD} shrink-0 shadow-xl`}><WhatsAppIcon className="h-[18px] w-[18px]" /> {d.cta.label}</a>}
+      />
+      <div className="grid gap-6 md:grid-cols-3 lg:gap-8" data-reveal-stagger>
+        {d.items.map((item) => <ShowcaseCard key={item.title} item={item} height="h-[340px] lg:h-[360px]" cta={d.cardCta} titleSize="text-[1.6rem] leading-tight" />)}
+      </div>
+    </CollectionSection>
   )
 }
 
