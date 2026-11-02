@@ -92,3 +92,17 @@
   background-size: 200% 100%;
   animation: shimmer 1.6s linear infinite;
 }
+
+/* Marquee band below the hero. Motion is driven by GSAP in MarqueeBand (scroll-reactive, eased hover stop);
+   here only the hover spotlight: the word under the pointer stays bright while the rest dim. */
+.marquee-spot { transition: opacity 0.4s var(--ease-silk); }
+@media (hover: hover) {
+  .marquee:hover .marquee-spot { opacity: 0.4; }
+  .marquee .marquee-spot:hover { opacity: 1; }
+}
+/* Saree-border strip: a gold rule over a chain of small diamonds, tiled horizontally */
+.zari-border {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='10'%3E%3Cpath d='M0 .5h22' stroke='%23C9A45C' stroke-opacity='.55'/%3E%3Cpath d='M11 3l3 3-3 3-3-3z' fill='%23C9A45C' fill-opacity='.7'/%3E%3Ccircle cx='0' cy='6' r='.9' fill='%23C9A45C' fill-opacity='.45'/%3E%3Ccircle cx='22' cy='6' r='.9' fill='%23C9A45C' fill-opacity='.45'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: center top;
+}

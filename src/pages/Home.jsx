@@ -1,6 +1,6 @@
 import { useSeo } from '../hooks/useSeo'
 import Hero from '../sections/Hero'
-import { CollectionsSection, CraftSection, FeaturedSection, GallerySection, IntroSection, NewArrivalsSection, StorySection, VisitSection } from '../sections/HomeSections'
+import { CollectionsSection, CraftSection, FeaturedSection, GallerySection, IntroSection, MarqueeBand, NewArrivalsSection, StorySection, VisitSection } from '../sections/HomeSections'
 
 export default function Home() {
   useSeo({
@@ -10,6 +10,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <MarqueeBand />
       <IntroSection />
       <CollectionsSection />
       <FeaturedSection />

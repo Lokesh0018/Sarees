@@ -36,7 +36,8 @@ canonical URLs, Open Graph tags and the sitemap.
 
 The wording of the home page sections below the hero (intro, collection cards, featured piece, craft pillars,
 brand story, gallery, visit, footer) lives in `src/content/home.js`. Their images are WebP files in
-`public/media/home/`.
+`src/assets/images/`, bundled by Vite. Data files (`categories.json`, `products.json`) refer to these by file name
+(e.g. `"image": "cat-sarees.webp"`); a full URL or a `/public` path also works for any image.
 
 Edit the files in `public/data/`. A static deploy only needs the edited file re-uploaded; no rebuild is required
 
@@ -112,7 +113,7 @@ Both are empty until confirmed. Set them in `settings.json`:
 public/
   brand/          SJR logo (WebP), favicon, touch icon, Open Graph image
   data/           settings / categories / products JSON
-  media/          hero video (WebM/MP4 boomerang), poster; home/ holds the section images (WebP)
+  media/          hero video (WebM/MP4 boomerang), poster
   .htaccess       index.html fallback, security and cache headers (Apache / Hostinger)
 scripts/          sitemap generator, sample-data remover
 src/

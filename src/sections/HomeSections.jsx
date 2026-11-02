@@ -1,12 +1,14 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowRight, BadgeCheck, BookOpen, Brush, CalendarCheck, Clock, MapPin, Palette, Phone, Ruler, UserCheck } from 'lucide-react'
 import { useStore } from '../context/StoreContext'
 import { useAsync } from '../hooks/useAsync'
-import { useReveal } from '../utils/motion'
+import { gsap, useReveal } from '../utils/motion'
 import { getNewArrivals } from '../services/catalog'
 import { addressLines, formatPhone, generalEnquiryMessage, mapsDirectionsHref, productEnquiryMessage, telHref, whatsappHref } from '../utils/contact'
 import WhatsAppIcon from '../components/WhatsAppIcon'
-import { ARRIVALS, COLLECTIONS, CRAFT, FEATURED, GALLERY, INTRO, STORY, VISIT } from '../content/home'
+import { LOGO } from '../components/Logo'
+import { imageUrl } from '../utils/assets'
+import { ARRIVALS, COLLECTIONS, CRAFT, FEATURED, GALLERY, INTRO, MARQUEE, STORY, VISIT } from '../content/home'
 
 // Shared type scale for the editorial sections
 const LABEL = 'text-[0.6875rem] font-semibold uppercase tracking-[0.22em]'
@@ -46,6 +48,151 @@ function useSectionReveal() {
   const ref = useRef(null)
   useReveal(ref)
   return ref
+}
+
+// 0 · Scrolling band between the hero film and the parchment introduction
+
+// Four-point star, like a kolam dot or a zari buti, used as the separator
+function ZariStar({ className = '' }) {
+  return (
+    <svg viewBox="0 0 24 24" className={`shrink-0 ${className}`} aria-hidden="true">
+      <path d="M12 1.5c.9 5 3.6 7.7 10.5 10.5C15.6 14.8 12.9 17.5 12 22.5c-.9-5-3.6-7.7-10.5-10.5C8.4 9.2 11.1 6.5 12 1.5Z" fill="currentColor" />
+      <circle cx="12" cy="12" r="1.7" fill="var(--color-night-lowest)" />
+    </svg>
+  )
+}
+
+// One copy of a row; the track renders it twice and slides by exactly one copy's width, so each item carries
+// its own trailing separator and spacing to keep both copies identical and the loop seamless.
+function MarqueeRun({ items, variant, hidden = false }) {
+  const major = variant === 'major'
+  return (
+    <ul className="flex shrink-0 items-center" aria-hidden={hidden || undefined}>
+      {/* Brand crest once per loop, where the list wraps back to the start */}
+      {major && (
+        <li className="flex shrink-0 items-center" aria-hidden="true">
+          <img src={LOGO.src} alt="" width={LOGO.width} height={LOGO.height} loading="lazy" className="h-9 w-auto opacity-90 sm:h-12" />
+          <ZariStar className="mx-7 h-4 w-4 text-gold sm:mx-12 sm:h-5 sm:w-5" />
+        </li>
+      )}
+      {items.map((item, i) => (
+        <li key={item} className="flex shrink-0 items-center">
+          {major ? (
+            <span
+              className={`marquee-spot whitespace-nowrap font-serif text-[1.7rem] leading-[1.15] sm:text-[2.6rem] ${
+                i % 2
+                  ? 'bg-[linear-gradient(100deg,#B08A45_0%,#F1DCAA_38%,#C9A45C_62%,#E9D3A0_100%)] bg-clip-text pr-[0.12em] italic text-transparent'
+                  : 'text-ivory'
+              }`}
+            >
+              {item}
+            </span>
+          ) : (
+            <span className="whitespace-nowrap text-[0.6875rem] font-semibold uppercase tracking-[0.32em] text-mist/80">{item}</span>
+          )}
+          {major ? <ZariStar className="mx-7 h-4 w-4 text-gold sm:mx-12 sm:h-5 sm:w-5" /> : <span className="mx-5 h-1 w-1 shrink-0 rotate-45 bg-gold/70 sm:mx-7" aria-hidden="true" />}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+const MarqueeRow = ({ items, variant, trackRef }) => (
+  <div ref={trackRef} className="flex w-max will-change-transform">
+    <MarqueeRun items={items} variant={variant} />
+    <MarqueeRun items={items} variant={variant} hidden />
+  </div>
+)
+
+// Scroll-reactive drift: a calm base speed that surges with scroll speed and eases back, reverses when the visitor
+// scrolls up, leans the large type slightly with velocity, and glides to a stop on hover.
+function useMarqueeMotion(bandRef, majorRef, minorRef) {
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const band = bandRef.current
+    const rows = [
+      { el: majorRef.current, speed: 64, dir: -1, lean: true },
+      { el: minorRef.current, speed: 26, dir: 1, lean: false },
+    ].map((r) => ({ ...r, x: 0, span: 0 }))
+
+    // One copy's width: the distance after which the track looks identical again
+    const measure = () => rows.forEach((r) => { r.span = r.el.firstElementChild.getBoundingClientRect().width })
+    measure()
+    const resize = new ResizeObserver(measure)
+    rows.forEach((r) => resize.observe(r.el.firstElementChild))
+
+    let visible = true
+    const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting })
+    io.observe(band)
+
+    let hover = false
+    const enter = () => { hover = true }
+    const leave = () => { hover = false }
+    band.addEventListener('pointerenter', enter)
+    band.addEventListener('pointerleave', leave)
+
+    let lastY = window.scrollY
+    let heading = 1 // 1 while scrolling down, -1 after scrolling up
+    let flow = 1 // eased 0..1, 0 when hovered
+    let speed = 0 // smoothed scroll speed in px/s; wheel scrolling arrives in bursts with still frames between
+    let surge = 0 // eased extra speed from scrolling
+    let lean = 0 // eased skew in degrees
+    const ease = (from, to, rate, dt) => from + (to - from) * Math.min(1, dt * rate)
+
+    const tick = (_time, deltaMs) => {
+      const dt = Math.min(deltaMs, 64) / 1000
+      const y = window.scrollY
+      speed = ease(speed, (y - lastY) / Math.max(dt, 0.001), 4, dt)
+      lastY = y
+      if (Math.abs(speed) > 40) heading = speed > 0 ? 1 : -1
+      if (!visible) return
+      flow = ease(flow, hover ? 0 : 1, 5, dt)
+      surge = ease(surge, Math.min(Math.abs(speed) / 220, 6), 5, dt)
+      lean = ease(lean, hover ? 0 : gsap.utils.clamp(-8, 8, -speed / 110), 6, dt)
+      for (const r of rows) {
+        if (!r.span) continue
+        r.x = gsap.utils.wrap(-r.span, 0, r.x + r.dir * heading * r.speed * (1 + surge) * flow * dt)
+        r.el.style.transform = `translate3d(${r.x.toFixed(2)}px,0,0)${r.lean ? ` skewX(${lean.toFixed(2)}deg)` : ''}`
+      }
+    }
+    gsap.ticker.add(tick)
+
+    return () => {
+      gsap.ticker.remove(tick)
+      resize.disconnect()
+      io.disconnect()
+      band.removeEventListener('pointerenter', enter)
+      band.removeEventListener('pointerleave', leave)
+      rows.forEach((r) => { r.el.style.transform = '' })
+    }
+  }, [bandRef, majorRef, minorRef])
+}
+
+export function MarqueeBand() {
+  const bandRef = useRef(null)
+  const majorRef = useRef(null)
+  const minorRef = useRef(null)
+  useMarqueeMotion(bandRef, majorRef, minorRef)
+
+  return (
+    <section ref={bandRef} className="marquee relative overflow-hidden bg-night-lowest" aria-label={MARQUEE.label}>
+      {/* Woven zari border, top and bottom, like the edge of a saree */}
+      <div className="zari-border h-2.5" aria-hidden="true" />
+      {/* A low warm glow behind the words, so the band reads as lit fabric rather than a flat strip */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_120%_at_50%_45%,rgb(201_164_92/0.09),transparent_70%)]" aria-hidden="true" />
+      {/* Soft fade at both edges so words drift in and out rather than being cut */}
+      <div className="relative [mask-image:linear-gradient(90deg,transparent,#000_7%,#000_93%,transparent)]">
+        <div className="py-5 sm:py-7">
+          <MarqueeRow items={MARQUEE.items} variant="major" trackRef={majorRef} />
+        </div>
+        <div className="mx-auto h-px max-w-5xl bg-gradient-to-r from-transparent via-gold/30 to-transparent" aria-hidden="true" />
+        <div className="py-3.5 sm:py-4">
+          <MarqueeRow items={MARQUEE.details} variant="minor" trackRef={minorRef} />
+        </div>
+      </div>
+      <div className="zari-border h-2.5 rotate-180" aria-hidden="true" />
+    </section>
+  )
 }
 
 // 1 · Warm editorial introduction on parchment
@@ -123,7 +270,7 @@ function CollectionCard({ category, index }) {
     >
       {category.image && (
         <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105">
-          <Photo src={category.image} alt="" />
+          <Photo src={imageUrl(category.image)} alt="" />
         </div>
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-night-lowest via-night-lowest/60 to-transparent" aria-hidden="true" />
@@ -251,7 +398,7 @@ function ArrivalCard({ product }) {
   return (
     <article className="group flex flex-col border border-gold/20 bg-night-low transition-[border-color,box-shadow] duration-300 hover:border-gold hover:shadow-2xl">
       <div className="relative h-[400px] overflow-hidden">
-        {image ? <Photo src={image.url} alt={image.alt || product.name} position={product.imagePosition} /> : <div className="h-full w-full bg-night-high" />}
+        {image ? <Photo src={imageUrl(image.url)} alt={image.alt || product.name} position={product.imagePosition} /> : <div className="h-full w-full bg-night-high" />}
         {product.badge && (
           <span className={`absolute left-3 top-3 px-2 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] ${BADGE_TONE[product.badgeTone] || BADGE_TONE.default}`}>{product.badge}</span>
         )}

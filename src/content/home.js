@@ -1,7 +1,17 @@
 // Copy and imagery for the home page sections below the hero.
 // Edit wording here; the layout lives in src/sections/HomeSections.jsx.
+import { imageUrl } from '../utils/assets'
 
-const IMG = (name) => `/media/home/${name}.webp`
+// Images live in src/assets/images
+const IMG = (name) => imageUrl(`${name}.webp`)
+
+// Scrolling band directly below the hero
+export const MARQUEE = {
+  label: 'What we offer',
+  items: ['Pattu & Handloom Sarees', 'Bespoke Blouse Stitching', 'Designer Matchings', 'Shaper Petticoats', 'Ethnic Inners', 'Cotton Nighties', 'Temple & Kundan Jewellery', 'MVP Colony, Visakhapatnam'],
+  // Second row, smaller, drifting the other way
+  details: ['Kanchipuram', 'Gadwal', 'Uppada', 'Banarasi', 'Chanderi', 'Festive Organza', 'Pure Zari', 'Maggam Work', 'Aari & Zardosi', 'Kundan', 'Temple Jewellery', 'Muhurtham Drapes'],
+}
 
 export const INTRO = {
   eyebrow: 'Sanctuary of Sartorial Excellence',
