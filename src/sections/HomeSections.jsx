@@ -1106,43 +1106,52 @@ function AppointmentForm() {
     window.open(href, '_blank', 'noopener,noreferrer')
   }
 
-  const field = 'w-full min-h-11 border-0 border-b border-gold/40 bg-night-mid px-3 py-2 text-[0.875rem] text-ivory placeholder:text-mist/50 transition-colors focus:border-gold-light focus:outline-none [color-scheme:dark]'
-  const label = 'mb-2 text-[0.6875rem] font-semibold uppercase tracking-wider text-gold-light'
+  const field = 'w-full min-h-12 border border-gold/30 bg-night-mid px-4 py-2.5 text-[0.9375rem] text-ivory placeholder:text-mist/50 transition-colors focus:border-gold-light focus:outline-none focus:ring-1 focus:ring-gold-light/40 [color-scheme:dark]'
+  const label = 'mb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-gold-light'
   return (
-    <div className="border border-gold/25 bg-night-low p-6 shadow-xl sm:p-8">
-      <div className="mb-6 flex items-center justify-between gap-4 border-b border-gold/15 pb-4">
+    <div>
+      <div className="mb-7 flex items-start justify-between gap-4">
         <div>
-          <h3 className="font-serif text-xl font-semibold text-ivory">{VISIT.form.title}</h3>
-          <p className="mt-1 text-[0.8125rem] text-mist">{VISIT.form.lead}</p>
+          <h3 className="font-serif text-[1.75rem] font-semibold leading-tight text-ivory sm:text-[2rem]">{VISIT.form.title}</h3>
+          <p className="mt-1.5 text-[0.875rem] text-mist">{VISIT.form.lead}</p>
         </div>
-        <CalendarCheck className="h-7 w-7 shrink-0 text-gold-light" strokeWidth={1.5} aria-hidden="true" />
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center border border-gold/40 bg-night-high text-gold-light"><CalendarCheck className="h-6 w-6" strokeWidth={1.5} aria-hidden="true" /></span>
       </div>
-      <form className="grid gap-6 sm:grid-cols-2" onSubmit={onSubmit}>
+      <form className="grid gap-5 sm:grid-cols-2" onSubmit={onSubmit}>
         <div className="flex flex-col">
-          <label htmlFor="appt-name" className={label}>Client Full Name *</label>
+          <label htmlFor="appt-name" className={label}>Full Name *</label>
           <input id="appt-name" name="name" type="text" required autoComplete="name" placeholder="e.g. Ananya Rao" className={field} />
         </div>
         <div className="flex flex-col">
           <label htmlFor="appt-phone" className={label}>WhatsApp Number *</label>
           <input id="appt-phone" name="phone" type="tel" required autoComplete="tel" inputMode="tel" placeholder="+91 98765 43210" className={field} />
         </div>
+        {/* Service as tap-to-select cards instead of a dropdown */}
+        <fieldset className="sm:col-span-2">
+          <legend className={label}>Service of Interest *</legend>
+          <div className="grid gap-2.5 sm:grid-cols-2">
+            {VISIT.form.services.map((sv, i) => (
+              <label key={sv} className="flex min-h-12 cursor-pointer items-center gap-3 border border-gold/25 bg-night-mid px-4 py-2.5 text-[0.875rem] text-mist transition-colors hover:border-gold/60 has-[:checked]:border-gold-light has-[:checked]:bg-gold-light/10 has-[:checked]:text-ivory has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-gold-light">
+                <input type="radio" name="service" value={sv} required defaultChecked={i === 0} className="peer sr-only" />
+                <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-gold/50 peer-checked:border-gold-light peer-checked:[&>span]:scale-100" aria-hidden="true">
+                  <span className="h-2 w-2 scale-0 rounded-full bg-gold-light transition-transform" />
+                </span>
+                {sv}
+              </label>
+            ))}
+          </div>
+        </fieldset>
         <div className="flex flex-col">
-          <label htmlFor="appt-service" className={label}>Service of Interest *</label>
-          <select id="appt-service" name="service" required className={field}>
-            {VISIT.form.services.map((s) => <option key={s} className="bg-night-high">{s}</option>)}
-          </select>
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="appt-date" className={label}>Preferred Consultation Date *</label>
+          <label htmlFor="appt-date" className={label}>Preferred Date *</label>
           <input id="appt-date" name="date" type="date" required min={today} className={field} />
         </div>
-        <div className="flex flex-col sm:col-span-2">
-          <label htmlFor="appt-notes" className={label}>Bespoke Notes / Wedding Date</label>
-          <input id="appt-notes" name="notes" type="text" placeholder="Tell us about the occasion, colour preferences, or specific drape requirements..." className={field} />
+        <div className="flex flex-col">
+          <label htmlFor="appt-notes" className={label}>Wedding Date / Notes</label>
+          <input id="appt-notes" name="notes" type="text" placeholder="Occasion, colours, drape needs…" className={field} />
         </div>
-        <div className="mt-2 sm:col-span-2">
+        <div className="mt-1 sm:col-span-2">
           <button type="submit" className={`${BTN_GOLD} w-full shadow-xl`}>
-            {VISIT.form.submit} <BadgeCheck className="h-[18px] w-[18px]" aria-hidden="true" />
+            <WhatsAppIcon className="h-[18px] w-[18px]" /> {VISIT.form.submit}
           </button>
           <p className="mt-3 text-center text-xs text-mist/80">Opens WhatsApp with your details filled in — send the message to place your request.</p>
         </div>
@@ -1151,66 +1160,95 @@ function AppointmentForm() {
   )
 }
 
+// Split-screen concierge: the salon photo carries the address, hours and quick actions; the panel beside it holds
+// the reservation form and a compact map strip. Full-bleed on desktop, stacked on phones.
 export function VisitSection() {
   const { settings } = useStore()
   const ref = useSectionReveal()
   const [line1, line2, cityLine] = addressLines(settings.address)
   const phone = `+${settings.countryCode} ${formatPhone(settings.phone)}`
+  const quick = 'flex min-h-12 items-center justify-center gap-2 border border-gold/40 bg-night/60 px-3 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-gold-light backdrop-blur-md transition-colors hover:border-gold-light hover:bg-gold-light hover:text-ink'
+  const infoIcon = 'mt-0.5 h-5 w-5 shrink-0 text-gold-light'
   return (
-    <section id="visit" ref={ref} className="relative border-t border-gold/20 bg-night-lowest py-20 text-ivory sm:py-28" aria-labelledby="visit-title">
-      <div className="container-x">
-        <div className="mx-auto mb-16 max-w-2xl text-center" data-reveal>
-          <RuleLabel both className="mb-3 justify-center text-gold-light">{VISIT.eyebrow}</RuleLabel>
-          <h2 id="visit-title" className={H_XL}>{VISIT.title}</h2>
-          <p className="mt-3 text-[0.9375rem] leading-[1.7] text-mist">{VISIT.lead}</p>
-        </div>
-
-        <div className="grid items-start gap-8 lg:grid-cols-12">
-          <div className="flex flex-col gap-6 border border-gold/25 bg-night-low p-6 shadow-xl sm:p-8 lg:col-span-5" data-reveal>
-            <div className="border-b border-gold/20 pb-6">
-              <p className={`mb-2 flex items-center gap-3 text-gold-light ${ACTION}`}><MapPin className="h-[22px] w-[22px]" aria-hidden="true" /> Location &amp; Address</p>
-              <address className="pl-[34px] not-italic">
-                <span className="block text-[0.9375rem] font-medium text-ivory">{[line1, line2].filter(Boolean).join(', ')},</span>
-                <span className="block text-[0.8125rem] text-mist">{cityLine}{settings.address.postalCode ? ` – ${settings.address.postalCode}` : ''}, {settings.address.country}</span>
-              </address>
-              <p className="mt-1 pl-[34px] text-xs text-sage">{VISIT.parkingNote}</p>
-            </div>
-            <div className="border-b border-gold/20 pb-6">
-              <p className={`mb-2 flex items-center gap-3 text-gold-light ${ACTION}`}><Clock className="h-[22px] w-[22px]" aria-hidden="true" /> Salon Timings</p>
-              {settings.hours?.length ? (
-                settings.hours.map((h) => <p key={h.days} className="pl-[34px] text-[0.9375rem] text-ivory">{h.days}: <strong className="font-semibold text-gold-light">{h.time}</strong></p>)
-              ) : (
-                <p className="pl-[34px] text-[0.9375rem] text-ivory">{settings.hoursNote}</p>
-              )}
-              <p className="mt-0.5 pl-[34px] text-[0.8125rem] text-mist">{VISIT.hoursNote}</p>
-            </div>
-            <div className="border-b border-gold/20 pb-6">
-              <p className={`mb-2 flex items-center gap-3 text-gold-light ${ACTION}`}><Phone className="h-[22px] w-[22px]" aria-hidden="true" /> Direct Call &amp; WhatsApp</p>
-              <a href={telHref(settings)} className="pl-[34px] font-serif text-2xl font-semibold text-gold-light hover:underline">{phone}</a>
-              <p className="mt-0.5 pl-[34px] text-[0.8125rem] text-mist">{VISIT.phoneNote}</p>
-            </div>
-            <a href={whatsappHref(settings, VISIT.conciergeMessage)} {...EXTERNAL} className={`${BTN_SAGE} w-full py-4 shadow-lg`}>
-              <WhatsAppIcon className="h-5 w-5" /> {VISIT.conciergeCta}
-            </a>
-          </div>
-
-          <div className="flex flex-col gap-8 lg:col-span-7" data-reveal>
-            <div className="relative h-72 overflow-hidden border border-gold/25 bg-night-mid shadow-xl">
-              {/* Stylised map backdrop: a faint street grid, no third-party map embed */}
-              <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgb(201_164_92/0.12)_1px,transparent_1px),linear-gradient(90deg,rgb(201_164_92/0.12)_1px,transparent_1px),linear-gradient(35deg,transparent_48%,rgb(165_207_193/0.18)_49%,rgb(165_207_193/0.18)_51%,transparent_52%)] [background-size:44px_44px,44px_44px,100%_100%]" aria-hidden="true" />
-              <div className="absolute inset-0 flex items-center justify-center bg-night/60 p-4">
-                <div className="flex flex-col items-center border border-gold/60 bg-night-high/95 p-4 text-center shadow-2xl">
-                  <MapPin className="mb-1 h-8 w-8 text-gold-light" aria-hidden="true" />
-                  <span className={`${ACTION} !tracking-wider text-ivory`}>{settings.storeName}</span>
-                  <span className="text-[0.6875rem] uppercase tracking-[0.22em] text-gold-light">{[line1, line2, settings.address.city].filter(Boolean).join(', ')}</span>
-                  <a href={mapsDirectionsHref(settings)} {...EXTERNAL} className="mt-3 inline-flex min-h-11 items-center bg-gold-light px-4 text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-ink transition-colors hover:bg-ivory">
-                    Open in Google Maps
-                  </a>
+    <section id="visit" ref={ref} className="relative border-t border-gold/20 bg-night-lowest text-ivory" aria-labelledby="visit-title">
+      <div className="grid lg:grid-cols-2">
+        {/* Photo half with the visit details laid over it */}
+        <div className="relative flex min-h-[560px] flex-col justify-end overflow-hidden lg:min-h-[760px]" data-reveal>
+          <div className="absolute inset-0"><Photo src={VISIT.image.src} alt={VISIT.image.alt} position={VISIT.image.position} /></div>
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night-lowest via-night-lowest/75 to-night-lowest/20" aria-hidden="true" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent to-night-lowest/60 max-lg:hidden" aria-hidden="true" />
+          <div className="pointer-events-none absolute inset-4 border border-gold-light/15 sm:inset-6" aria-hidden="true" />
+          <div className="relative px-6 pb-10 pt-24 sm:px-12 sm:pb-14 lg:px-16 lg:pb-16">
+            <RuleLabel className="mb-3 text-gold-light">{VISIT.eyebrow}</RuleLabel>
+            <h2 id="visit-title" className={`${H_XL} lg:text-[3.75rem]`}>{VISIT.title}</h2>
+            <p className="mt-4 max-w-md text-[0.9375rem] leading-[1.7] text-mist">{VISIT.lead}</p>
+            <dl className="mt-8 grid max-w-lg gap-5 border-t border-gold/25 pt-6 sm:grid-cols-2">
+              <div className="flex gap-3 sm:col-span-2">
+                <MapPin className={infoIcon} strokeWidth={1.5} aria-hidden="true" />
+                <div>
+                  <dt className="sr-only">Address</dt>
+                  <dd>
+                    <address className="not-italic">
+                      <span className="block text-[0.9375rem] font-medium text-ivory">{[line1, line2].filter(Boolean).join(', ')},</span>
+                      <span className="block text-[0.8125rem] text-mist">{cityLine}{settings.address.postalCode ? ` – ${settings.address.postalCode}` : ''}, {settings.address.country}</span>
+                    </address>
+                    <span className="mt-0.5 block text-xs text-sage">{VISIT.parkingNote}</span>
+                  </dd>
                 </div>
               </div>
+              <div className="flex gap-3">
+                <Clock className={infoIcon} strokeWidth={1.5} aria-hidden="true" />
+                <div>
+                  <dt className="sr-only">Timings</dt>
+                  <dd>
+                    {settings.hours?.length ? (
+                      settings.hours.map((h) => <span key={h.days} className="block text-[0.875rem] text-ivory">{h.days}: <strong className="font-semibold text-gold-light">{h.time}</strong></span>)
+                    ) : (
+                      <span className="block text-[0.875rem] text-ivory">{settings.hoursNote}</span>
+                    )}
+                    <span className="mt-0.5 block text-xs text-mist">{VISIT.hoursNote}</span>
+                  </dd>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <Phone className={infoIcon} strokeWidth={1.5} aria-hidden="true" />
+                <div>
+                  <dt className="sr-only">Phone</dt>
+                  <dd>
+                    <a href={telHref(settings)} className="font-serif text-[1.35rem] font-semibold leading-tight text-gold-light hover:underline">{phone}</a>
+                    <span className="mt-0.5 block text-xs text-mist">{VISIT.phoneNote}</span>
+                  </dd>
+                </div>
+              </div>
+            </dl>
+            <div className="mt-7 grid max-w-lg grid-cols-3 gap-2">
+              <a href={telHref(settings)} className={quick}><Phone className="h-4 w-4" aria-hidden="true" /> Call</a>
+              <a href={whatsappHref(settings, VISIT.conciergeMessage)} {...EXTERNAL} className={quick}><WhatsAppIcon className="h-4 w-4" /> Chat</a>
+              <a href={mapsDirectionsHref(settings)} {...EXTERNAL} className={quick}><MapPin className="h-4 w-4" aria-hidden="true" /> Route</a>
             </div>
-            <AppointmentForm />
           </div>
+        </div>
+
+        {/* Concierge panel */}
+        <div className="relative flex flex-col justify-center bg-night-low px-6 py-14 sm:px-12 lg:px-16 lg:py-16" data-reveal>
+          <div className="pointer-events-none absolute right-0 top-0 h-40 w-40 bg-[radial-gradient(closest-side,rgb(201_164_92/0.12),transparent)]" aria-hidden="true" />
+          <span className={`${LABEL} mb-4 flex items-center gap-2 text-gold`}><Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> Private Salon Reservations</span>
+          <AppointmentForm />
+          {/* Compact map strip */}
+          <a href={mapsDirectionsHref(settings)} {...EXTERNAL} className="group relative mt-8 flex items-center gap-4 overflow-hidden border border-gold/25 bg-night-mid p-4 transition-colors hover:border-gold/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-light" aria-label={`Open ${settings.storeName} in Google Maps`}>
+            <span className="relative flex h-16 w-20 shrink-0 items-center justify-center overflow-hidden border border-gold/30 bg-night opacity-90 [background-image:linear-gradient(rgb(201_164_92/0.18)_1px,transparent_1px),linear-gradient(90deg,rgb(201_164_92/0.18)_1px,transparent_1px)] [background-size:12px_12px]" aria-hidden="true">
+              <span className="absolute h-6 w-6 rounded-full bg-gold-light/30 motion-safe:animate-ping" />
+              <MapPin className="relative h-6 w-6 fill-gold-light/20 text-gold-light" strokeWidth={1.5} />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className={`${LABEL} block text-gold-light`}>Find Us</span>
+              <span className="block truncate text-[0.875rem] text-ivory">{[line1, line2, settings.address.city].filter(Boolean).join(', ')}</span>
+            </span>
+            <ArrowRight className="h-5 w-5 shrink-0 text-gold-light transition-transform duration-300 motion-safe:group-hover:translate-x-1" aria-hidden="true" />
+          </a>
+          <a href={whatsappHref(settings, VISIT.conciergeMessage)} {...EXTERNAL} className={`${ACTION} mt-5 inline-flex items-center gap-2 self-start text-sage hover:text-gold-light`}>
+            <WhatsAppIcon className="h-4 w-4" /> {VISIT.conciergeCta}
+          </a>
         </div>
       </div>
     </section>

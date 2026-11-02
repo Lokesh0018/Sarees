@@ -114,6 +114,7 @@ export const VISIT = {
   phoneNote: 'Instant response during boutique operating hours.',
   conciergeCta: 'WhatsApp Bridal Concierge',
   conciergeMessage: 'Hello SJR House of Collection, I would like to reserve a bridal consultation.',
+  image: { src: IMG('gallery-trial-room'), alt: 'The private trial room with emerald velvet seating, a gilded mirror and saree hangers', position: '40% 50%' },
   form: {
     title: 'Reserve Your Private Salon Session',
     lead: 'Dedicated stylist & master draper reserved exclusively for your family.',
