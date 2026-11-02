@@ -106,3 +106,34 @@
   background-repeat: repeat-x;
   background-position: center top;
 }
+
+/* Shade finder scrolling: slim gold scrollbars, smooth wheel/keyboard scroll, and a soft fade where content
+   runs under the top and bottom edges so the swatch grid reads as continuing. */
+.shade-scroll {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(201 164 92 / 0.55) transparent;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+  mask-image: linear-gradient(to bottom, transparent 0, #000 18px, #000 calc(100% - 28px), transparent 100%);
+}
+.shade-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.shade-scroll::-webkit-scrollbar-track { background: transparent; }
+.shade-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #E3C88F, #9E7D3E);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+.shade-scroll::-webkit-scrollbar-thumb:hover { background: #E3C88F; background-clip: padding-box; }
+/* Horizontal chip rail: snaps chip by chip and fades at the edges on small screens */
+.shade-rail {
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: 1.25rem;
+  scrollbar-width: none;
+  mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 32px), transparent 100%);
+}
+.shade-rail::-webkit-scrollbar { display: none; }
+.shade-rail > * { scroll-snap-align: start; }
+@media (min-width: 640px) { .shade-rail { mask-image: none; } }
+@media (prefers-reduced-motion: reduce) { .shade-scroll { scroll-behavior: auto; } }

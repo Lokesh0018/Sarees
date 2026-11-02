@@ -236,11 +236,22 @@ export const MATCHINGS = {
   title: 'Designer Matchings & Lining Fabrics',
   lead: 'Over 400 meticulously dyed tones ensuring an exact, seamless colour match for pure silks, sheer georgettes, and heavy bridal borders.',
   items: [
-    { icon: 'texture', label: 'Breathable Durability', title: '2x2 Pure Cotton Linings', body: 'Pre-shrunk, color-fast, ultra-absorbent 2x2 fine combed cotton linings that preserve luxury silk fabrics against sweat and tension while offering featherweight comfort.', note: '400+ Available Shades', message: 'Enquiring about 2x2 Cotton Linings Matchings' },
-    { icon: 'layers', label: 'Textured Lustre', title: 'Raw Silk & Brocades', body: 'Contrast raw silk fabrics, authentic Banarasi brocades, and lustrous tissue fabrics curated for contrast sleeves, borders, and designer blouse backs.', note: 'By Meter & Pre-Cut Bits', message: 'Enquiring about Contrast Raw Silk and Brocade' },
-    { icon: 'ribbon', label: 'Drape Accents', title: 'Organza & Silk Dupattas', body: 'Embellished scalloped dupattas, banarasi weaves, and lightweight organza veils tailored for double-drape bridal ceremonies and festive ensembles.', note: 'Bespoke Embroidery', message: 'Enquiring about Designer Dupattas' },
+    { icon: 'texture', image: IMG('gallery-threads'), alt: 'Spools of silk thread and folded lining fabrics laid out by shade on a wooden counter', position: '50% 62%', label: 'Breathable Durability', title: '2x2 Pure Cotton Linings', body: 'Pre-shrunk, color-fast, ultra-absorbent 2x2 fine combed cotton linings that preserve luxury silk fabrics against sweat and tension while offering featherweight comfort.', note: '400+ Available Shades', message: 'Enquiring about 2x2 Cotton Linings Matchings' },
+    { icon: 'layers', image: IMG('featured-zari-detail'), alt: 'Close-up of a gold zari brocade border with a peacock motif on bottle-green raw silk', position: '55% 50%', label: 'Textured Lustre', title: 'Raw Silk & Brocades', body: 'Contrast raw silk fabrics, authentic Banarasi brocades, and lustrous tissue fabrics curated for contrast sleeves, borders, and designer blouse backs.', note: 'By Meter & Pre-Cut Bits', message: 'Enquiring about Contrast Raw Silk and Brocade' },
+    { icon: 'ribbon', image: IMG('cat-matchings'), alt: 'Sheer pastel organza and silk dupattas hanging on a boutique rail beside brocade bundles', position: '72% 50%', label: 'Drape Accents', title: 'Organza & Silk Dupattas', body: 'Embellished scalloped dupattas, banarasi weaves, and lightweight organza veils tailored for double-drape bridal ceremonies and festive ensembles.', note: 'Bespoke Embroidery', message: 'Enquiring about Designer Dupattas' },
   ],
   cardCta: 'Match Shade',
+  // Shade card under the header: a sample of the dyed tones kept in-house
+  shades: {
+    label: 'From the shade card',
+    note: 'Explore 400+ tones',
+    swatches: [
+      { name: 'Kumkum Red', hex: '#9B1B30' }, { name: 'Maroon', hex: '#5E1224' }, { name: 'Rani Pink', hex: '#C2185B' }, { name: 'Onion Pink', hex: '#D89AA0' },
+      { name: 'Peach', hex: '#E8A27C' }, { name: 'Turmeric', hex: '#D9A21B' }, { name: 'Mustard', hex: '#B8860B' }, { name: 'Parrot Green', hex: '#6B9E2E' },
+      { name: 'Bottle Green', hex: '#0F4D3A' }, { name: 'Peacock Blue', hex: '#0E6E73' }, { name: 'Royal Blue', hex: '#1F3C88' }, { name: 'Navy', hex: '#1A2340' },
+      { name: 'Lavender', hex: '#9C8AC4' }, { name: 'Ivory', hex: '#F1E6D2' }, { name: 'Antique Gold', hex: '#B08A45' }, { name: 'Black', hex: '#141414' },
+    ],
+  },
 }
 
 export const PETTICOATS = {
@@ -293,10 +304,10 @@ export const JEWELLERY = {
   title: 'Fancy Temple & Kundan Jewellery',
   lead: 'Regal South Indian antique matte gold finish, uncut polki stones, guttapusalu pearls, and bridal waistbands matched precisely to your saree zari.',
   items: [
-    { image: IMG('cat-fancy-jewellery'), alt: 'Antique matte gold Goddess Lakshmi temple choker necklace with kemp stones and pearl droplets', badge: 'Antique Matte Gold', label: 'Choker Suite', title: 'Lakshmi Temple Choker', body: 'Repoussé temple idol motif with rubies, emerald cabochons & matching jhumkas.', note: 'With Matching Earrings', message: 'Enquiry for Lakshmi Temple Choker' },
-    { image: IMG('gallery-jewellery-silk'), alt: 'Pearl and kundan necklace with matching earrings on emerald silk', badge: 'Pearl Clusters', label: 'Long Haaram', title: 'Royal Gutta Pusalu Haaram', body: 'Centuries-old Nizam-inspired cluster pearl fringes woven on hand-engraved gold.', note: 'Heritage Wedding Classic', message: 'Enquiry for Gutta Pusalu Haaram' },
-    { image: IMG('craft-finished-blouse'), alt: 'Bridal jewellery and a waist belt laid out with an embroidered blouse on emerald silk', badge: 'Bridal Waistbelt', label: 'Oddiyanam Accent', title: 'Nakshi Vaddanam Belt', body: 'Sculpted peacock and floral motifs with adjustable belt chain for snug saree tucking.', note: 'Adjustable Fit', message: 'Enquiry for Nakshi Vaddanam Waist Belt', position: '75% 70%' },
-    { image: IMG('gallery-bride'), alt: 'A bride wearing traditional forehead and hair jewellery', badge: 'Hair & Forehead Set', label: 'Bridal Accents', title: 'Maang Tikka & Jada Billalu', body: 'Nine-piece traditional braid jewellery set complete with sun-moon tikkas.', note: 'Full 9-Piece Set', message: 'Enquiry for Maang Tikka and Jada Billalu', position: '45% 25%' },
+    { image: IMG('jewellery-lakshmi-choker'), alt: 'Lakshmi Temple Choker Suite on dark emerald silk bust', badge: 'Antique Matte Gold', label: 'Choker Suite', title: 'Lakshmi Temple Choker', body: 'Repoussé temple idol motif with rubies, emerald cabochons & matching jhumkas.', note: 'With Matching Earrings', message: 'Enquiry for Lakshmi Temple Choker' },
+    { image: IMG('jewellery-gutta-pusalu-haaram'), alt: 'Royal Gutta Pusalu Haram set displayed on dark emerald silk bust', badge: 'Pearl Clusters', label: 'Long Haaram', title: 'Royal Gutta Pusalu Haaram', body: 'Centuries-old Nizam-inspired cluster pearl fringes woven on hand-engraved gold.', note: 'Heritage Wedding Classic', message: 'Enquiry for Gutta Pusalu Haaram' },
+    { image: IMG('jewellery-nakshi-vaddanam'), alt: 'Antique handcrafted Nakshi Vaddanam temple gold waist belt on dark emerald bust', badge: 'Bridal Waistbelt', label: 'Oddiyanam Accent', title: 'Nakshi Vaddanam Belt', body: 'Sculpted peacock and floral motifs with adjustable belt chain for snug saree tucking.', note: 'Adjustable Fit', message: 'Enquiry for Nakshi Vaddanam Waist Belt' },
+    { image: IMG('jewellery-maang-tikka-jada-billalu'), alt: 'Temple Maang Tikka and matching Jada Billalu hair ornaments on rich emerald green velvet display', badge: 'Hair & Forehead Set', label: 'Bridal Accents', title: 'Maang Tikka & Jada Billalu', body: 'Nine-piece traditional braid jewellery set complete with sun-moon tikkas.', note: 'Full 9-Piece Set', message: 'Enquiry for Maang Tikka and Jada Billalu' },
   ],
   cardCta: 'Enquire',
 }

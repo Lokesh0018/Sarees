@@ -6,6 +6,7 @@ import { gsap, useReveal } from '../utils/motion'
 import { getNewArrivals } from '../services/catalog'
 import { addressLines, formatPhone, generalEnquiryMessage, mapsDirectionsHref, productEnquiryMessage, telHref, whatsappHref } from '../utils/contact'
 import WhatsAppIcon from '../components/WhatsAppIcon'
+import ShadeFinder from '../components/ShadeFinder'
 import { LOGO } from '../components/Logo'
 import { imageUrl } from '../utils/assets'
 import { ARRIVALS, COLLECTIONS, CRAFT, DRESS_SETS, FEATURED, GALLERY, INNERS, INTRO, JEWELLERY, MARQUEE, MATCHINGS, NIGHTIES, PETTICOATS, SAREES, STITCHING, STORY, VISIT } from '../content/home'
@@ -586,27 +587,82 @@ export function StitchingCollection() {
   )
 }
 
-export function MatchingsCollection() {
+// Matching card: the whole card is one WhatsApp link; photo on top with the icon seal riding its lower edge
+function MatchingCard({ item, cta }) {
   const { settings } = useStore()
+  const Icon = COLLECTION_ICONS[item.icon] || Sparkles
+  return (
+    <a
+      href={whatsappHref(settings, item.message)}
+      {...EXTERNAL}
+      aria-label={`${cta} — ${item.title}, on WhatsApp`}
+      className="group flex cursor-pointer flex-col border border-gold/20 bg-night-low transition-[border-color,box-shadow] duration-300 hover:border-gold/70 hover:shadow-[0_24px_60px_-24px_rgba(0,0,0,0.75)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-light"
+    >
+      <div className="relative aspect-[4/3] overflow-hidden bg-night-mid">
+        <div className="absolute inset-0 transition-transform duration-700 ease-[var(--ease-silk)] motion-safe:group-hover:scale-105">
+          <Photo src={item.image} alt={item.alt} position={item.position} />
+        </div>
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night-low via-night-low/10 to-transparent" aria-hidden="true" />
+        <span className="absolute left-4 top-4 border border-gold/40 bg-night/75 px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-gold-light backdrop-blur-md">{item.note}</span>
+      </div>
+      <div className="relative flex flex-1 flex-col px-6 pb-6 sm:px-7 sm:pb-7">
+        <span className="-mt-6 mb-4 flex h-12 w-12 items-center justify-center border border-gold/50 bg-night-high text-gold-light shadow-lg transition-colors duration-300 group-hover:border-gold-light group-hover:bg-gold-light group-hover:text-ink">
+          <Icon className="h-6 w-6" strokeWidth={1.5} aria-hidden="true" />
+        </span>
+        <span className={`${LABEL} text-gold-light`}>{item.label}</span>
+        <h3 className="mb-3 mt-1.5 font-serif text-[1.65rem] font-medium leading-tight text-ivory transition-colors duration-300 group-hover:text-gold-light">{item.title}</h3>
+        <p className="flex-1 text-[0.875rem] leading-relaxed text-mist">{item.body}</p>
+        <span className={`${ACTION} mt-6 inline-flex items-center gap-2 border-t border-gold/15 pt-4 text-gold-light`}>
+          {cta}
+          <span className="transition-transform duration-300 motion-safe:group-hover:translate-x-1" aria-hidden="true">→</span>
+        </span>
+      </div>
+    </a>
+  )
+}
+
+// Shade card strip: tall dyed-thread swatches that lift on hover. The strip and the tone count both open the full shade finder.
+function ShadeCard({ shades }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <figure className="mx-auto mb-14 max-w-4xl" data-reveal>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="group/shades flex h-20 w-full cursor-pointer gap-1 border border-gold/25 bg-night-low p-1.5 transition-colors duration-300 hover:border-gold/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-light sm:h-24 sm:gap-1.5 sm:p-2"
+        aria-label={`Open the shade card — ${shades.note}`}
+        aria-haspopup="dialog"
+      >
+        {shades.swatches.map((s) => (
+          <span
+            key={s.name}
+            title={s.name}
+            className="h-full flex-1 border-t-2 border-gold-light/60 transition-transform duration-300 ease-[var(--ease-silk)] motion-safe:hover:-translate-y-1.5"
+            style={{ backgroundColor: s.hex }}
+            aria-hidden="true"
+          />
+        ))}
+      </button>
+      <figcaption className="mt-3 flex items-center justify-between gap-4">
+        <span className={`${LABEL} text-mist`}>{shades.label}</span>
+        <button type="button" onClick={() => setOpen(true)} aria-haspopup="dialog" className={`${LABEL} group/more -my-3 inline-flex min-h-11 cursor-pointer items-center gap-2 text-gold-light transition-colors hover:text-ivory`}>
+          {shades.note}
+          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 motion-safe:group-hover/more:translate-x-1" aria-hidden="true" />
+        </button>
+      </figcaption>
+      <ShadeFinder open={open} onClose={() => setOpen(false)} />
+    </figure>
+  )
+}
+
+export function MatchingsCollection() {
   const d = MATCHINGS
   return (
     <CollectionSection data={d}>
       <CollectionHeader data={d} titleId={`${d.id}-title`} centered />
+      <ShadeCard shades={d.shades} />
       <div className="grid gap-6 md:grid-cols-3 lg:gap-8" data-reveal-stagger>
-        {d.items.map((item) => (
-          <article key={item.title} className="flex flex-col justify-between border border-gold/20 bg-night-low p-7 transition-colors duration-300 hover:border-gold sm:p-8">
-            <div>
-              <div className="mb-4"><IconBox name={item.icon} /></div>
-              <span className="text-[0.6875rem] font-semibold uppercase tracking-wider text-gold-light">{item.label}</span>
-              <h3 className="mb-3 mt-1 font-serif text-[1.75rem] font-medium leading-tight text-ivory">{item.title}</h3>
-              <p className="text-[0.8125rem] leading-relaxed text-mist">{item.body}</p>
-            </div>
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-gold/15 pt-4">
-              <span className="whitespace-nowrap text-xs text-sage">{item.note}</span>
-              <a href={whatsappHref(settings, item.message)} {...EXTERNAL} className={`${ACTION} ml-auto shrink-0 text-gold-light hover:underline`} aria-label={`${d.cardCta} — ${item.title}, on WhatsApp`}>{d.cardCta} →</a>
-            </div>
-          </article>
-        ))}
+        {d.items.map((item) => <MatchingCard key={item.title} item={item} cta={d.cardCta} />)}
       </div>
     </CollectionSection>
   )
