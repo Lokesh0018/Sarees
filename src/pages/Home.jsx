@@ -19,17 +19,18 @@ export default function Home() {
       <MarqueeBand />
       <IntroSection />
       <CollectionsSection />
-      <SareesCollection />
+      {/* Two tones only: emerald (default) alternating with warm parchment (light, like the Intro), so the run varies without adding colours */}
+      <div className="tone-parchment"><SareesCollection /></div>
       <StitchingCollection />
-      <MatchingsCollection />
+      <div className="tone-parchment"><MatchingsCollection /></div>
       <PetticoatsCollection />
-      <InnersCollection />
+      <div className="tone-parchment"><InnersCollection /></div>
       <NightiesCollection />
-      <JewelleryCollection />
+      <div className="tone-parchment"><JewelleryCollection /></div>
       <CraftSection />
-      <StorySection />
+      <div className="tone-parchment"><StorySection /></div>
       <GallerySection />
-      <VisitSection />
+      <div className="tone-parchment"><VisitSection /></div>
     </>
   )
 }

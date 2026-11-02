@@ -143,3 +143,44 @@
 
 /* Sections scrolled out of view pause their looping CSS animations (pings, pulses, shimmers); see useOffscreenPause */
 [data-offscreen], [data-offscreen] * { animation-play-state: paused !important; }
+
+/* Section tone: warm parchment, the light editorial spread of the Intro section, alternating with the default emerald.
+   It remaps the dark "night" surfaces to ivory paper and flips the text and accent tokens (ivory -> forest, mist -> warm
+   grey, gold -> bronze, sage -> deep green, ink -> paper) so the same utilities render light. Emerald needs no class.
+   .tone-dark restores the dark tokens for anything that must stay dark inside a parchment section (text over photos). */
+.tone-parchment {
+  --color-night-lowest: #F3E8D6;
+  --color-night: #F6EDDF;
+  --color-night-low: #FBF6EC;
+  --color-night-mid: #EDE1CC;
+  --color-night-high: #E6D7BD;
+  --color-ivory: #14231E;
+  --color-mist: #4E5A53;
+  --color-gold: #9E7D3E;
+  --color-gold-light: #8A6828;
+  --color-sage: #285045;
+  --color-sage-deep: #DCEBE4;
+  --color-ink: #FBF6EC;
+}
+.tone-dark {
+  --color-night-lowest: #05110D;
+  --color-night: #091612;
+  --color-night-low: #111E1A;
+  --color-night-mid: #15221E;
+  --color-night-high: #1F2D28;
+  --color-ivory: #F6EBDD;
+  --color-mist: #D1C5B4;
+  --color-gold: #C9A45C;
+  --color-gold-light: #E3C88F;
+  --color-sage: #A5CFC1;
+  --color-sage-deep: #285045;
+  --color-ink: #0E120D;
+}
+/* Native form controls (date picker icon, select menu) follow the light tone */
+.tone-parchment :is(input, select, textarea) { color-scheme: light; }
+/* On parchment, the dark theme's deep black shadows read as smudges: swap them for soft, warm sepia shadows */
+.tone-parchment :is([class^="shadow-"], [class*=" shadow-"]) { box-shadow: 0 18px 40px -22px rgb(92 68 30 / 0.35) !important; }
+.tone-parchment :is([class*="hover:shadow-"]):hover { box-shadow: 0 22px 48px -24px rgb(92 68 30 / 0.4) !important; }
+.tone-parchment .tone-dark :is([class^="shadow-"], [class*=" shadow-"]) { box-shadow: 0 30px 70px -30px rgb(0 0 0 / 0.6) !important; }
+/* A faint warm vignette at the top of each parchment section softens the step from the dark section above */
+.tone-parchment > section { background-image: linear-gradient(to bottom, rgb(120 90 40 / 0.07), transparent 140px); }

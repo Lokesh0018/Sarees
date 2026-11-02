@@ -499,7 +499,7 @@ function SareeCard({ item, index, cta }) {
         {/* Gold inner frame that draws in on hover */}
         <div className="pointer-events-none absolute inset-3 border border-gold-light/0 transition-colors duration-500 group-hover:border-gold-light/60" aria-hidden="true" />
         <span className="absolute left-5 top-5 border border-gold/40 bg-night/70 px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-gold-light backdrop-blur-md">{item.badge}</span>
-        <span className="absolute right-5 top-4 font-serif text-[1.75rem] leading-none text-ivory/80 [text-shadow:0_2px_12px_rgba(0,0,0,0.5)]" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+        <span className="tone-dark absolute right-5 top-4 font-serif text-[1.75rem] leading-none text-ivory/80 [text-shadow:0_2px_12px_rgba(0,0,0,0.5)]" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
       </div>
       <div className="relative flex flex-1 flex-col px-5 pb-5 sm:px-6 sm:pb-6">
         <div className="flex items-center gap-2.5 text-gold">
@@ -756,7 +756,7 @@ export function InnersCollection() {
     <CollectionSection data={d} className="lg:py-16">
       <div className="grid gap-10 lg:grid-cols-12 lg:items-stretch lg:gap-12">
         {/* Photo panel */}
-        <div className="relative min-h-[300px] overflow-hidden border border-gold/25 bg-night-mid sm:min-h-[380px] lg:col-span-5 lg:min-h-0" data-reveal>
+        <div className="tone-dark relative min-h-[300px] overflow-hidden border border-gold/25 bg-night-mid sm:min-h-[380px] lg:col-span-5 lg:min-h-0" data-reveal>
           <div className="absolute inset-0"><Photo {...d.image} /></div>
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night via-night/30 to-transparent" aria-hidden="true" />
           <div className="pointer-events-none absolute inset-3 border border-gold-light/20" aria-hidden="true" />
@@ -1006,12 +1006,12 @@ export function StorySection() {
         {/* Layered photo composition */}
         <div className="relative pb-16 pr-6 sm:pb-20 sm:pr-16 lg:col-span-6 lg:pb-14" data-reveal>
           <div data-depth="22" className="pointer-events-none absolute -left-3 -top-3 h-24 w-24 border-l border-t border-gold/50 sm:-left-5 sm:-top-5" aria-hidden="true" />
-          <div data-depth="6" className="group relative h-[380px] overflow-hidden border border-gold/30 bg-night-mid shadow-2xl sm:h-[500px] lg:h-[min(500px,62vh)]">
+          <div data-depth="6" className="tone-dark group relative h-[380px] overflow-hidden border border-gold/30 bg-night-mid shadow-2xl sm:h-[500px] lg:h-[min(500px,62vh)]">
             <div className="absolute inset-0 transition-transform duration-[1200ms] ease-[var(--ease-silk)] motion-safe:group-hover:scale-[1.03]"><Photo {...STORY.image} /></div>
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night/60 via-transparent to-transparent" aria-hidden="true" />
           </div>
           {/* Inset loom photo */}
-          <div data-depth="18" className="absolute right-0 top-10 hidden h-44 w-36 overflow-hidden border-4 border-night-lowest shadow-2xl outline outline-1 outline-gold/40 sm:block lg:h-52 lg:w-40">
+          <div data-depth="18" className="tone-dark absolute right-0 top-10 hidden h-44 w-36 overflow-hidden border-4 border-night-lowest shadow-2xl outline outline-1 outline-gold/40 sm:block lg:h-52 lg:w-40">
             <Photo {...STORY.inset} />
           </div>
           {/* Founder's vision pull quote */}
@@ -1193,7 +1193,7 @@ export function VisitSection() {
     <section id="visit" ref={ref} className="relative border-t border-gold/20 bg-night-lowest text-ivory" aria-labelledby="visit-title">
       <div className="grid lg:grid-cols-2">
         {/* Photo half with the visit details laid over it */}
-        <div className="relative flex min-h-[560px] flex-col justify-end overflow-hidden lg:min-h-[760px]" data-reveal>
+        <div className="tone-dark relative flex min-h-[560px] flex-col justify-end overflow-hidden text-ivory lg:min-h-[760px]" data-reveal>
           <div className="absolute inset-0"><Photo src={VISIT.image.src} alt={VISIT.image.alt} position={VISIT.image.position} /></div>
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night-lowest via-night-lowest/75 to-night-lowest/20" aria-hidden="true" />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent to-night-lowest/60 max-lg:hidden" aria-hidden="true" />
