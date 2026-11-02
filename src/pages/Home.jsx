@@ -1,4 +1,5 @@
 import { useSeo } from '../hooks/useSeo'
+import { useOffscreenPause } from '../hooks/useOffscreenPause'
 import Hero from '../sections/Hero'
 import {
   CollectionsSection, CraftSection, GallerySection, InnersCollection, IntroSection, JewelleryCollection,
@@ -11,6 +12,7 @@ export default function Home() {
     description: "SJR – House of Collection, a women's ethnic fashion boutique in MVP Colony, Visakhapatnam. Sarees, blouse stitching, matchings, petticoats, inners, nighties and fancy jewellery.",
     path: '/',
   })
+  useOffscreenPause()
   return (
     <>
       <Hero />

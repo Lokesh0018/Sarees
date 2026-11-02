@@ -43,11 +43,11 @@ function HeroBackdrop({ hero, reduced, inView }) {
       }
     }
 
-    if (inView) {
-      attemptPlay()
-    } else {
-      video.pause()
-    }
+    // Play only while the hero is on screen and the tab is visible; pause otherwise to save CPU, GPU and battery
+    const sync = () => (inView && !document.hidden ? attemptPlay() : video.pause())
+    sync()
+    document.addEventListener('visibilitychange', sync)
+    return () => document.removeEventListener('visibilitychange', sync)
   }, [reduced, inView, hasVideo])
 
   return (
@@ -69,8 +69,8 @@ function HeroBackdrop({ hero, reduced, inView }) {
           poster={hero.poster || undefined}
           onPlaying={() => setPlaying(true)}
           onPause={() => {
-            // Auto-resume if accidentally paused while in view and not reduced
-            if (!reduced && inView && videoRef.current) {
+            // Auto-resume if paused unexpectedly while in view (not when the tab is hidden or the hero has scrolled away)
+            if (!reduced && inView && !document.hidden && videoRef.current) {
               videoRef.current.play().catch(() => {})
             }
           }}

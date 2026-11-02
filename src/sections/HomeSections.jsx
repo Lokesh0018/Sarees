@@ -148,9 +148,27 @@ function useMarqueeMotion(bandRef, majorRef, minorRef) {
     const resize = new ResizeObserver(measure)
     rows.forEach((r) => resize.observe(r.el.firstElementChild))
 
-    let visible = true
-    const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting })
-    io.observe(band)
+    // The ticker runs only while the band is on screen and the tab is visible
+    let running = false
+    let inView = false
+    const start = () => {
+      if (running || !inView || document.hidden) return
+      running = true
+      lastY = window.scrollY // ignore scrolling that happened while off screen
+      speed = 0
+      gsap.ticker.add(tick)
+    }
+    const stop = () => {
+      if (!running) return
+      running = false
+      gsap.ticker.remove(tick)
+    }
+    const io = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting
+      inView ? start() : stop()
+    })
+    const onVisibility = () => (document.hidden ? stop() : start())
+    document.addEventListener('visibilitychange', onVisibility)
 
     let hover = false
     const enter = () => { hover = true }
@@ -172,22 +190,24 @@ function useMarqueeMotion(bandRef, majorRef, minorRef) {
       speed = ease(speed, (y - lastY) / Math.max(dt, 0.001), 4, dt)
       lastY = y
       if (Math.abs(speed) > 40) heading = speed > 0 ? 1 : -1
-      if (!visible) return
       flow = ease(flow, hover ? 0 : 1, 5, dt)
       surge = ease(surge, Math.min(Math.abs(speed) / 220, 6), 5, dt)
       lean = ease(lean, hover ? 0 : gsap.utils.clamp(-8, 8, -speed / 110), 6, dt)
+      // Glided to a stop on hover: nothing moves, so skip the style writes entirely
+      if (flow < 0.002 && Math.abs(lean) < 0.01) return
       for (const r of rows) {
         if (!r.span) continue
         r.x = gsap.utils.wrap(-r.span, 0, r.x + r.dir * heading * r.speed * (1 + surge) * flow * dt)
         r.el.style.transform = `translate3d(${r.x.toFixed(2)}px,0,0)${r.lean ? ` skewX(${lean.toFixed(2)}deg)` : ''}`
       }
     }
-    gsap.ticker.add(tick)
+    io.observe(band)
 
     return () => {
-      gsap.ticker.remove(tick)
+      stop()
       resize.disconnect()
       io.disconnect()
+      document.removeEventListener('visibilitychange', onVisibility)
       band.removeEventListener('pointerenter', enter)
       band.removeEventListener('pointerleave', leave)
       rows.forEach((r) => { r.el.style.transform = '' })
@@ -202,7 +222,7 @@ export function MarqueeBand() {
   useMarqueeMotion(bandRef, majorRef, minorRef)
 
   return (
-    <section ref={bandRef} className="marquee relative overflow-hidden bg-night-lowest" aria-label={MARQUEE.label}>
+    <section ref={bandRef} className="marquee relative overflow-hidden bg-night-lowest [contain:layout_paint]" aria-label={MARQUEE.label}>
       {/* Woven zari border, top and bottom, like the edge of a saree */}
       <div className="zari-border h-2.5" aria-hidden="true" />
       {/* A low warm glow behind the words, so the band reads as lit fabric rather than a flat strip */}

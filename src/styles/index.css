@@ -140,3 +140,6 @@
 
 /* Lightbox photo swap */
 @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: none; } }
+
+/* Sections scrolled out of view pause their looping CSS animations (pings, pulses, shimmers); see useOffscreenPause */
+[data-offscreen], [data-offscreen] * { animation-play-state: paused !important; }
