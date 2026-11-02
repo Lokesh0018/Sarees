@@ -14,6 +14,20 @@
   --color-charcoal: #24201D;
   --color-ink: #0E120D; /* deep olive-black for cinematic shading and gold-button text */
 
+  /* Dark green-black surfaces for the editorial home sections, lowest to highest */
+  --color-night-lowest: #05110D;
+  --color-night: #091612;
+  --color-night-low: #111E1A;
+  --color-night-mid: #15221E;
+  --color-night-high: #1F2D28;
+  --color-mist: #D1C5B4; /* secondary text on dark surfaces */
+  --color-sage: #A5CFC1; /* status and secondary accents */
+  --color-sage-deep: #285045;
+  --color-parchment: #F5EBD9; /* light editorial spread */
+  --color-parchment-dark: #EBDCC4;
+  --color-forest: #14231E; /* headings on parchment */
+  --color-bronze: #8A6828; /* small labels on parchment */
+
   --font-serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
   --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 

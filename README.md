@@ -34,6 +34,10 @@ canonical URLs, Open Graph tags and the sitemap.
 
 ## Managing content
 
+The wording of the home page sections below the hero (intro, collection cards, featured piece, craft pillars,
+brand story, gallery, visit, footer) lives in `src/content/home.js`. Their images are WebP files in
+`public/media/home/`.
+
 Edit the files in `public/data/`. A static deploy only needs the edited file re-uploaded; no rebuild is required
 
 
@@ -58,8 +62,8 @@ The second image appears on hover in product cards. Use **3:4 portrait WebP** im
 Products and categories without photos show a woven textile pattern instead.
 
 ### Sample products
-The 12 products in `products.json` are **samples**: marked `"sample": true`, badged "Sample" on the site, and
-set to `noindex`. Remove them all with:
+All 16 products in `products.json` are **samples** (`"sample": true`), including the four shown under
+New Arrivals. Remove them all with:
 
 ```bash
 npm run remove-samples
@@ -108,12 +112,13 @@ Both are empty until confirmed. Set them in `settings.json`:
 public/
   brand/          SJR logo (WebP), favicon, touch icon, Open Graph image
   data/           settings / categories / products JSON
-  media/          hero video (WebM/MP4 boomerang), poster, product photos
+  media/          hero video (WebM/MP4 boomerang), poster; home/ holds the section images (WebP)
   .htaccess       index.html fallback, security and cache headers (Apache / Hostinger)
 scripts/          sitemap generator, sample-data remover
 src/
-  components/     Logo, ProductCard, ProductMedia, TextileArt, Ornament …
-  config/         site URL, fallback business details, availability labels
+  components/     Logo, WhatsAppIcon
+  config/         site URL, fallback business details
+  content/        home.js: copy for the sections below the hero
   context/        StoreContext (settings + categories)
   hooks/          useAsync, useSeo, useMedia
   layouts/        SiteLayout, Header, Footer

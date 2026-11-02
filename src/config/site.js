@@ -29,9 +29,3 @@ export const FALLBACK_SETTINGS = {
 
 export const SITE_URL = (import.meta.env.VITE_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : '')).replace(/\/$/, '')
 export const DATA_BASE_URL = (import.meta.env.VITE_DATA_BASE_URL || '/data').replace(/\/$/, '')
-
-export const AVAILABILITY = {
-  in_stock: { label: 'Available', tone: 'emerald' },
-  on_request: { label: 'On request', tone: 'gold' },
-  out_of_stock: { label: 'Currently unavailable', tone: 'muted' },
-}

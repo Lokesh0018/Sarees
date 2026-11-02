@@ -262,5 +262,139 @@
       "motif": "jewel"
     },
     "sample": true
+  },
+  {
+    "id": 13,
+    "slug": "royal-emerald-gadwal-silk-saree",
+    "name": "Royal Emerald Gadwal Silk Saree",
+    "categorySlug": "sarees",
+    "subcategorySlug": "pattu-sarees",
+    "productCode": "SJR-GD-109",
+    "description": "Interlocked Kuttu zari border with pure zari pallu.",
+    "badge": "In Boutique",
+    "statusLabel": "Ready For Drape",
+    "tags": [
+      "gadwal"
+    ],
+    "images": [
+      {
+        "url": "/media/home/arrival-emerald-gadwal.webp",
+        "alt": "Royal Emerald Gadwal silk saree with contrast maroon temple border, draped on a model",
+        "isPrimary": true,
+        "displayOrder": 1,
+        "width": 1408,
+        "height": 768
+      }
+    ],
+    "imagePosition": "62% 30%",
+    "price": null,
+    "availability": "in_stock",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isPublished": true,
+    "displayOrder": 13,
+    "createdAt": "2026-11-02T10:03:00.000Z",
+    "sample": true
+  },
+  {
+    "id": 14,
+    "slug": "crimson-zari-pure-kanchipuram-pattu",
+    "name": "Crimson Zari Pure Kanchipuram Pattu",
+    "categorySlug": "sarees",
+    "subcategorySlug": "pattu-sarees",
+    "productCode": "SJR-KP-420",
+    "description": "Dense bridal mayil & chakra motifs in tested gold zari.",
+    "badge": "Bridal Edition",
+    "badgeTone": "gold",
+    "statusLabel": "Ready For Drape",
+    "tags": [
+      "kanchipuram"
+    ],
+    "images": [
+      {
+        "url": "/media/home/arrival-crimson-kanchipuram.webp",
+        "alt": "Crimson Kanchipuram pattu saree with gold zari pallu on display",
+        "isPrimary": true,
+        "displayOrder": 1,
+        "width": 1408,
+        "height": 768
+      }
+    ],
+    "imagePosition": "44% 50%",
+    "price": null,
+    "availability": "in_stock",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isPublished": true,
+    "displayOrder": 14,
+    "createdAt": "2026-11-02T10:02:00.000Z",
+    "sample": true
+  },
+  {
+    "id": 15,
+    "slug": "handwoven-chanderi-floral-saree",
+    "name": "Handwoven Chanderi Floral Saree",
+    "categorySlug": "sarees",
+    "subcategorySlug": "handloom-sarees",
+    "productCode": "SJR-CH-304",
+    "description": "Featherlight silk-cotton weave with delicate silver butis.",
+    "badge": "Limited Weave",
+    "statusLabel": "In Stock (Vizag)",
+    "tags": [
+      "chanderi"
+    ],
+    "images": [
+      {
+        "url": "/media/home/arrival-chanderi-floral.webp",
+        "alt": "Mint green handwoven Chanderi saree with gold border",
+        "isPrimary": true,
+        "displayOrder": 1,
+        "width": 1408,
+        "height": 768
+      }
+    ],
+    "imagePosition": "40% 50%",
+    "price": null,
+    "availability": "in_stock",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isPublished": true,
+    "displayOrder": 15,
+    "createdAt": "2026-11-02T10:01:00.000Z",
+    "sample": true
+  },
+  {
+    "id": 16,
+    "slug": "maggam-work-embroidered-blouse",
+    "name": "Maggam Work Embroidered Blouse",
+    "categorySlug": "stitching",
+    "subcategorySlug": "blouse-stitching",
+    "productCode": "SJR-ST-88",
+    "description": "Hand-set zardosi, French knots & customized sweetheart neck.",
+    "badge": "Atelier Service",
+    "badgeTone": "sage",
+    "statusLabel": "Custom Tailored",
+    "tags": [
+      "blouses"
+    ],
+    "images": [
+      {
+        "url": "/media/home/arrival-maggam-blouse.webp",
+        "alt": "Royal blue velvet maggam work blouse with zardosi embroidery on a dress form",
+        "isPrimary": true,
+        "displayOrder": 1,
+        "width": 1408,
+        "height": 768
+      }
+    ],
+    "imagePosition": "50% 40%",
+    "price": null,
+    "availability": "in_stock",
+    "isFeatured": false,
+    "isNewArrival": true,
+    "isPublished": true,
+    "displayOrder": 16,
+    "createdAt": "2026-11-02T10:00:00.000Z",
+    "sample": true
   }
 ]
