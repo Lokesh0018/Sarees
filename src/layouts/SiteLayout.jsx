@@ -29,6 +29,7 @@ export default function SiteLayout({ children }) {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat with the boutique on WhatsApp"
+        data-float-whatsapp
         className={`fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-4 z-40 flex h-[54px] w-[54px] cursor-pointer items-center justify-center rounded-full border border-gold/60 bg-emerald-deep text-gold-light shadow-[0_12px_30px_-12px_rgb(0_0_0/0.6)] transition-[transform,opacity,visibility,border-color] duration-300 hover:scale-105 hover:border-gold-light sm:bottom-8 sm:right-8 sm:h-[60px] sm:w-[60px] ${showFloat ? 'visible opacity-100' : 'max-sm:invisible max-sm:translate-y-4 max-sm:opacity-0'}`}
       >
         <WhatsAppIcon className="h-6 w-6 sm:h-[26px] sm:w-[26px]" />

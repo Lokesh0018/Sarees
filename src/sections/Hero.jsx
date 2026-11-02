@@ -22,8 +22,32 @@ function HeroBackdrop({ hero, reduced, inView }) {
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
-    if (reduced || !inView) video.pause()
-    else video.play().catch(() => {})
+
+    video.muted = true
+    video.defaultMuted = true
+
+    if (reduced) {
+      video.pause()
+      return
+    }
+
+    // Try to ensure playback begins cleanly and recovers if paused
+    const attemptPlay = () => {
+      const promise = video.play()
+      if (promise !== undefined) {
+        promise.catch(() => {
+          // Fallback if browser requires muted guarantee
+          video.muted = true
+          video.play().catch(() => {})
+        })
+      }
+    }
+
+    if (inView) {
+      attemptPlay()
+    } else {
+      video.pause()
+    }
   }, [reduced, inView, hasVideo])
 
   return (
@@ -36,13 +60,23 @@ function HeroBackdrop({ hero, reduced, inView }) {
           className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-1000 ${playing ? 'opacity-100' : 'opacity-0'}`}
           autoPlay={!reduced}
           muted
+          defaultMuted
           loop
           playsInline
+          webkit-playsinline="true"
           preload="auto"
           disablePictureInPicture
           poster={hero.poster || undefined}
           onPlaying={() => setPlaying(true)}
-          onError={() => setFailed(true)}
+          onPause={() => {
+            // Auto-resume if accidentally paused while in view and not reduced
+            if (!reduced && inView && videoRef.current) {
+              videoRef.current.play().catch(() => {})
+            }
+          }}
+          // Skipped <source>s (e.g. the mobile file on desktop) also fire "error" here;
+          // only a real media error on the video itself means playback has failed.
+          onError={(e) => e.currentTarget.error && setFailed(true)}
         >
           {hero.videoWebmMobile && <source src={hero.videoWebmMobile} type="video/webm" media="(max-width: 767px)" />}
           {hero.videoWebm && <source src={hero.videoWebm} type="video/webm" />}
@@ -114,7 +148,8 @@ export default function Hero() {
         data-hero-content
         className="container-wide relative flex flex-1 flex-col pb-[max(1.75rem,env(safe-area-inset-bottom))] pt-[max(6.5rem,14vh)] lg:pb-[clamp(1.75rem,5vh,3.25rem)] lg:pt-[max(7.5rem,15vh)]"
       >
-        <div className="mt-auto max-w-[38rem] [text-shadow:0_1px_14px_rgb(14_18_13/0.35)] lg:my-auto lg:max-w-[min(48vw,700px)]">
+        {/* Text column stops near 46% of the width, so the model (centre to right of the film) stays clear */}
+        <div className="mt-auto max-w-[38rem] [text-shadow:0_1px_14px_rgb(14_18_13/0.35)] lg:my-auto lg:max-w-[min(42vw,700px)]">
           <div data-mono className="relative inline-block">
             <img
               src={LOGO_LARGE.src}
@@ -149,7 +184,7 @@ export default function Hero() {
 
           <h1
             id="hero-title"
-            className="mt-[clamp(0.75rem,2vh,1.25rem)] max-w-[700px] text-[clamp(2.625rem,12vw,3.375rem)] font-normal leading-[1.02] md:text-[clamp(3.25rem,7.5vw,4.5rem)] lg:text-[clamp(3.375rem,min(5.2vw,9.6vh),5.375rem)]"
+            className="mt-[clamp(0.75rem,2vh,1.25rem)] max-w-[700px] text-[clamp(2.625rem,12vw,3.375rem)] font-normal leading-[1.02] md:text-[clamp(3.25rem,7.5vw,4.5rem)] lg:text-[clamp(3.375rem,min(5.2vw,9.6vh),4.75rem)]"
           >
             {lines.map((line, i) => (
               // Each line slides up inside its own mask; the padding keeps descenders (g, y) unclipped.
