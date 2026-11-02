@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowRight, BadgeCheck, BookOpen, Brush, CalendarCheck, CalendarDays, Check, CircleCheck, CircleDot, Clock, Flower, Flower2, Grid2x2, Layers, LockOpen, MapPin, Palette, PencilRuler, Phone, Ribbon, Ruler, Scissors, Shield, Shirt, Sparkles, UserCheck, Waves } from 'lucide-react'
+import { ArrowRight, BadgeCheck, BookOpen, Brush, CalendarCheck, CalendarDays, Check, CircleCheck, CircleDot, Clock, Flower, Flower2, Grid2x2, Layers, LockOpen, MapPin, Moon, Palette, PencilRuler, Phone, Ribbon, Ruler, Scissors, Shield, Shirt, Sparkles, UserCheck, Waves } from 'lucide-react'
 import { useStore } from '../context/StoreContext'
 import { useAsync } from '../hooks/useAsync'
 import { gsap, useReveal } from '../utils/motion'
@@ -787,36 +787,57 @@ export function InnersCollection() {
   )
 }
 
+// Nighties: calm editorial spread. Copy and an airy numbered list on the left; the photo sits in an arched
+// jharokha-style frame on a faint handblock dot print, sized so the spread fits one laptop screen.
 export function NightiesCollection() {
   const { settings } = useStore()
   const d = NIGHTIES
   return (
-    <CollectionSection data={d} tone="low">
-      <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-16">
-        <div className="flex flex-col lg:col-span-6">
+    <CollectionSection data={d} tone="low" className="lg:py-16">
+      <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-14">
+        <div className="order-2 flex flex-col lg:order-1 lg:col-span-7">
           <RuleLabel className="mb-3 text-gold-light" data-reveal>{d.eyebrow}</RuleLabel>
-          <h2 id={`${d.id}-title`} className={`mb-6 ${H_XL}`} data-reveal>
+          <h2 id={`${d.id}-title`} className={`mb-5 ${H_XL} lg:text-[3.1rem]`} data-reveal>
             {d.title} <br />
             <span className="italic text-gold-light">{d.titleAccent}</span>
           </h2>
-          <p className="mb-6 text-lg font-light leading-[1.85] text-mist" data-reveal>{d.lead}</p>
-          <ul className="mb-8 flex flex-col gap-4" data-reveal-stagger>
-            {d.features.map((f) => (
-              <li key={f.title} className="flex items-start gap-4 border border-gold/20 bg-night-low p-4">
-                <IconBox name={f.icon} small />
-                <div>
-                  <h3 className="text-sm font-semibold text-ivory">{f.title}</h3>
-                  <p className="mt-0.5 text-xs leading-relaxed text-mist">{f.body}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-          <div data-reveal>
-            <a href={whatsappHref(settings, d.cta.message)} {...EXTERNAL} className={`${BTN_GOLD} shadow-xl`}><WhatsAppIcon className="h-[18px] w-[18px]" /> {d.cta.label}</a>
+          <p className="max-w-xl text-base font-light leading-[1.8] text-mist" data-reveal>{d.lead}</p>
+          <ol className="mt-8 flex flex-col border-t border-gold/20" data-reveal-stagger>
+            {d.features.map((f, i) => {
+              const Icon = COLLECTION_ICONS[f.icon] || Sparkles
+              return (
+                <li key={f.title} className="group/night flex items-start gap-4 border-b border-gold/20 py-5 sm:gap-5">
+                  <span className="w-7 shrink-0 pt-1 font-serif text-[1.1rem] italic text-gold/60" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold/35 bg-gold-light/10 text-gold-light transition-colors duration-300 group-hover/night:border-gold-light group-hover/night:bg-gold-light group-hover/night:text-ink">
+                    <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="font-serif text-[1.25rem] font-semibold leading-snug text-ivory">{f.title}</h3>
+                    <p className="mt-1 text-[0.875rem] leading-relaxed text-mist">{f.body}</p>
+                  </div>
+                </li>
+              )
+            })}
+          </ol>
+          <div className="mt-8" data-reveal>
+            <a href={whatsappHref(settings, d.cta.message)} {...EXTERNAL} className={`${BTN_GOLD} w-full text-center shadow-xl sm:w-auto`}><WhatsAppIcon className="h-[18px] w-[18px]" /> {d.cta.label}</a>
           </div>
         </div>
-        <div className="lg:col-span-6" data-reveal>
-          <div className="h-[420px] overflow-hidden border border-gold/30 shadow-2xl sm:h-[500px]"><Photo {...d.image} /></div>
+
+        <div className="relative order-1 mx-auto w-full max-w-md lg:order-2 lg:col-span-5 lg:max-w-none" data-reveal>
+          {/* Faint handblock dot print behind the frame */}
+          <div className="pointer-events-none absolute -inset-4 opacity-40 [background-image:radial-gradient(rgb(201_164_92/0.35)_1.2px,transparent_1.6px)] [background-size:18px_18px] [mask-image:radial-gradient(closest-side,#000,transparent)] sm:-inset-8" aria-hidden="true" />
+          <div className="relative rounded-t-full border border-gold/40 p-2.5">
+            <div className="relative h-[400px] overflow-hidden rounded-t-full bg-night-mid sm:h-[480px] lg:h-[min(520px,62vh)]">
+              <div className="absolute inset-0"><Photo {...d.image} /></div>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night/60 via-transparent to-transparent" aria-hidden="true" />
+            </div>
+          </div>
+          {/* Floating note, like a garment tag */}
+          <div className="absolute -bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-3 whitespace-nowrap border border-gold/40 bg-night-high/95 px-5 py-3 shadow-xl backdrop-blur-md">
+            <Moon className="h-4 w-4 text-gold-light" strokeWidth={1.5} aria-hidden="true" />
+            <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-ivory">Breathable Natural Fibres</span>
+          </div>
         </div>
       </div>
     </CollectionSection>
