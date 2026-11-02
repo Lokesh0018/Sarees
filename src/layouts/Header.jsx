@@ -10,7 +10,6 @@ import WhatsAppIcon from '../components/WhatsAppIcon'
 // In-page sections of the single home page.
 export const SECTION_LINKS = [
   { href: '#collections', label: 'Collections' },
-  { href: '#new-arrivals', label: 'New Arrivals' },
   { href: '#craft', label: 'Our Craft' },
   { href: '#about', label: 'About' },
   { href: '#visit', label: 'Visit Us' },
@@ -37,22 +36,22 @@ export default function Header() {
 
   return (
     <>
-    <header className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow] duration-500 ${solid ? 'border-b border-gold/20 bg-emerald-deep/95 shadow-[0_10px_40px_-20px_rgba(0,0,0,0.6)] backdrop-blur-md' : 'border-b border-transparent bg-transparent'}`}>
-      <div className="container-x flex h-20 items-center justify-between gap-6">
+    <header data-site-header className={`fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color] duration-500 ${solid ? 'border-gold/15 bg-ink/75 backdrop-blur-md' : 'border-transparent bg-transparent'}`}>
+      <div className="container-wide flex h-20 items-center justify-between gap-6 lg:h-[88px]">
         <Logo settings={settings} />
 
-        <nav aria-label="Main" className="hidden items-center gap-8 lg:flex">
+        <nav aria-label="Main" className="hidden items-center gap-7 lg:flex xl:gap-10">
           {SECTION_LINKS.map(({ href, label }) => (
-            <a key={href} href={href} className="group relative py-2 text-[0.7rem] font-semibold uppercase tracking-[0.24em]">
-              <span className="text-ivory/85 transition-colors group-hover:text-ivory">{label}</span>
-              <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-gold transition-transform duration-500 group-hover:scale-x-100" />
+            <a key={href} href={href} className="group relative py-2 text-[0.78rem] font-semibold uppercase tracking-[0.14em]">
+              <span className="text-ivory/90 transition-colors duration-300 group-hover:text-gold-light">{label}</span>
+              <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-gold-light transition-transform duration-300 group-hover:scale-x-100" />
             </a>
           ))}
         </nav>
 
         <div className="flex items-center gap-2">
-          <a href={enquiry} target="_blank" rel="noopener noreferrer" className="hidden h-11 items-center gap-2 border border-gold/50 px-4 text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-gold transition-colors hover:bg-gold hover:text-emerald-deep sm:inline-flex" aria-label="Enquire on WhatsApp">
-            <WhatsAppIcon className="h-4 w-4" /> <span className="hidden xl:inline">Enquire</span>
+          <a href={enquiry} target="_blank" rel="noopener noreferrer" className="hidden h-11 cursor-pointer items-center gap-2.5 border border-gold/55 px-5 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-gold-light transition-colors duration-300 hover:border-gold hover:bg-gold hover:text-ink sm:inline-flex" aria-label="Enquire on WhatsApp">
+            <WhatsAppIcon className="h-4 w-4" /> <span className="hidden lg:inline">Enquire</span>
           </a>
           <button
             type="button"

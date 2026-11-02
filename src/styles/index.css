@@ -12,15 +12,16 @@
   --color-maroon: #541D32;
   --color-maroon-deep: #3A1322;
   --color-charcoal: #24201D;
+  --color-ink: #0E120D; /* deep olive-black for cinematic shading and gold-button text */
 
   --font-serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
-  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
   body {
     @apply bg-ivory text-charcoal font-sans antialiased;
     overflow-x: hidden;
@@ -37,6 +38,8 @@
 }
 
 @utility container-x { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10; }
+/* Wider editorial frame shared by the header and hero so their edges line up */
+@utility container-wide { @apply mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12; }
 @utility eyebrow { @apply font-sans text-[0.7rem] font-semibold uppercase tracking-[0.32em]; }
 @utility btn {
   @apply inline-flex min-h-12 items-center justify-center gap-2.5 px-7 text-[0.72rem] font-semibold uppercase tracking-[0.24em] transition-all duration-500;
@@ -74,4 +77,3 @@
   background-size: 200% 100%;
   animation: shimmer 1.6s linear infinite;
 }
-@keyframes scrollcue { 0% { transform: translateY(-100%); } 60%, 100% { transform: translateY(200%); } }

@@ -3,10 +3,13 @@
 Boutique website for **SJR – House of Collection**, Plot No. 69, Sector-2, MVP Colony, Visakhapatnam.
 *Your Style • Our Craft*
 
-React 19 · Vite 8 · Tailwind CSS 4 · React Router 7 · GSAP + ScrollTrigger · Lucide
+React 19 · Vite 8 · Tailwind CSS 4 · GSAP + ScrollTrigger · Lucide
+
+The site is a **single page**: the home page, with header links that scroll to its sections
+(`#collections`, `#craft`, `#about`, `#visit`). Enquiries go to WhatsApp.
 
 This is a **frontend-only** site. All content comes from JSON files in `public/data/`, loaded through one service
-layer (`src/services/`), so a REST API can replace the files later without touching the pages.
+layer (`src/services/`), so a REST API can replace the files later without touching the components.
 
 ---
 
@@ -20,7 +23,7 @@ npm run preview    # serve the production build locally
 ```
 
 Copy `.env.example` to `.env` and set `VITE_SITE_URL` to the live domain before building. It is used for
-canonical URLs, Open Graph tags, the sitemap and the product link inside WhatsApp enquiries.
+canonical URLs, Open Graph tags and the sitemap.
 
 | Variable | Purpose | Example |
 |---|---|---|
@@ -32,14 +35,13 @@ canonical URLs, Open Graph tags, the sitemap and the product link inside WhatsAp
 ## Managing content
 
 Edit the files in `public/data/`. A static deploy only needs the edited file re-uploaded; no rebuild is required
-(re-run `npm run sitemap` if you add products or categories).
+
 
 | File | Contents |
 |---|---|
 | `settings.json` | Store name, tagline, phone, WhatsApp, address, Maps link, opening hours, social links, logo, hero text/video, promo banners, footer text |
 | `categories.json` | Categories: name, slug, description, image, order, `isActive`, subcategories |
 | `products.json` | Products (see fields below) |
-| `gallery.json` | Gallery images: `imageUrl`, `caption`, `category`, `displayOrder`, `isActive`, `width`, `height` |
 
 **Product fields:** `id`, `slug`, `name`, `productCode`, `categorySlug`, `subcategorySlug`, `description`,
 `price` (or `null` to hide), `availability` (`in_stock` · `on_request` · `out_of_stock`), `isFeatured`,
@@ -96,8 +98,7 @@ Both are empty until confirmed. Set them in `settings.json`:
 ```
 
 ### Map
-`maps.query` drives the embedded map and the directions link. For an exact pin, paste the shop's Google Maps
-share link into `maps.placeUrl`, and the embed URL from Google Maps → Share → Embed into `maps.embedUrl`.
+`maps.query` drives the directions link. For an exact pin, paste the shop's Google Maps share link into `maps.placeUrl`.
 
 ---
 
@@ -106,38 +107,33 @@ share link into `maps.placeUrl`, and the embed URL from Google Maps → Share �
 ```
 public/
   brand/          SJR logo (WebP), favicon, touch icon, Open Graph image
-  data/           settings / categories / products / gallery JSON
+  data/           settings / categories / products JSON
   media/          hero video (WebM/MP4 boomerang), poster, product photos
-  .htaccess       SPA routing, security and cache headers (Apache / Hostinger)
+  .htaccess       index.html fallback, security and cache headers (Apache / Hostinger)
 scripts/          sitemap generator, sample-data remover
 src/
-  components/     Logo, ProductCard, ProductMedia, TextileArt, PageHero, Ornament …
+  components/     Logo, ProductCard, ProductMedia, TextileArt, Ornament …
   config/         site URL, fallback business details, availability labels
   context/        StoreContext (settings + categories)
   hooks/          useAsync, useSeo, useMedia
   layouts/        SiteLayout, Header, Footer
-  pages/          Home, Collections (+ category), ProductDetail, About, Craft, Gallery, Contact, Privacy, NotFound
+  pages/          Home (the only page)
   sections/       Hero (video + logo reveal), home page sections
-  services/       api.js (data fetch + cache), catalog.js (filter/sort/search)
+  services/       api.js (data fetch + cache), catalog.js (featured / new arrivals)
   styles/         Tailwind theme + design tokens
   utils/          contact.js (WhatsApp / tel / maps), motion.js (GSAP reveals)
 ```
-
-Routes: `/` · `/collections` · `/collections/:category` (`?sub=`, `?q=`, `?availability=`, `?sort=latest`) ·
-`/products/:slug` · `/our-craft` · `/about` · `/gallery` · `/contact` · `/privacy-policy`
 
 ---
 
 ## Deploying to Hostinger (or any static host)
 
 1. Set `VITE_SITE_URL` in `.env`, then `npm run build`.
-2. Upload the **contents** of `dist/` to `public_html/`. `.htaccess` is included, so deep links such as
-   `/products/…` work on refresh.
+2. Upload the **contents** of `dist/` to `public_html/` (`.htaccess` is included).
 3. Enable SSL (hPanel → Security → SSL) and force HTTPS.
 4. Submit `https://your-domain/sitemap.xml` in Google Search Console.
 
-On Netlify, Vercel or Cloudflare Pages, use build command `npm run build`, output directory `dist`, and an SPA
-fallback rewrite to `/index.html`.
+On Netlify, Vercel or Cloudflare Pages, use build command `npm run build` and output directory `dist`.
 
 ---
 

@@ -11,7 +11,7 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules/gsap')) return 'gsap'
-          if (id.includes('node_modules/react') || id.includes('react-router')) return 'react'
+          if (id.includes('node_modules/react')) return 'react'
         },
       },
     },

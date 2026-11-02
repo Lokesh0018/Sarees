@@ -15,19 +15,19 @@ export function Monogram({ className = '' }) {
 export default function Logo({ className = '', settings }) {
   const src = settings?.logo ?? LOGO.src
   return (
-    <a href="#top" className={`group flex items-center gap-3 ${className}`} aria-label={`${settings?.storeName || 'SJR – House of Collection'} — home`}>
+    <a href="#top" className={`group flex items-center gap-4 ${className}`} aria-label={`${settings?.storeName || 'SJR – House of Collection'} — home`}>
       {src ? (
         <img
           src={src}
           alt=""
           width={LOGO.width}
           height={LOGO.height}
-          className="h-12 w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)] transition-transform duration-700 group-hover:scale-[1.04] sm:h-14"
+          className="h-[52px] w-auto transition-transform duration-500 group-hover:scale-[1.03] lg:h-[60px]"
         />
       ) : (
         <Monogram className="h-11 w-11 text-gold" />
       )}
-      <span className="hidden border-l border-gold/40 pl-3 text-[0.56rem] font-medium uppercase leading-[1.6] tracking-[0.36em] text-gold min-[400px]:block">
+      <span className="hidden border-l border-gold/35 py-1 pl-4 text-[0.6rem] font-semibold uppercase leading-[1.7] tracking-[0.34em] text-gold-light min-[400px]:block">
         House of<br />Collection
       </span>
     </a>

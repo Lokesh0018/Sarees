@@ -1,5 +1,3 @@
-import { SITE_URL } from '../config/site'
-
 const digits = (value = '') => String(value).replace(/\D/g, '')
 
 // Normalises a local Indian number to international form for wa.me / tel: links.
@@ -15,8 +13,6 @@ export function whatsappHref(settings, message) {
   return message ? `${base}?text=${encodeURIComponent(message)}` : base
 }
 
-export const productUrl = (product) => `${SITE_URL}/products/${product.slug}`
-
 export function productEnquiryMessage(settings, product, categoryName) {
   return [
     `Hello ${settings.storeName}!`,
@@ -26,7 +22,6 @@ export function productEnquiryMessage(settings, product, categoryName) {
     `Product: ${product.name}`,
     `Category: ${categoryName || product.categorySlug}`,
     `Product Code: ${product.productCode}`,
-    `Product URL: ${productUrl(product)}`,
     '',
     'Please share more details and availability.',
   ].join('\n')
@@ -56,11 +51,6 @@ export function addressLines(address) {
 export function mapsDirectionsHref(settings) {
   if (settings.maps?.placeUrl) return settings.maps.placeUrl
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.maps?.query || addressLines(settings.address).join(', '))}`
-}
-
-export function mapsEmbedSrc(settings) {
-  if (settings.maps?.embedUrl) return settings.maps.embedUrl
-  return `https://maps.google.com/maps?q=${encodeURIComponent(settings.maps?.query || addressLines(settings.address).join(', '))}&z=16&output=embed`
 }
 
 export const formatPrice = (price) =>

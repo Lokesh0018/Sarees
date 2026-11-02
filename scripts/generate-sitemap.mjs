@@ -1,9 +1,8 @@
-// Builds public/sitemap.xml and public/robots.txt from the catalogue data.
+// Builds public/sitemap.xml and public/robots.txt.
 // SITE_URL comes from VITE_SITE_URL (env or .env file).
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 
 const root = new URL('../', import.meta.url)
-const read = (p) => JSON.parse(readFileSync(new URL(p, root), 'utf8'))
 
 function siteUrl() {
   if (process.env.VITE_SITE_URL) return process.env.VITE_SITE_URL
@@ -17,21 +16,10 @@ function siteUrl() {
 }
 
 const base = siteUrl().replace(/\/$/, '')
-const categories = read('public/data/categories.json').filter((c) => c.isActive)
-const products = read('public/data/products.json').filter((p) => p.isPublished && !p.archived)
 const today = new Date().toISOString().slice(0, 10)
 
-const urls = [
-  ['/', '1.0'],
-  ['/collections', '0.9'],
-  ['/our-craft', '0.7'],
-  ['/about', '0.6'],
-  ['/gallery', '0.6'],
-  ['/contact', '0.8'],
-  ['/privacy-policy', '0.2'],
-  ...categories.map((c) => [`/collections/${c.slug}`, '0.8']),
-  ...products.map((p) => [`/products/${p.slug}`, '0.7']),
-]
+// Single-page site: the home page is the only URL.
+const urls = [['/', '1.0']]
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

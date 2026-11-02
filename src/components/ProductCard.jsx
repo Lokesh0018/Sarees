@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom'
-import { ArrowUpRight } from 'lucide-react'
 import { useStore } from '../context/StoreContext'
 import { AVAILABILITY } from '../config/site'
 import { formatPrice, productEnquiryMessage, whatsappHref } from '../utils/contact'
@@ -22,11 +20,10 @@ export default function ProductCard({ product, eager = false }) {
   const category = categoryBySlug[product.categorySlug]
   const [primary, secondary] = sortedImages(product)
   const price = formatPrice(product.price)
-  const href = `/products/${product.slug}`
 
   return (
     <article className="group relative flex flex-col">
-      <Link to={href} className="relative block aspect-[3/4] overflow-hidden bg-ivory-dark" aria-label={`View details of ${product.name}`}>
+      <div className="relative aspect-[3/4] overflow-hidden bg-ivory-dark">
         <div className="absolute inset-0 transition-transform duration-[1.4s] ease-[var(--ease-silk)] group-hover:scale-[1.045]">
           <ProductMedia image={primary} art={product.art || category?.art} seed={product.productCode} alt={product.name} eager={eager} />
         </div>
@@ -40,22 +37,17 @@ export default function ProductCard({ product, eager = false }) {
           {product.isNewArrival && <span className="bg-ivory/95 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-maroon">New</span>}
           {product.sample && <span className="bg-charcoal/70 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-ivory">Sample</span>}
         </div>
-      </Link>
+      </div>
 
       <div className="flex flex-1 flex-col pt-4">
         <p className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-maroon">{category?.name}</p>
-        <h3 className="mt-1.5 font-serif text-[1.35rem] leading-tight text-emerald">
-          <Link to={href} className="link-underline">{product.name}</Link>
-        </h3>
+        <h3 className="mt-1.5 font-serif text-[1.35rem] leading-tight text-emerald">{product.name}</h3>
         <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[0.78rem] text-charcoal/60">
           <span>Code {product.productCode}</span>
           {price && <span className="font-medium text-charcoal">{price}</span>}
         </div>
         <AvailabilityBadge status={product.availability} className="mt-2" />
-        <div className="mt-auto grid grid-cols-2 gap-2 pt-4">
-          <Link to={href} className="inline-flex min-h-11 items-center justify-center gap-1.5 border border-emerald/25 text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-emerald transition-colors hover:border-emerald hover:bg-emerald hover:text-ivory">
-            Details <ArrowUpRight className="h-3.5 w-3.5" />
-          </Link>
+        <div className="mt-auto grid pt-4">
           <a
             href={whatsappHref(settings, productEnquiryMessage(settings, product, category?.name))}
             target="_blank"
