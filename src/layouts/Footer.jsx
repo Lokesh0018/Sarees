@@ -63,9 +63,9 @@ export default function Footer() {
 
       {/* Woven silk behind the footer: kept low contrast and veiled so the text always leads */}
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        {nearFooter && <SareeLoom className="h-full w-full opacity-70 motion-safe:animate-[fadeIn_1.6s_ease-out]" />}
-        <div className="absolute inset-0 bg-gradient-to-b from-night-lowest/85 via-night-lowest/72 to-night-lowest/55" />
-        <div className="absolute inset-0 bg-[radial-gradient(90%_80%_at_50%_40%,rgb(5_17_13/0.35),transparent)]" />
+        {nearFooter && <SareeLoom className="h-full w-full opacity-85 motion-safe:animate-[fadeIn_1.6s_ease-out]" />}
+        <div className="absolute inset-0 bg-gradient-to-b from-night-lowest/78 via-night-lowest/62 to-night-lowest/45" />
+        <div className="absolute inset-0 bg-[radial-gradient(90%_80%_at_50%_40%,rgb(5_17_13/0.28),transparent)]" />
       </div>
 
       <div className="relative">
