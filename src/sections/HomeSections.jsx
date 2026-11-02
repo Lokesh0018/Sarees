@@ -6,6 +6,7 @@ import { addressLines, formatPhone, generalEnquiryMessage, mapsDirectionsHref, p
 import WhatsAppIcon from '../components/WhatsAppIcon'
 import ShadeFinder from '../components/ShadeFinder'
 import GalleryLightbox from '../components/GalleryLightbox'
+import Muggulu from '../components/Muggulu'
 import { LOGO } from '../components/Logo'
 import { imageUrl } from '../utils/assets'
 import { COLLECTIONS, CRAFT, GALLERY, INNERS, INTRO, JEWELLERY, MARQUEE, MATCHINGS, NIGHTIES, PETTICOATS, SAREES, STITCHING, STORY, VISIT } from '../content/home'
@@ -351,7 +352,8 @@ export function CollectionsSection() {
   const ref = useRef(null)
   useReveal(ref, [categories.length])
   return (
-    <section id="collections" ref={ref} className="relative bg-night-lowest py-20 text-ivory sm:py-28" aria-labelledby="collections-title">
+    <section id="collections" ref={ref} className="relative isolate bg-night-lowest py-20 text-ivory sm:py-28" aria-labelledby="collections-title">
+      <Muggulu />
       <div className="container-x">
         <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end" data-reveal>
           <div>
@@ -434,7 +436,8 @@ function CollectionHeader({ data, titleId, action, centered = false }) {
 function CollectionSection({ data, tone, className = '', children }) {
   const ref = useSectionReveal()
   return (
-    <section id={data.id} ref={ref} className={`relative border-t border-gold/20 py-20 text-ivory sm:py-28 ${tone === 'low' ? 'bg-night-lowest' : 'bg-night'} ${className}`} aria-labelledby={`${data.id}-title`}>
+    <section id={data.id} ref={ref} className={`relative isolate border-t border-gold/20 py-20 text-ivory sm:py-28 ${tone === 'low' ? 'bg-night-lowest' : 'bg-night'} ${className}`} aria-labelledby={`${data.id}-title`}>
+      <Muggulu />
       <div className="container-x">{children}</div>
     </section>
   )
@@ -928,7 +931,8 @@ const ROMAN = ['I', 'II', 'III']
 export function CraftSection() {
   const ref = useSectionReveal()
   return (
-    <section id="craft" ref={ref} className="relative overflow-hidden bg-night py-20 text-ivory sm:py-28 lg:py-24" aria-labelledby="craft-title">
+    <section id="craft" ref={ref} className="relative isolate overflow-hidden bg-night py-20 text-ivory sm:py-28 lg:py-24" aria-labelledby="craft-title">
+      <Muggulu />
       {/* Soft gold glow anchoring the header */}
       <div className="pointer-events-none absolute -top-40 left-1/2 h-[480px] w-[900px] -translate-x-1/2 bg-[radial-gradient(closest-side,rgb(201_164_92/0.10),transparent)]" aria-hidden="true" />
       <div className="container-x relative">
@@ -999,7 +1003,8 @@ export function StorySection() {
   useMouseParallax(ref)
   const [first, ...rest] = STORY.lead
   return (
-    <section id="about" ref={ref} className="relative overflow-hidden border-t border-gold/20 bg-night-lowest py-20 text-ivory sm:py-28 lg:py-16" aria-labelledby="story-title">
+    <section id="about" ref={ref} className="relative isolate overflow-hidden border-t border-gold/20 bg-night-lowest py-20 text-ivory sm:py-28 lg:py-16" aria-labelledby="story-title">
+      <Muggulu />
       {/* Monogram watermark */}
       <span className="pointer-events-none absolute -right-6 top-6 select-none font-serif text-[11rem] font-semibold leading-none text-gold/[0.04] sm:text-[16rem] lg:text-[20rem]" aria-hidden="true">SJR</span>
       <div className="container-x relative grid items-center gap-14 lg:grid-cols-12 lg:gap-14">
@@ -1064,7 +1069,8 @@ export function GallerySection() {
   const ref = useSectionReveal()
   const [active, setActive] = useState(null)
   return (
-    <section id="gallery" ref={ref} className="relative bg-night py-20 text-ivory sm:py-28 lg:py-20" aria-labelledby="gallery-title">
+    <section id="gallery" ref={ref} className="relative isolate bg-night py-20 text-ivory sm:py-28 lg:py-20" aria-labelledby="gallery-title">
+      <Muggulu />
       <div className="container-x">
         <div className="mb-10 grid gap-5 md:mb-12 md:grid-cols-12 md:items-end" data-reveal>
           <div className="md:col-span-7">
@@ -1190,7 +1196,8 @@ export function VisitSection() {
   const quick = 'flex min-h-12 items-center justify-center gap-2 border border-gold/40 bg-night/60 px-3 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-gold-light backdrop-blur-md transition-colors hover:border-gold-light hover:bg-gold-light hover:text-ink'
   const infoIcon = 'mt-0.5 h-5 w-5 shrink-0 text-gold-light'
   return (
-    <section id="visit" ref={ref} className="relative border-t border-gold/20 bg-night-lowest text-ivory" aria-labelledby="visit-title">
+    <section id="visit" ref={ref} className="relative isolate border-t border-gold/20 bg-night-lowest text-ivory" aria-labelledby="visit-title">
+      <Muggulu />
       <div className="grid lg:grid-cols-2">
         {/* Photo half with the visit details laid over it */}
         <div className="tone-dark relative flex min-h-[560px] flex-col justify-end overflow-hidden text-ivory lg:min-h-[760px]" data-reveal>
