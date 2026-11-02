@@ -262,11 +262,32 @@ export const PETTICOATS = {
   lead: 'Engineered underskirts and 4-way stretch mermaid shapers designed to hold heavy drapes securely without bulkiness.',
   aside: 'Sizes XS to 3XL',
   items: [
-    { label: 'Signature Draping', title: 'Mermaid Saree Shaper', body: 'Four-way micro-stretch fabric that hugs the hips and thighs while flaring at the hem for effortless walking and flawless pleat fall.', points: ['Targeted compression & tummy control', 'Side slit for unrestricted movement', 'Sturdy drawcord supports heavy Kanchi silks'], note: 'Available in 28+ Colours', message: 'I am looking for a Mermaid Saree Shaper' },
-    { label: 'Lustrous Glide', title: 'Pure Satin Underskirt', body: 'Heavy satin weave giving an exquisite sheen beneath sheer organzas, net sarees, and chiffon handlooms without clinging.', points: ['Zero static friction with delicate weaves', 'Flared 6-panel classical silhouette', 'Reinforced waist tie cord'], note: 'Gold, Champagne & Silver Tones', message: 'I am looking for a Satin Underskirt' },
-    { label: 'Daily Classic', title: 'Pure Cotton Drawstring Skirt', body: 'Traditional 100% fine cotton petticoat crafted with sturdy interlock stitching, double-hemmed bottom, and pre-washed softness.', points: ['100% breathable natural cotton', 'Pre-shrunk color guarantee', 'Ideal for traditional everyday & temple drapes'], note: '100+ Shades In Stock', message: 'I am looking for Cotton Petticoats' },
+    {
+      image: IMG('petticoat-mermaid'), alt: 'Seamless Mermaid Saree Shaper in deep emerald on mannequin', position: '50% 30%',
+      badge: '4-Way Sculpt • Seamless Contour', label: 'Signature Draping', spec: 'XS – 3XL | 28+ Shades', code: 'SIR-SHP-01',
+      title: 'Mermaid Saree Shaper',
+      body: 'Engineered 4-way micro-stretch fabric that hugs the waist and thighs while flaring at the calf for effortless walking and flawless pleat fall.',
+      points: ['Targeted compression waistband & tummy contour', 'Side walking slit for completely free movement', 'Zero-chafing breathable moisture-wicking weave', 'Heavy drawcord holds dense bridal Kanchi silks securely'],
+      note: 'Available in Boutique', message: 'I am looking for a Mermaid Saree Shaper',
+    },
+    {
+      image: IMG('petticoat-satin'), alt: 'Pure Satin Silk Underskirt in champagne gold on mannequin', position: '50% 30%',
+      badge: 'Fluid Sheen • Luminous Fall', label: 'Lustrous Gloss', spec: 'Free Size | 32+ Hues', code: 'SIR-SAT-02',
+      title: 'Pure Satin Underskirt',
+      body: 'Ultra-luxurious heavyweight duchess satin crafted to prevent see-through visibility beneath diaphanous organzas, chiffons, and delicate tissue silks.',
+      points: ['Zero cling, high-density anti-static fluid weave', 'Wide flared hemline for circular pleated movement', 'Dual side zip closure with secure drawstring hold', 'Tailored lining prevents fabric fraying under friction'],
+      note: 'Available in Boutique', message: 'I am looking for a Pure Satin Underskirt',
+    },
+    {
+      image: IMG('petticoat-cotton'), alt: 'Pure Cotton 6-Panel Drawstring Petticoat in maroon on mannequin', position: '50% 30%',
+      badge: 'Bridal Heavy Support • 6-Panel Cut', label: 'Classic Tradition', spec: 'Custom Lengths | 45+ Tones', code: 'SIR-COT-03',
+      title: 'Pure Cotton Drawstring Skirt',
+      body: 'Traditional 6-panel silhouette tailored from 100% fine combed poplin cotton, reinforced with interlocking double seams to support dense 2kg bridal pattu sarees.',
+      points: ['100% pre-shrunk, skin-friendly combed cotton', 'Wide woven drawcord ribbon prevents waist pinching', 'Tailored 6-panel A-line flare ensures free stride', 'Reinforced bottom hemline for firm pleat foundation'],
+      note: 'Available in Boutique', message: 'I am looking for a Pure Cotton Drawstring Petticoat',
+    },
   ],
-  cardCta: 'Enquire Size',
+  cardCta: 'Reserve Drape',
 }
 
 export const INNERS = {

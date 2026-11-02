@@ -668,31 +668,57 @@ export function MatchingsCollection() {
   )
 }
 
-export function PetticoatsCollection() {
+// Petticoat card: photo, copy and a reserve link. `wide` lays it out photo-beside-copy while it spans two columns (tablet).
+function PetticoatCard({ item, cta, wide = false }) {
   const { settings } = useStore()
+  return (
+    <article className={`group flex flex-col justify-between overflow-hidden border border-gold/20 bg-night-low transition-[border-color,box-shadow] duration-300 hover:border-gold hover:shadow-2xl ${wide ? 'sm:col-span-2 sm:flex-row lg:col-span-1 lg:flex-col' : ''}`}>
+      <div className={wide ? 'sm:flex sm:flex-1 lg:block' : ''}>
+        <div className={`relative h-80 w-full shrink-0 overflow-hidden border-b border-gold/20 bg-night-mid sm:h-96 lg:h-[22rem] ${wide ? 'sm:h-auto sm:min-h-[22rem] sm:w-[45%] sm:border-b-0 sm:border-r lg:h-[22rem] lg:min-h-0 lg:w-full lg:border-b lg:border-r-0' : ''}`}>
+          <img
+            src={item.image}
+            alt={item.alt}
+            width={800}
+            height={1000}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            style={{ objectPosition: item.position }}
+          />
+          <span className="absolute left-3 top-3 border border-gold/30 bg-night-high/90 px-2.5 py-1 text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-gold-light backdrop-blur-md">{item.badge}</span>
+        </div>
+        <div className="flex flex-col p-5 sm:p-6">
+          <div className="mb-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+            <span className="text-[0.6875rem] font-semibold uppercase tracking-wider text-gold-light">{item.label}</span>
+            <span className="text-right text-[0.625rem] font-semibold uppercase tracking-[0.16em] text-sage">{item.spec}</span>
+          </div>
+          <h3 className="mb-2 font-serif text-[1.45rem] font-medium leading-tight sm:text-[1.6rem] text-ivory transition-colors group-hover:text-gold-light">{item.title}</h3>
+          <p className="mb-4 text-[0.8125rem] leading-relaxed text-mist">{item.body}</p>
+          <ul className="flex flex-col gap-2 text-[0.8125rem] text-mist">
+            {item.points.map((pt) => (
+              <li key={pt} className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-light" aria-hidden="true" /> {pt}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className={`mt-2 p-5 pt-0 sm:p-6 sm:pt-0 ${wide ? 'sm:self-end sm:w-[55%] lg:w-full' : ''}`}>
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-gold/15 pt-4">
+          <span className="text-xs text-sage">{item.note}</span>
+          <a href={whatsappHref(settings, item.message)} {...EXTERNAL} className={`${ACTION} flex items-center gap-1 text-gold-light hover:underline`} aria-label={`${cta} — ${item.title}, on WhatsApp`}>{cta} →</a>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+export function PetticoatsCollection() {
   const d = PETTICOATS
   return (
     <CollectionSection data={d} tone="low">
       <CollectionHeader data={d} titleId={`${d.id}-title`} action={<span className={`${LABEL} !tracking-wider shrink-0 text-mist`}>{d.aside}</span>} />
-      <div className="grid gap-6 md:grid-cols-3" data-reveal-stagger>
-        {d.items.map((item) => (
-          <article key={item.title} className="flex flex-col justify-between border border-gold/20 bg-night-low p-7 transition-colors duration-300 hover:border-gold sm:p-8">
-            <div>
-              <span className="text-[0.6875rem] font-semibold uppercase tracking-wider text-gold-light">{item.label}</span>
-              <h3 className="mb-2 mt-1 font-serif text-[1.75rem] font-medium leading-tight text-ivory">{item.title}</h3>
-              <p className="mb-4 text-[0.8125rem] leading-relaxed text-mist">{item.body}</p>
-              <ul className="flex flex-col gap-2 text-xs text-mist">
-                {item.points.map((pt) => (
-                  <li key={pt} className="flex items-start gap-2"><Check className="mt-px h-4 w-4 shrink-0 text-gold-light" aria-hidden="true" /> {pt}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="mt-8 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-gold/15 pt-4">
-              <span className="whitespace-nowrap text-xs text-sage">{item.note}</span>
-              <a href={whatsappHref(settings, item.message)} {...EXTERNAL} className={`${ACTION} ml-auto shrink-0 text-gold-light hover:underline`} aria-label={`${d.cardCta} — ${item.title}, on WhatsApp`}>{d.cardCta} →</a>
-            </div>
-          </article>
-        ))}
+      {/* 1 column on phones, 2 on tablets (the third card spans both, photo beside copy), 3 on desktop */}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
+        {d.items.map((item, i) => <PetticoatCard key={item.title} item={item} cta={d.cardCta} wide={i === d.items.length - 1} />)}
       </div>
     </CollectionSection>
   )
