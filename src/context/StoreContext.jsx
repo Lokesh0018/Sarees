@@ -20,10 +20,7 @@ export function StoreProvider({ children }) {
     return () => { alive = false }
   }, [])
 
-  const value = useMemo(() => {
-    const categoryBySlug = Object.fromEntries(categories.map((c) => [c.slug, c]))
-    return { settings, categories, categoryBySlug, status }
-  }, [settings, categories, status])
+  const value = useMemo(() => ({ settings, categories, status }), [settings, categories, status])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

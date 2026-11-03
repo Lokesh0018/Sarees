@@ -8,7 +8,7 @@ import Logo from '../components/Logo'
 import WhatsAppIcon from '../components/WhatsAppIcon'
 
 // In-page sections of the single home page.
-export const SECTION_LINKS = [
+const SECTION_LINKS = [
   { href: '#collections', label: 'Collections' },
   { href: '#craft', label: 'Our Craft' },
   { href: '#about', label: 'About' },

@@ -1,20 +1,11 @@
 [
-  { "id": 1, "slug": "sarees", "name": "Sarees", "description": "Silk, handloom and fancy sarees chosen for celebrations and everyday grace.", "image": "cat-sarees.webp", "displayOrder": 1, "isActive": true, "art": { "base": "#541D32", "motif": "buta" },
-    "subcategories": [
-      { "slug": "pattu-sarees", "name": "Pattu Sarees", "isActive": true },
-      { "slug": "handloom-sarees", "name": "Handloom Sarees", "isActive": true },
-      { "slug": "fancy-sarees", "name": "Fancy Sarees", "isActive": true }
-    ] },
-  { "id": 2, "slug": "stitching", "name": "Stitching", "description": "Blouse stitching and tailoring, finished to your measurements.", "image": "cat-stitching.webp", "displayOrder": 2, "isActive": true, "art": { "base": "#123C32", "motif": "stitch" }, "subcategories": [] },
-  { "id": 3, "slug": "matchings", "name": "Matchings", "description": "Blouse fabrics and colours matched to the saree you love.", "image": "cat-matchings.webp", "displayOrder": 3, "isActive": true, "art": { "base": "#6B2A3E", "motif": "stripe" }, "subcategories": [] },
-  { "id": 4, "slug": "petticoats", "name": "Petticoats", "description": "Everyday essentials in the shades your drapes need.", "image": "cat-petticoats.webp", "displayOrder": 4, "isActive": true, "art": { "base": "#1B4A3E", "motif": "diamond" }, "subcategories": [] },
-  { "id": 5, "slug": "inners", "name": "Inners", "description": "Comfortable innerwear basics for daily wear.", "image": "cat-inners.webp", "displayOrder": 5, "isActive": true, "art": { "base": "#3A2A26", "motif": "dots" }, "subcategories": [] },
-  { "id": 6, "slug": "nighties", "name": "Nighties", "description": "Soft, easy nightwear for rest and comfort at home.", "image": "cat-nighties.webp", "displayOrder": 6, "isActive": true, "art": { "base": "#2C4F48", "motif": "floral" }, "subcategories": [] },
-  { "id": 7, "slug": "fancy-jewellery", "name": "Fancy Jewellery", "description": "Fashion and traditional pieces to complete every look.", "image": "cat-fancy-jewellery.webp", "displayOrder": 7, "isActive": true, "art": { "base": "#24201D", "motif": "jewel" },
-    "subcategories": [
-      { "slug": "traditional-jewellery", "name": "Traditional Jewellery", "isActive": true },
-      { "slug": "fashion-accessories", "name": "Fashion Accessories", "isActive": true }
-    ] },
-  { "id": 8, "slug": "three-piece-dress-sets", "name": "Three-Piece Dress Sets", "description": "Coordinated dress sets ready to wear.", "image": "", "displayOrder": 8, "isActive": false, "art": { "base": "#541D32", "motif": "diamond" }, "subcategories": [] },
-  { "id": 9, "slug": "tops-and-kurtis", "name": "Tops & Kurtis", "description": "Everyday tops and kurtis in easy silhouettes.", "image": "", "displayOrder": 9, "isActive": false, "art": { "base": "#123C32", "motif": "floral" }, "subcategories": [] }
+  { "id": 1, "slug": "sarees", "name": "Sarees", "description": "Silk, handloom and fancy sarees chosen for celebrations and everyday grace.", "image": "cat-sarees.webp", "displayOrder": 1, "isActive": true },
+  { "id": 2, "slug": "stitching", "name": "Stitching", "description": "Blouse stitching and tailoring, finished to your measurements.", "image": "cat-stitching.webp", "displayOrder": 2, "isActive": true },
+  { "id": 3, "slug": "matchings", "name": "Matchings", "description": "Blouse fabrics and colours matched to the saree you love.", "image": "cat-matchings.webp", "displayOrder": 3, "isActive": true },
+  { "id": 4, "slug": "petticoats", "name": "Petticoats", "description": "Everyday essentials in the shades your drapes need.", "image": "cat-petticoats.webp", "displayOrder": 4, "isActive": true },
+  { "id": 5, "slug": "inners", "name": "Inners", "description": "Comfortable innerwear basics for daily wear.", "image": "cat-inners.webp", "displayOrder": 5, "isActive": true },
+  { "id": 6, "slug": "nighties", "name": "Nighties", "description": "Soft, easy nightwear for rest and comfort at home.", "image": "cat-nighties.webp", "displayOrder": 6, "isActive": true },
+  { "id": 7, "slug": "fancy-jewellery", "name": "Fancy Jewellery", "description": "Fashion and traditional pieces to complete every look.", "image": "cat-fancy-jewellery.webp", "displayOrder": 7, "isActive": true },
+  { "id": 8, "slug": "three-piece-dress-sets", "name": "Three-Piece Dress Sets", "description": "Coordinated dress sets ready to wear.", "image": "", "displayOrder": 8, "isActive": false },
+  { "id": 9, "slug": "tops-and-kurtis", "name": "Tops & Kurtis", "description": "Everyday tops and kurtis in easy silhouettes.", "image": "", "displayOrder": 9, "isActive": false }
 ]

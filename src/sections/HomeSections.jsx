@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowRight, BadgeCheck, Brush, CalendarCheck, CalendarDays, Check, CircleCheck, CircleDot, Clock, Flower, Flower2, Grid2x2, Layers, LockOpen, MapPin, Maximize2, Moon, Palette, PencilRuler, Phone, Ribbon, Ruler, Scissors, Shield, Shirt, Sparkles, UserCheck, Waves } from 'lucide-react'
 import { useStore } from '../context/StoreContext'
 import { gsap, useReveal } from '../utils/motion'
-import { addressLines, formatPhone, generalEnquiryMessage, mapsDirectionsHref, productEnquiryMessage, telHref, whatsappHref } from '../utils/contact'
+import { addressLines, formatPhone, generalEnquiryMessage, mapsDirectionsHref, telHref, whatsappHref } from '../utils/contact'
 import WhatsAppIcon from '../components/WhatsAppIcon'
 import ShadeFinder from '../components/ShadeFinder'
 import GalleryLightbox from '../components/GalleryLightbox'
@@ -391,15 +391,6 @@ const COLLECTION_ICONS = {
   texture: Grid2x2, layers: Layers, ribbon: Ribbon,
   shirt: Shirt, shield: Shield, cups: CircleDot, flower: Flower2,
   blossom: Flower, waves: Waves, zip: LockOpen,
-}
-
-function IconBox({ name, small = false }) {
-  const Icon = COLLECTION_ICONS[name] || Sparkles
-  return (
-    <span className={`flex shrink-0 items-center justify-center border border-gold/30 bg-gold-light/10 text-gold-light ${small ? 'h-10 w-10' : 'h-12 w-12'}`}>
-      <Icon className={small ? 'h-5 w-5' : 'h-6 w-6'} strokeWidth={1.5} aria-hidden="true" />
-    </span>
-  )
 }
 
 // Eyebrow + title + lead, left-aligned with an optional action on the right, or centred

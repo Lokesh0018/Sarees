@@ -3,7 +3,7 @@ import { ArrowRight, ArrowUp, Camera, Clock, Headset, MapPin, MapPinned, Phone }
 import { useStore } from '../context/StoreContext'
 import { addressLines, formatPhone, generalEnquiryMessage, mapsDirectionsHref, telHref, whatsappHref } from '../utils/contact'
 import { FOOTER } from '../content/home'
-// Footer background animation: SareeLoom (loom weaving), SareeFlag (waving saree) and SareeRibbons (silk ribbons) are drop-in swaps
+import { LOGO } from '../components/Logo'
 import SareeLoom from '../components/SareeLoom'
 
 const SOCIAL_LABELS = { instagram: 'Instagram', facebook: 'Facebook', youtube: 'YouTube' }
@@ -84,7 +84,7 @@ export default function Footer() {
             <div className="relative flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex items-center gap-5 sm:gap-7">
                 <a href="#top" className="shrink-0" aria-label={`${settings.storeName} — back to top`}>
-                  <img src={settings.logo || '/brand/sjr-logo-sm.webp'} alt="" width={360} height={230} loading="lazy" className="h-10 w-auto sm:h-12" />
+                  <img src={settings.logo || LOGO.src} alt="" width={LOGO.width} height={LOGO.height} loading="lazy" className="h-10 w-auto sm:h-12" />
                 </a>
                 <span className="hidden h-12 w-px bg-gradient-to-b from-transparent via-gold/50 to-transparent sm:block" aria-hidden="true" />
                 <div>

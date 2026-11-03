@@ -13,20 +13,6 @@ export function whatsappHref(settings, message) {
   return message ? `${base}?text=${encodeURIComponent(message)}` : base
 }
 
-export function productEnquiryMessage(settings, product, categoryName) {
-  return [
-    `Hello ${settings.storeName}!`,
-    '',
-    'I am interested in the following product:',
-    '',
-    `Product: ${product.name}`,
-    `Category: ${categoryName || product.categorySlug}`,
-    `Product Code: ${product.productCode}`,
-    '',
-    'Please share more details and availability.',
-  ].join('\n')
-}
-
 export function generalEnquiryMessage(settings, { name, phone, topic, message } = {}) {
   const lines = [`Hello ${settings.storeName}!`, '']
   if (message?.trim()) lines.push(message.trim())
@@ -52,6 +38,3 @@ export function mapsDirectionsHref(settings) {
   if (settings.maps?.placeUrl) return settings.maps.placeUrl
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.maps?.query || addressLines(settings.address).join(', '))}`
 }
-
-export const formatPrice = (price) =>
-  price == null || price === '' ? null : new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(price)

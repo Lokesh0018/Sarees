@@ -1,13 +1,12 @@
 // Fallback business details, used only if settings.json cannot be loaded.
 export const FALLBACK_SETTINGS = {
   storeName: 'SJR – House of Collection',
-  shortName: 'SJR',
   tagline: 'Your Style • Our Craft',
   phone: '9052122474',
   whatsapp: '9052122474',
   countryCode: '91',
   address: { line1: 'Plot No. 69, Sector-2', line2: 'MVP Colony', city: 'Visakhapatnam', region: 'Andhra Pradesh', country: 'India' },
-  maps: { query: 'Plot No. 69, Sector-2, MVP Colony, Visakhapatnam, Andhra Pradesh', placeUrl: '', embedUrl: '' },
+  maps: { query: 'Plot No. 69, Sector-2, MVP Colony, Visakhapatnam, Andhra Pradesh', placeUrl: '' },
   hours: [],
   hoursNote: "Please call or WhatsApp us to confirm today's timings.",
   logo: '/brand/sjr-logo-sm.webp',
@@ -23,7 +22,6 @@ export const FALLBACK_SETTINGS = {
     videoMp4: '/media/hero.mp4',
     poster: '/media/hero-poster.webp',
   },
-  banners: [],
   footer: {},
 }
 

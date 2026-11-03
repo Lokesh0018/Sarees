@@ -1,6 +1,5 @@
 {
   "storeName": "SJR – House of Collection",
-  "shortName": "SJR",
   "tagline": "Your Style • Our Craft",
   "phone": "9052122474",
   "whatsapp": "9052122474",
@@ -15,8 +14,7 @@
   },
   "maps": {
     "query": "SJR House of Collection, Plot No. 69, Sector-2, MVP Colony, Visakhapatnam, Andhra Pradesh",
-    "placeUrl": "",
-    "embedUrl": ""
+    "placeUrl": ""
   },
   "hours": [
     {
@@ -48,7 +46,6 @@
     "videoMp4": "/media/hero.mp4",
     "poster": "/media/hero-poster.webp"
   },
-  "banners": [],
   "footer": {
     "about": "A luxury sanctuary for heritage bridal weaves, master bespoke tailoring, and timeless Andhra silk heirlooms. Dedicated to celebrating your style through our regal craft."
   }

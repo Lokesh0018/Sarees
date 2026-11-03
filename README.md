@@ -34,41 +34,18 @@ canonical URLs, Open Graph tags and the sitemap.
 
 ## Managing content
 
-The wording of the home page sections below the hero (intro, collection cards, featured piece, craft pillars,
-brand story, gallery, visit, footer) lives in `src/content/home.js`. Their images are WebP files in
-`src/assets/images/`, bundled by Vite. Data files (`categories.json`, `products.json`) refer to these by file name
+The wording of the home page sections below the hero (marquee, intro, collection cards, the seven collection
+sections, craft pillars, brand story, gallery, visit, footer) lives in `src/content/home.js`. Their images are WebP files in
+`src/assets/images/`, bundled by Vite. `categories.json` refers to these by file name
 (e.g. `"image": "cat-sarees.webp"`); a full URL or a `/public` path also works for any image.
 
-Edit the files in `public/data/`. A static deploy only needs the edited file re-uploaded; no rebuild is required
+Edit the files in `public/data/`. A static deploy only needs the edited file re-uploaded; no rebuild is required.
 
 
 | File | Contents |
 |---|---|
-| `settings.json` | Store name, tagline, phone, WhatsApp, address, Maps link, opening hours, social links, logo, hero text/video, promo banners, footer text |
-| `categories.json` | Categories: name, slug, description, image, order, `isActive`, subcategories |
-| `products.json` | Products (see fields below) |
-
-**Product fields:** `id`, `slug`, `name`, `productCode`, `categorySlug`, `subcategorySlug`, `description`,
-`price` (or `null` to hide), `availability` (`in_stock` · `on_request` · `out_of_stock`), `isFeatured`,
-`isNewArrival`, `isPublished`, `archived`, `displayOrder`, `createdAt`, and `images`:
-
-```json
-"images": [
-  { "url": "/media/products/emerald-saree-1.webp", "alt": "Emerald silk saree with gold zari border", "isPrimary": true, "displayOrder": 1, "width": 900, "height": 1200 },
-  { "url": "/media/products/emerald-saree-2.webp", "alt": "Pallu detail", "displayOrder": 2 }
-]
-```
-
-The second image appears on hover in product cards. Use **3:4 portrait WebP** images, about 900×1200.
-Products and categories without photos show a woven textile pattern instead.
-
-### Sample products
-All 16 products in `products.json` are **samples** (`"sample": true`), including the four shown under
-New Arrivals. Remove them all with:
-
-```bash
-npm run remove-samples
-```
+| `settings.json` | Store name, tagline, phone, WhatsApp, address, Maps link, opening hours, social links, logo, hero text/video, footer text |
+| `categories.json` | Categories: name, slug, description, image, order, `isActive` |
 
 ### Hero video
 The hero background plays a **boomerang** cut of `src/assets/videos/hero.mp4` (the 10 s master). The clip runs
@@ -112,20 +89,21 @@ Both are empty until confirmed. Set them in `settings.json`:
 ```
 public/
   brand/          SJR logo (WebP), favicon, touch icon, Open Graph image
-  data/           settings / categories / products JSON
+  data/           settings / categories JSON
   media/          hero video (WebM/MP4 boomerang), poster
   .htaccess       index.html fallback, security and cache headers (Apache / Hostinger)
-scripts/          sitemap generator, sample-data remover
+scripts/          sitemap + robots.txt generator
 src/
-  components/     Logo, WhatsAppIcon
+  assets/         images/ (bundled WebP photos), videos/ (hero master, source for public/media)
+  components/     Logo, WhatsAppIcon, ShadeFinder, GalleryLightbox, Muggulu (kolam art), SareeLoom (footer)
   config/         site URL, fallback business details
-  content/        home.js: copy for the sections below the hero
+  content/        home.js: copy for the sections below the hero; shades.js: 400-tone shade card
   context/        StoreContext (settings + categories)
-  hooks/          useAsync, useSeo, useMedia
+  hooks/          useSeo, useMedia, useOffscreenPause
   layouts/        SiteLayout, Header, Footer
   pages/          Home (the only page)
   sections/       Hero (video + logo reveal), home page sections
-  services/       api.js (data fetch + cache), catalog.js (featured / new arrivals)
+  services/       api.js (data fetch + cache), catalog.js (settings / categories)
   styles/         Tailwind theme + design tokens
   utils/          contact.js (WhatsApp / tel / maps), motion.js (GSAP reveals)
 ```

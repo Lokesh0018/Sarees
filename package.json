@@ -8,8 +8,7 @@
     "dev": "vite",
     "build": "node scripts/generate-sitemap.mjs && vite build",
     "preview": "vite preview",
-    "sitemap": "node scripts/generate-sitemap.mjs",
-    "remove-samples": "node scripts/remove-sample-data.mjs"
+    "sitemap": "node scripts/generate-sitemap.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",

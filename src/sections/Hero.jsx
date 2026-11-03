@@ -89,7 +89,7 @@ function HeroBackdrop({ hero, reduced, inView }) {
 
 export default function Hero() {
   const { settings } = useStore()
-  const hero = { ...settings.hero }
+  const { hero } = settings
   const reduced = useReducedMotion()
   const rootRef = useRef(null)
   const [inView, setInView] = useState(true)

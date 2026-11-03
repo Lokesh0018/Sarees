@@ -1,6 +1,6 @@
 // Copy and imagery for the home page sections below the hero.
 // Edit wording here; the layout lives in src/sections/HomeSections.jsx.
-import { imageUrl, pickImage } from '../utils/assets'
+import { imageUrl } from '../utils/assets'
 
 // Images live in src/assets/images
 const IMG = (name) => imageUrl(`${name}.webp`)
@@ -158,10 +158,6 @@ export const FOOTER = {
 }
 
 // ── Dedicated collection sections (between Collections and Craft) ─────────────────────────────────────────
-// The four saree photos are stand-ins until the real ones are saved to src/assets/images as
-// saree-kanchipuram, saree-gadwal, saree-banarasi and saree-organza (.webp / .jpg / .png). They take over automatically.
-const PREFER = (name, fallback) => pickImage(name, fallback)
-
 export const SAREES = {
   id: 'collection-sarees',
   eyebrow: 'Heritage Silk Registry',
@@ -170,10 +166,10 @@ export const SAREES = {
   lead: 'Hand-selected heirloom weaves crafted by generational master artisans across Kanchipuram, Gadwal, Uppada, and Banaras.',
   cta: { label: 'Enquire Collection', message: 'Hi SJR House of Collection, I would like to view your Pattu and Handloom Saree catalogue.' },
   items: [
-    { image: PREFER('saree-kanchipuram', 'cat-sarees'), alt: 'Pure Kanchipuram Pattu Saree with pure zari brocade and temple border', badge: 'Silk Mark Certified', label: 'Kanchipuram Heritage', title: 'Pure Kanchipuram Pattu', body: 'Heavy 3-ply mulberry silk with 2-gram tested gold zari korvai border.', status: 'Bridal Masterpiece', message: 'Interested in Pure Kanchipuram Bridal Pattu' },
-    { image: PREFER('saree-gadwal', 'arrival-emerald-gadwal'), alt: 'Pure Gadwal Silk Handloom Saree with kuttu interlocking zari pallu', badge: 'Handloom Guild', label: 'Gadwal Atelier', title: 'Pure Gadwal Sico & Silk', body: 'Featherweight cotton body seamlessly woven into rich pure silk zari borders.', status: 'Kuttu Technique', message: 'Interested in Pure Gadwal Sico and Silk' },
-    { image: PREFER('saree-banarasi', 'arrival-crimson-kanchipuram'), alt: 'Banarasi Katan Brocade silk saree with intricate floral kadwa weaves', badge: 'Katan Silk', label: 'Banaras Weaves', title: 'Banarasi Katan Brocade', body: 'Regal kadwa floral jaal motifs woven in antique silver and sona-rupa zari.', status: 'Festive Royal', message: 'Interested in Banarasi Katan Brocade' },
-    { image: PREFER('saree-organza', 'arrival-chanderi-floral'), alt: 'Sheer Tissue Organza Festive Saree with delicate scalloped cutwork and resham embroidery', badge: 'Contemporary Chic', label: 'Festive Delight', title: 'Sheer Tissue Organza', body: 'Airy pure organza enhanced with scalloped zari borders and pastel undertones.', status: 'Light & Ethereal', message: 'Interested in Sheer Tissue Organza Saree' },
+    { image: IMG('saree-kanchipuram'), alt: 'Pure Kanchipuram Pattu Saree with pure zari brocade and temple border', badge: 'Silk Mark Certified', label: 'Kanchipuram Heritage', title: 'Pure Kanchipuram Pattu', body: 'Heavy 3-ply mulberry silk with 2-gram tested gold zari korvai border.', status: 'Bridal Masterpiece', message: 'Interested in Pure Kanchipuram Bridal Pattu' },
+    { image: IMG('saree-gadwal'), alt: 'Pure Gadwal Silk Handloom Saree with kuttu interlocking zari pallu', badge: 'Handloom Guild', label: 'Gadwal Atelier', title: 'Pure Gadwal Sico & Silk', body: 'Featherweight cotton body seamlessly woven into rich pure silk zari borders.', status: 'Kuttu Technique', message: 'Interested in Pure Gadwal Sico and Silk' },
+    { image: IMG('saree-banarasi'), alt: 'Banarasi Katan Brocade silk saree with intricate floral kadwa weaves', badge: 'Katan Silk', label: 'Banaras Weaves', title: 'Banarasi Katan Brocade', body: 'Regal kadwa floral jaal motifs woven in antique silver and sona-rupa zari.', status: 'Festive Royal', message: 'Interested in Banarasi Katan Brocade' },
+    { image: IMG('saree-organza'), alt: 'Sheer Tissue Organza Festive Saree with delicate scalloped cutwork and resham embroidery', badge: 'Contemporary Chic', label: 'Festive Delight', title: 'Sheer Tissue Organza', body: 'Airy pure organza enhanced with scalloped zari borders and pastel undertones.', status: 'Light & Ethereal', message: 'Interested in Sheer Tissue Organza Saree' },
   ],
   cardCta: 'Reserve Drape',
 }
